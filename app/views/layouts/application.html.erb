@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title><%= yield(:title) %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <link
+    rel="preconnect"
+    href="https://fonts.bunny.net">
+  <link
+    rel="stylesheet"
+    href="https://fonts.bunny.net/css?family=rock-salt:400">
+  <link
+    rel="stylesheet"
+    href="https://fonts.bunny.net/css?family=concert-one:400"/>
+</head>
+<body class="<%= body_class %>">
+<div class="container">
+  <div class="top-bar">
+    <%= link_to root_path, class: "logo-link" do %>
+      <%= image_tag('logo.png', alt: 'Home') %>
+      <span>Libregig</span>
+    <% end %>
+    <%= render partial: 'shared/account_menu' %>
+  </div>
+
+  <% my_pending_invites&.each do |invite| %>
+    <%= flash_banner("notice") do %>
+      <strong><%= invite.item_type %> invite:</strong>
+      <% if invite.bestowing_user %>
+        User <strong><%= invite.bestowing_user.username %></strong> has
+      <% else %>
+        We have
+      <% end %>
+      invited you to <%= invite.permission_type %>
+      <strong>'<%= invite.item.name %>'</strong>.
+      <br>
+      <%= form_with model: invite,
+        method: :patch,
+        class: "inline-block font-bold",
+        local: true do |f| %>
+        <div>
+          <%= f.radio_button :status, "accepted", id: "status_accepted_#{invite.id}" %>
+          <%= f.label :status, "Accept", for: "status_accepted_#{invite.id}" %>
+          <%= f.radio_button :status, "rejected", id: "status_rejected_#{invite.id}" %>
+          <%= f.label :status, "Decline", for: "status_rejected_#{invite.id}" %>
+        </div>
+        <%= f.submit 'Save', class: 'linkify' %>
+      <% end %>
+      or
+      <%= form_with model: invite,
+        method: :patch,
+        class: "inline-block font-bold",
+        local: true do |f| %>
+        <%= f.hidden_field :status, value: "rejected" %>
+        <%= f.submit 'Decline', class: 'linkify' %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if nav_tabs %>
+    <nav class="top-nav">
+      <%= render partial: 'shared/tabs', locals: { tabs: nav_tabs } %>
+    </nav>
+  <% end %>
+
+  <%= render partial: 'shared/banners' %>
+
+  <div class="tab-body">
+    <%= yield %>
+  </div>
+
+  <footer></footer>
+</div>
+</body>
+</html>

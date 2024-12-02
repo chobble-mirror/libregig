@@ -1,0 +1,278 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-r from-slate-900 to-slate-950;
+  }
+
+  h1 {
+    @apply text-gray-900 text-xl;
+  }
+
+  h2 {
+    @apply text-gray-900 text-lg;
+  }
+
+  a,
+  .linkify {
+    @apply underline decoration-slate-500 cursor-pointer transition-colors;
+    &:hover {
+      @apply text-emerald-600 decoration-emerald-500;
+    }
+  }
+
+  p {
+    @apply pb-4;
+  }
+
+  hr {
+    @apply my-8;
+  }
+
+  table {
+    @apply table-auto w-full;
+  }
+
+  thead th {
+    @apply text-left;
+    a {
+      @apply decoration-slate-400 whitespace-nowrap no-underline;
+      span {
+        @apply text-xs text-emerald-600;
+      }
+    }
+  }
+
+  tbody tr {
+    @apply border-b border-slate-100;
+    &:nth-child(odd) {
+      @apply bg-gray-200;
+    }
+    &:nth-child(even) {
+      @apply bg-white;
+    }
+  }
+
+  tbody tr td,
+  thead tr th {
+    @apply p-2 lg:px-4;
+  }
+
+  .container {
+    @apply mx-auto p-2 sm:p-4;
+  }
+
+  .top-bar {
+    @apply flex flex-wrap items-center justify-between relative;
+
+    .logo-link {
+      font-family: "Concert One", "Rock Salt", handwriting;
+      @apply w-12 flex items-center font-bold text-lg text-white uppercase no-underline;
+      img {
+        @apply mr-4 inline-block;
+      }
+    }
+    .account-menu {
+      @apply flex no-underline text-white relative;
+      img {
+        @apply bg-white rounded-full float-right cursor-pointer;
+        width: 40px;
+        height: 40px;
+      }
+      .account-menu-contents {
+        display: none;
+        h1 {
+          @apply p-2;
+        }
+        li {
+          @apply text-black m-0 py-1 px-2;
+        }
+      }
+      &:has(input:checked) {
+        @apply bg-white shadow rounded-xl absolute w-60;
+        top: -5px;
+        right: -5px;
+        img {
+          @apply absolute;
+          top: 6px;
+          right: 6px;
+        }
+        .account-menu-contents {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .top-nav {
+    @apply content-start;
+  }
+
+  .tab-body {
+    @apply md:flex gap-2 lg:gap-5;
+  }
+
+  section {
+    @apply bg-white p-4 mb-8 lg:p-8;
+    &:first-child {
+      @apply flex-grow;
+    }
+  }
+
+  ul {
+    @apply my-4;
+    li {
+      @apply p-0 my-4 mx-0;
+    }
+    &.small_list {
+      @apply text-xs;
+      li {
+        @apply my-0 py-0.5;
+      }
+    }
+  }
+
+  ul.nav-tabs {
+    @apply flex font-bold text-sm text-white uppercase no-underline my-0;
+    li {
+      @apply p-0 m-0;
+      a {
+        @apply no-underline text-gray-400 p-4 inline-block;
+        &:hover {
+          @apply underline text-white;
+        }
+        &.active {
+          @apply underline text-white;
+        }
+      }
+    }
+  }
+
+  .primary_button {
+    @apply bg-emerald-300 border border-emerald-700 text-emerald-900 font-bold relative shadow-sm py-1 px-2 no-underline cursor-pointer;
+    &:hover {
+      @apply bg-emerald-400 text-emerald-900;
+    }
+  }
+
+  .secondary_button {
+    @apply bg-sky-300 border border-sky-700 text-sky-900 font-bold relative shadow-sm py-1 px-2 no-underline cursor-pointer;
+    &:hover {
+      @apply bg-sky-400 text-sky-900;
+    }
+  }
+
+  .danger_button {
+    @apply bg-rose-300 border border-rose-700 text-rose-700 font-bold relative shadow-sm py-1 px-2 no-underline cursor-pointer;
+    &:hover {
+      @apply bg-rose-400 text-rose-900;
+    }
+  }
+
+  .banner {
+    @apply w-full p-4 pr-8 my-4 text-sm border animate-fade-in relative;
+    &:has(input:checked) {
+      display: none;
+    }
+    .close {
+      @apply absolute top-2 right-1;
+    }
+    &.notice {
+      @apply text-green-800 border-green-900 bg-green-200;
+      a {
+        @apply decoration-green-600;
+      }
+      svg {
+        @apply text-green-500;
+      }
+    }
+    &.alert {
+      @apply text-red-800 border-red-900 bg-red-200;
+      a {
+        @apply decoration-red-600;
+      }
+      svg {
+        @apply text-red-500;
+      }
+    }
+    &.info {
+      @apply p-4 my-4 text-sm text-sky-800 border border-sky-900 bg-sky-300 animate-fade-in;
+      a {
+        @apply decoration-sky-600;
+      }
+      svg {
+        @apply text-sky-500;
+      }
+    }
+  }
+
+  .admin {
+    @apply text-fuchsia-700 font-bold decoration-fuchsia-500;
+  }
+
+  .field {
+    @apply p-0 my-4;
+    input,
+    select,
+    textarea {
+      @apply shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight border-gray-600 focus:border-yellow-700;
+    }
+    .disabled {
+      @apply border-none shadow-none p-0;
+    }
+    input {
+      &:focus {
+        @apply outline-none;
+      }
+      &:disabled {
+        @apply border-none disabled:shadow-none p-0;
+      }
+      &[type="text"] {
+        @apply shadow appearance-none border w-full rounded mb-4 py-2 px-3 text-gray-700 leading-tight;
+        &:focus {
+          @apply outline-none;
+        }
+      }
+    }
+    select {
+      @apply block text-gray-700 w-full mb-4 py-2 px-4 rounded leading-tight;
+      &:focus {
+        @apply outline-none;
+      }
+    }
+    label {
+      @apply block text-gray-700 text-sm font-bold mb-2;
+      &.disabled {
+        @apply text-yellow-800 dark:text-yellow-400;
+      }
+    }
+    .has_error {
+      @apply border-2 border-red-400;
+      &:focus {
+        @apply border-rose-200;
+      }
+    }
+    .error_message {
+      @apply font-bold text-red-500;
+    }
+  }
+
+  footer {
+    @apply mt-16 mb-4 text-gray-500;
+  }
+
+  /* Specific Page Stuff */
+  .email_content {
+    @apply break-all max-w-screen-md border-dashed border border-gray-500 p-4 my-4;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease;
+}
+
+body.admin-background {
+  @apply bg-gradient-to-r from-fuchsia-900 to-slate-900;
+}

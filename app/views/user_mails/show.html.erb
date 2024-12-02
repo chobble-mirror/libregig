@@ -1,0 +1,18 @@
+<section>
+  <h1><%= @mail.subject %></h1>
+  <ul>
+    <li><strong>State:</strong> <%= @mail.state %></li>
+    <li><strong>Created:</strong> <%= l(@mail.created_at) %></li>
+    <li><strong>Updated:</strong> <%= l(@mail.updated_at) %></li>
+  </ul>
+  <hr>
+  <h2>HTML Content</h2>
+  <div class="email_content">
+    <%= @mail.html_content %>
+  </div>
+  <hr>
+  <h2>Text Content</h2>
+  <div class="email_content">
+    <%= simple_format(@mail.text_content) %>
+  </div>
+</section>

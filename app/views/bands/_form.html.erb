@@ -1,0 +1,6 @@
+<%= form_with model: band,
+              builder: FormBuilders::TailwindFormBuilder do |form| %>
+  <%= form.text_field :name, required: true %>
+  <%= form.text_field :description, required: true %>
+  <%= form.submit "Add Band" %>
+<% end %>

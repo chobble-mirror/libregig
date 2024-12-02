@@ -1,0 +1,15 @@
+<section class="w-full max-w-xs mt-4">
+  <h1>
+    Log In
+  </h1>
+  <%= form_with model: @user,
+    url: login_path,
+    method: :post,
+    local: true,
+    builder: FormBuilders::TailwindFormBuilder do |form| %>
+    <%= form.text_field :username %>
+    <%= form.password_field :password %>
+    <%= form.submit "Log In" %>
+    <%= link_to "Register", register_path, class: "float-right secondary_button" %>
+  <% end %>
+</section>

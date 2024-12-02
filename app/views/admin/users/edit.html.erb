@@ -1,0 +1,15 @@
+<section>
+  <h1>
+    Editing User
+  </h1>
+  <%= form_with model: @user,
+    local: true,
+    url: admin_user_path(@user),
+    builder: FormBuilders::TailwindFormBuilder do |form| %>
+    <%= form.text_field :username %>
+    <%= form.text_field :name %>
+    <%= form.text_field :email %>
+    <%= form.select :user_type, User.user_types.keys %>
+    <%= form.submit("Save") %>
+  <% end %>
+</section>

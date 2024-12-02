@@ -1,0 +1,24 @@
+<% if Current.user.present? %>
+  <div class="account-menu z-10">
+    <div class="account-menu-contents">
+      <h1 class="tracking-wide text-lg"><%= Current.user.name %></h1>
+      <ul>
+        <li><%= link_to 'account settings', edit_admin_user_url(Current.user) %></li>
+        <% if Current.user.admin? %>
+          <li><%= link_to 'users admin', admin_users_path %></li>
+        <% end %>
+        <% if Current.impersonating? %>
+          <li>stop impersonating</li>
+        <% end %>
+        <li>profile</li>
+        <li>notifications</li>
+        <li>linked devices</li>
+        <li><%= link_to 'logout', logout_url, data: { "turbo-method": :delete } %></li>
+      </ul>
+    </div>
+    <input type="checkbox" class="hidden" id="account-menu-toggle">
+    <label for="account-menu-toggle">
+      <img src="<%= image_path("account_placeholder.png") %>">
+    </label>
+  </div>
+<% end %>
