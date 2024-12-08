@@ -41,7 +41,7 @@ module ApplicationHelper
         msg = capture(&block)
       end
 
-      concat(content_tag(:span, msg, class: "block sm:inline"))
+      concat(content_tag(:div, msg))
       concat(hidden_checkbox_tag(key))
       concat(close_button(key))
     end

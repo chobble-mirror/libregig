@@ -1,3 +1,5 @@
+<% content_for :title, @member.name %>
+
 <section>
   <h1>Member Details</h1>
   <p>
@@ -8,20 +10,24 @@
     <strong>Description:</strong>
     <%= @member.description %>
   </p>
-  <section class="skills">
-    <h2>Skills:</h2>
+  <% if @member.skills.any? %>
+    <section class="skills">
+      <h2>Skills:</h2>
+      <ul>
+        <% @member.skills.each do |skill| %>
+          <li><%= skill.name %></li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+  <% if @member.bands.any? %>
+    <h2>Bands:</h2>
     <ul>
-      <% @member.skills.each do |skill| %>
-        <li><%= skill.name %></li>
+      <% @member.bands.each do |band| %>
+        <li><%= band.name %></li>
       <% end %>
     </ul>
-  </section>
-  <h2>Bands:</h2>
-  <ul>
-    <% @member.bands.each do |band| %>
-      <li><%= band.name %></li>
-    <% end %>
-  </ul>
+  <% end %>
   <%= link_to 'Edit', edit_member_path(@member) %> |
   <%= link_to 'Back', members_path %>
 </section>

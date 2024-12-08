@@ -1,4 +1,6 @@
-{pkgs ? import <nixpkgs> {}}:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 pkgs.mkShell {
   buildInputs = [
     pkgs.git
@@ -13,4 +15,7 @@ pkgs.mkShell {
     pkgs.sqlite
     pkgs.xclip
   ];
+  shellHook = ''
+    git pull
+  '';
 }

@@ -32,12 +32,18 @@ class MembersController < ApplicationController
   end
 
   def update
-    if @member.update(member_params)
-      redirect_to @member, notice: "Member was successfully updated."
-    else
-      logger.warn "members/update error: #{@member.errors.full_messages}"
-      render :edit, status: :unprocessable_entity
+    Member.transaction do
+      @member.assign_attributes(member_params)
+      if @member.save
+        redirect_to @member, notice: "Member was successfully updated." and return
+      else
+        logger.warn "members/update error: #{@member.errors.full_messages}"
+        render :edit, status: :unprocessable_entity and return
+      end
     end
+  rescue ActiveRecord::RecordInvalid => e
+    logger.warn "members/update transaction error: #{e.message}"
+    render :edit, status: :unprocessable_entity
   end
 
   def destroy
@@ -52,6 +58,8 @@ class MembersController < ApplicationController
   end
 
   def member_params
-    params.require(:member).permit(:name, :description, skill_ids: [], band_ids: [])
+    params.require(:member).permit(
+      :name, :description, :skills_list, band_ids: []
+    )
   end
 end
