@@ -2,20 +2,18 @@
   pkgs ? import <nixpkgs> { },
 }:
 pkgs.mkShell {
-  buildInputs = [
-    pkgs.git
-    pkgs.nodejs_22
-    pkgs.ruby_3_3
-    pkgs.rubyPackages_3_3.concurrent-ruby
-    pkgs.rubyPackages_3_3.htmlbeautifier
-    pkgs.rubyPackages_3_3.rails
-    pkgs.rubyPackages_3_3.rugged
-    pkgs.rubyPackages_3_3.sassc
-    pkgs.rubyPackages.execjs
-    pkgs.sqlite
-    pkgs.xclip
+  buildInputs = with pkgs; [
+    bundix
+    git
+    nodejs_22
+    ruby_3_3
+    rubyPackages_3_3.concurrent-ruby
+    rubyPackages_3_3.htmlbeautifier
+    rubyPackages_3_3.rails
+    rubyPackages_3_3.rugged
+    rubyPackages_3_3.sassc
+    rubyPackages.execjs
+    sqlite
+    xclip
   ];
-  shellHook = ''
-    git pull
-  '';
 }
