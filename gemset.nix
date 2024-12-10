@@ -105,9 +105,6 @@
   i18n = {
     dependencies = ["concurrent-ruby"];
   };
-  importmap-rails = {
-    dependencies = ["actionpack" "activesupport" "railties"];
-  };
   io-console = {
   };
   irb = {
@@ -196,7 +193,7 @@
   prosopite = {
   };
   psych = {
-    dependencies = ["stringio"];
+    dependencies = ["date" "stringio"];
   };
   public_suffix = {
   };
@@ -214,7 +211,7 @@
     dependencies = ["rack"];
   };
   rackup = {
-    dependencies = ["rack" "webrick"];
+    dependencies = ["rack"];
   };
   rails = {
     dependencies = ["actioncable" "actionmailbox" "actionmailer" "actionpack" "actiontext" "actionview" "activejob" "activemodel" "activerecord" "activestorage" "activesupport" "railties"];
@@ -315,9 +312,6 @@
   standard-rails = {
     dependencies = ["lint_roller" "rubocop-rails"];
   };
-  stimulus-rails = {
-    dependencies = ["railties"];
-  };
   stringio = {
   };
   tailwindcss-rails = {
@@ -329,9 +323,6 @@
   };
   tomlrb = {
   };
-  turbo-rails = {
-    dependencies = ["actionpack" "railties"];
-  };
   tzinfo = {
     dependencies = ["concurrent-ruby"];
   };
@@ -341,8 +332,6 @@
   };
   web-console = {
     dependencies = ["actionview" "activemodel" "bindex" "railties"];
-  };
-  webrick = {
   };
   websocket = {
   };

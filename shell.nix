@@ -4,14 +4,16 @@
 pkgs.mkShell {
   buildInputs = with pkgs; [
     bundix
-    git
+    libyaml
     nodejs_22
-    ruby_3_3
-    rubyPackages_3_3.concurrent-ruby
-    rubyPackages_3_3.htmlbeautifier
-    rubyPackages_3_3.rails
-    rubyPackages_3_3.rugged
-    rubyPackages_3_3.sassc
+    pkg-config
+    ruby_3_2
+    rubyPackages_3_2.concurrent-ruby
+    rubyPackages_3_2.htmlbeautifier
+    rubyPackages_3_2.psych
+    rubyPackages_3_2.rails
+    rubyPackages_3_2.rugged
+    rubyPackages_3_2.sassc
     rubyPackages.execjs
     sqlite
     xclip
