@@ -48,7 +48,7 @@
         };
 
         checks = {
-          basic-rails-test = import ./nix/tests/basic-rails.nix { inherit pkgs env ruby; };
+          basic-rails-test = import ./nix/tests/rack-service.nix { inherit pkgs env ruby; };
         };
       }
     );
