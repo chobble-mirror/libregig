@@ -1,5 +1,5 @@
 {
-  description = "A simple ruby app";
+  description = "Libregig - band management app";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -25,7 +25,7 @@
 
         inherit
           (rubyNix {
-            name = "simple-ruby-app";
+            name = "libregig";
             gemset = ./gemset.nix;
             ruby = pkgs.ruby_3_2;
           })
