@@ -19,6 +19,11 @@
   "homepage": "https://git.chobble.com/chobble/libregig#readme",
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "bootstrap": "^5.3.3"
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
+    "bootstrap": "^5.3.3",
+    "tailwindcss": "^3.4.16"
   }
 }
