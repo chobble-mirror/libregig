@@ -51,14 +51,13 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 
-  gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
   gem "standard-rails"
   gem "standard"
   gem "letter_opener"
 
   gem "better_html"
   gem "erb_lint"
-  gem "licensed"
+  # gem "licensed"
   gem "prosopite" # n+1 queries
 end
 
