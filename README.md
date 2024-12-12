@@ -1,5 +1,8 @@
 # Libregig - a band management app
 
+> [Test coverage](https://coverage.libregig.com/) (updated periodically)
+
+
 ⚠️ **THIS IS NOT PRODUCTION READY!! Many sections are incomplete** ⚠️
 
 -----
