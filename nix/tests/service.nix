@@ -21,8 +21,9 @@ pkgs.nixosTest {
           railsApp
           ;
         environmentConfig = {
-          RAIL_USE_SSL = "false";
-          RAILS_ASSUME_SSL = "false";
+          RAILS_ENV = "test";
+          FORCE_SSL = "false";
+          ASSUME_SSL = "false";
         };
       };
     in
