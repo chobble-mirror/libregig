@@ -72,6 +72,10 @@
             { name, config, ... }:
             {
               options = {
+                name = lib.mkOption {
+                  type = lib.types.str;
+                  description = "Name of the libregig instance";
+                };
                 enable = lib.mkEnableOption "Libregig instance ${name}";
                 port = lib.mkOption {
                   type = lib.types.port;
