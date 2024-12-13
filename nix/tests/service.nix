@@ -40,5 +40,16 @@ pkgs.nixosTest {
     machine.succeed("ls -la /run/libregig-default >&2")
     machine.succeed("cd /run/libregig-default && cp env-example .env >&2")
     machine.succeed("cd /run/libregig-default && ${env}/bin/rails db:migrate >&2")
+
+    machine.succeed("systemctl start libregig-default >&2 &")
+    machine.execute("journalctl -u libregig-default >&2")
+    machine.wait_for_unit("libregig-default", timeout = 5)
+    machine.succeed("journalctl -u libregig-default --no-pager >&2")
+
+    machine.succeed("curl -I -s http://127.0.0.1:3000 >&2")
+
+    response = machine.succeed("curl -I -s -o /dev/null -w '%{redirect_url}' http://127.0.0.1:3000")
+    if "127.0.0.1:3000/login" not in response:
+        raise Exception("could not load app")
   '';
 }
