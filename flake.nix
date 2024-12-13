@@ -87,6 +87,8 @@
             };
         in
         {
+          imports = [ ./nix/modules/service.nix ];
+
           options.services.libregig = {
             instances = lib.mkOption {
               type = lib.types.attrsOf (lib.types.submodule instanceOpts);
