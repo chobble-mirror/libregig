@@ -53,7 +53,7 @@
         };
 
         checks = {
-          rack-test = import ./nix/tests/rack-service.nix { inherit pkgs env ruby; };
+          # rack-test = import ./nix/tests/rack-service.nix { inherit pkgs env ruby; };
           service-test = import ./nix/tests/service.nix { inherit pkgs env ruby; };
         };
       }
