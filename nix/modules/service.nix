@@ -39,7 +39,7 @@ in
 {
   users.users.${serviceName} = {
     isSystemUser = true;
-    description = "Libregig service user";
+    name = "Libregig service user";
     group = serviceName;
   };
 
