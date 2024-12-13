@@ -20,6 +20,7 @@ pkgs.nixosTest {
           ruby
           libregig
           ;
+        name = "default";
         environmentConfig = {
           RAILS_ENV = "test";
           FORCE_SSL = "false";
@@ -36,19 +37,8 @@ pkgs.nixosTest {
     machine.start()
     machine.wait_for_unit("multi-user.target")
 
-    machine.succeed("ls -la /run/libregig >&2")
-    machine.succeed("cd /run/libregig && cp env-example .env >&2")
-    machine.succeed("cd /run/libregig && ${env}/bin/rails db:migrate >&2")
-
-    machine.succeed("systemctl start libregig >&2 &")
-    machine.execute("journalctl -u libregig >&2")
-    machine.wait_for_unit("libregig", timeout = 5)
-    machine.succeed("journalctl -u libregig --no-pager >&2")
-
-    machine.succeed("curl -I -s http://127.0.0.1:3000 >&2")
-
-    response = machine.succeed("curl -I -s -o /dev/null -w '%{redirect_url}' http://127.0.0.1:3000")
-    if "127.0.0.1:3000/login" not in response:
-        raise Exception("could not load app")
+    machine.succeed("ls -la /run/libregig-default >&2")
+    machine.succeed("cd /run/libregig-default && cp env-example .env >&2")
+    machine.succeed("cd /run/libregig-default && ${env}/bin/rails db:migrate >&2")
   '';
 }

@@ -4,12 +4,15 @@
   env,
   ruby,
   libregig,
+  name ? "default",
   port ? 3000,
   environmentConfig ? { },
   ...
 }:
 
 let
+  serviceName = "libregig-${name}";
+  runtimeDir = "libregig-${name}";
   defaultEnvironment = {
     GEM_HOME = "${env}";
     PATH = lib.mkForce "${env}/bin:${ruby}/bin:${pkgs.coreutils}/bin:/run/current-system/sw/bin";
@@ -20,14 +23,14 @@ let
   };
 in
 {
-  systemd.services.libregig = {
+  systemd.services.${serviceName} = {
     enable = true;
     wantedBy = [ "multi-user.target" ];
     environment = defaultEnvironment // environmentConfig;
     serviceConfig = {
-      RuntimeDirectory = "libregig";
-      WorkingDirectory = "/run/libregig";
-      ExecStartPre = "+${pkgs.coreutils}/bin/cp -r ${libregig}/. /run/libregig/";
+      RuntimeDirectory = runtimeDir;
+      WorkingDirectory = "/run/${runtimeDir}";
+      ExecStartPre = "+${pkgs.coreutils}/bin/cp -r ${libregig}/. /run/${runtimeDir}/";
       ExecStart = "${env}/bin/rails server -p ${toString port}";
       StandardOutput = "journal";
       StandardError = "journal";

@@ -61,33 +61,50 @@
           config,
           ...
         }:
+        let
+          cfg = config.services.libregig;
+          instanceOpts =
+            { name, config, ... }:
+            {
+              options = {
+                enable = lib.mkEnableOption "Libregig instance ${name}";
+                port = lib.mkOption {
+                  type = lib.types.port;
+                  default = 3000;
+                  description = "Port on which the Rails server will listen";
+                };
+                environment = lib.mkOption {
+                  type = lib.types.attrs;
+                  default = { };
+                  description = "Additional environment variables for the Rails application";
+                };
+              };
+            };
+        in
         {
-          options = {
-            services.libregig = {
-              enable = lib.mkEnableOption "Libregig service";
-              port = lib.mkOption {
-                type = lib.types.port;
-                default = 3000;
-                description = "Port on which the Rails server will listen";
-              };
-              environment = lib.mkOption {
-                type = lib.types.attrs;
-                default = { };
-                description = "Additional environment variables for the Rails application";
-              };
+          options.services.libregig = {
+            instances = lib.mkOption {
+              type = lib.types.attrsOf (lib.types.submodule instanceOpts);
+              default = { };
+              description = "Libregig service instances";
             };
           };
 
-          config = lib.mkIf config.services.libregig.enable {
-            imports = [
-              (import ./nix/modules/service.nix {
-                inherit lib pkgs;
-                inherit (self.packages.${pkgs.system}) env ruby;
-                libregig = ./.;
-                environmentConfig = {
-                };
-              })
-            ];
+          config = lib.mkIf (cfg.instances != { }) {
+            systemd.services = lib.mapAttrs' (
+              name: instanceCfg:
+              lib.nameValuePair "libregig-${name}" (
+                lib.mkIf instanceCfg.enable
+                  (import ./nix/modules/service.nix {
+                    inherit lib pkgs;
+                    inherit (self.packages.${pkgs.system}) env ruby;
+                    libregig = ./.;
+                    inherit name;
+                    port = instanceCfg.port;
+                    environmentConfig = instanceCfg.environment;
+                  }).systemd.services."libregig-${name}"
+              )
+            ) cfg.instances;
           };
         };
     };
