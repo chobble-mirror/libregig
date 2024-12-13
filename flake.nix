@@ -14,7 +14,7 @@
       ruby-nix,
       flake-utils,
     }:
-    flake-utils.lib.eachDefaultSystem (
+    (flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs {
@@ -48,9 +48,47 @@
         };
 
         checks = {
-          # rack-test = import ./nix/tests/rack-service.nix { inherit pkgs env ruby; };
+          rack-test = import ./nix/tests/rack-service.nix { inherit pkgs env ruby; };
           service-test = import ./nix/tests/service.nix { inherit pkgs env ruby; };
         };
       }
-    );
+    ))
+    // {
+      nixosModules.default =
+        {
+          pkgs,
+          lib,
+          config,
+          ...
+        }:
+        {
+          options = {
+            services.libregig = {
+              enable = lib.mkEnableOption "Libregig service";
+              port = lib.mkOption {
+                type = lib.types.port;
+                default = 3000;
+                description = "Port on which the Rails server will listen";
+              };
+              environment = lib.mkOption {
+                type = lib.types.attrs;
+                default = { };
+                description = "Additional environment variables for the Rails application";
+              };
+            };
+          };
+
+          config = lib.mkIf config.services.libregig.enable {
+            imports = [
+              (import ./nix/modules/service.nix {
+                inherit lib pkgs;
+                inherit (self.packages.${pkgs.system}) env ruby;
+                libregig = ./.;
+                environmentConfig = {
+                };
+              })
+            ];
+          };
+        };
+    };
 }

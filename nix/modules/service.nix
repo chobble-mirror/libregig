@@ -3,7 +3,8 @@
   pkgs,
   env,
   ruby,
-  railsApp,
+  libregig,
+  port ? 3000,
   environmentConfig ? { },
   ...
 }:
@@ -19,15 +20,15 @@ let
   };
 in
 {
-  systemd.services.rails-server = {
+  systemd.services.libregig = {
     enable = true;
     wantedBy = [ "multi-user.target" ];
     environment = defaultEnvironment // environmentConfig;
     serviceConfig = {
-      RuntimeDirectory = "rails-server";
-      WorkingDirectory = "/run/rails-server";
-      ExecStartPre = "+${pkgs.coreutils}/bin/cp -r ${railsApp}/. /run/rails-server/";
-      ExecStart = "${env}/bin/rails server -p 3000";
+      RuntimeDirectory = "libregig";
+      WorkingDirectory = "/run/libregig";
+      ExecStartPre = "+${pkgs.coreutils}/bin/cp -r ${libregig}/. /run/libregig/";
+      ExecStart = "${env}/bin/rails server -p ${toString port}";
       StandardOutput = "journal";
       StandardError = "journal";
     };
