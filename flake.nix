@@ -36,6 +36,11 @@
         commonDeps = import ./nix/dependencies.nix { inherit pkgs env ruby; };
       in
       {
+        packages = {
+          inherit env ruby;
+          default = env;
+        };
+
         devShells = rec {
           default = dev;
           dev = pkgs.mkShell {
