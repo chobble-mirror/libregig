@@ -122,7 +122,7 @@
                   serviceConfig = {
                     User = "libregig-${name}";
                     Group = "libregig-${name}";
-                    Type = "forking";
+                    Type = "simple";
                     RuntimeDirectory = "libregig-${name}";
                     StateDirectory = "libregig-${name}";
                     WorkingDirectory = "/run/libregig-${name}";
