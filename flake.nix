@@ -126,7 +126,10 @@
                     RuntimeDirectory = "libregig-${name}";
                     StateDirectory = "libregig-${name}";
                     WorkingDirectory = "/run/libregig-${name}";
-                    ExecStart = "+${self.packages.${pkgs.system}.env}/bin/rails server -p ${toString instanceCfg.port}";
+                    # ExecStart = "+${self.packages.${pkgs.system}.env}/bin/rails server -p ${toString instanceCfg.port}";
+                    ExecStart = "+${
+                      self.packages.${pkgs.system}.env
+                    }/bin/bundle exec rails server -p ${toString instanceCfg.port}";
                     StandardOutput = "journal";
                     StandardError = "journal";
                   };
