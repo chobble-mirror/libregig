@@ -2,6 +2,7 @@
   pkgs,
   env,
   ruby,
+  self,
 }:
 let
   commonDeps = import ../dependencies.nix { inherit pkgs env ruby; };
@@ -9,33 +10,26 @@ let
 in
 pkgs.nixosTest {
   name = "service-test";
+
   nodes.machine =
     { lib, pkgs, ... }:
-    let
-      service = import ../modules/service.nix {
-        inherit
-          lib
-          pkgs
-          env
-          ruby
-          libregig
-          ;
-        name = "default";
-        environmentConfig = {
+    {
+      imports = [ self.nixosModules.default ];
+      services.libregig.instances.default = {
+        enable = true;
+        port = 3000;
+        environment = {
           RAILS_ENV = "test";
           FORCE_SSL = "false";
           ASSUME_SSL = "false";
         };
       };
-    in
-    {
-      imports = [ service ];
       environment.systemPackages = commonDeps;
     };
-
   testScript = ''
     machine.start()
     machine.wait_for_unit("multi-user.target")
+    machine.succeed("ls -la /var/lib/libregig-default >&2")
     machine.succeed("cp ${libregig}/env-example /var/lib/libregig-default/.env >&2")
     machine.succeed("systemctl start libregig-default-migrate >&2")
     machine.succeed("systemctl start libregig-default >&2 &")

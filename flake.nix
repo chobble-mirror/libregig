@@ -40,25 +40,19 @@
           inherit env ruby;
           default = env;
         };
-
-        devShells = rec {
-          default = dev;
-          dev = pkgs.mkShell {
-            buildInputs = commonDeps;
-            env = {
-              BUNDLE_PATH = "$GEM_HOME";
-              TAILWINDCSS_INSTALL_DIR = "./node_modules/.bin";
-            };
-          };
-        };
-
         checks = {
-          service-test = import ./nix/tests/service.nix { inherit pkgs env ruby; };
+          service-test = import ./nix/tests/service.nix {
+            inherit
+              pkgs
+              env
+              ruby
+              self
+              ;
+          };
         };
       }
     ))
     // {
-      nixosModules.libregig = ./nix/modules/service.nix;
       nixosModules.default =
         {
           pkgs,
@@ -72,10 +66,6 @@
             { name, config, ... }:
             {
               options = {
-                name = lib.mkOption {
-                  type = lib.types.str;
-                  description = "Name of the libregig instance";
-                };
                 enable = lib.mkEnableOption "Libregig instance ${name}";
                 port = lib.mkOption {
                   type = lib.types.port;
@@ -85,14 +75,30 @@
                 environment = lib.mkOption {
                   type = lib.types.attrs;
                   default = { };
-                  description = "Additional environment variables for the Rails application";
+                  description = "Environment variables for this instance";
                 };
               };
             };
+
+          defaultEnvironment = {
+            GEM_HOME = "${self.packages.${pkgs.system}.env}";
+            RAILS_ENV = "production";
+            RAILS_LOG_TO_STDOUT = "1";
+            RAILS_SERVE_STATIC_FILES = "1";
+            SECRET_KEY_BASE = "secret_key_base";
+          };
+
+          makeSetupScript =
+            name:
+            pkgs.writeShellScriptBin "libregig-setup" ''
+              set -e
+              set -x
+              mkdir -p "/var/lib/libregig-${name}"
+              cp -r "${./.}/." "/run/libregig-${name}"
+              cp -r "/var/lib/libregig-${name}/." "/run/libregig-${name}"
+            '';
         in
         {
-          imports = [ ./nix/modules/service.nix ];
-
           options.services.libregig = {
             instances = lib.mkOption {
               type = lib.types.attrsOf (lib.types.submodule instanceOpts);
@@ -102,19 +108,84 @@
           };
 
           config = lib.mkIf (cfg.instances != { }) {
-            systemd.services = lib.mapAttrs' (
+            systemd.services = lib.mkMerge [
+              # Main services
+              (lib.mapAttrs' (
+                name: instanceCfg:
+                lib.nameValuePair "libregig-${name}" {
+                  description = "libregig instance ${name}";
+                  environment = defaultEnvironment // instanceCfg.environment;
+                  enable = instanceCfg.enable;
+                  wantedBy = [ "multi-user.target" ];
+                  after = [ "libregig-${name}-setup.service" ];
+                  requires = [ "libregig-${name}-setup.service" ];
+                  serviceConfig = {
+                    User = "libregig-${name}";
+                    Group = "libregig-${name}";
+                    Type = "forking";
+                    RuntimeDirectory = "libregig-${name}";
+                    StateDirectory = "libregig-${name}";
+                    WorkingDirectory = "/run/libregig-${name}";
+                    ExecStart = "+${self.packages.${pkgs.system}.env}/bin/rails server -p ${toString instanceCfg.port}";
+                    StandardOutput = "journal";
+                    StandardError = "journal";
+                  };
+                }
+              ) cfg.instances)
+
+              # Setup services
+              (lib.mapAttrs' (
+                name: instanceCfg:
+                lib.nameValuePair "libregig-${name}-setup" {
+                  description = "Setup for libregig-${name}";
+                  environment = defaultEnvironment // instanceCfg.environment;
+                  after = [ "users.target" ];
+                  before = [ "libregig-${name}.service" ];
+                  requiredBy = [ "libregig-${name}.service" ];
+                  serviceConfig = {
+                    User = "libregig-${name}";
+                    Group = "libregig-${name}";
+                    Type = "oneshot";
+                    ExecStart = "+${makeSetupScript name}/bin/libregig-setup";
+                    StandardOutput = "journal";
+                    StandardError = "journal";
+                  };
+                }
+              ) cfg.instances)
+
+              # Migration services
+              (lib.mapAttrs' (
+                name: instanceCfg:
+                lib.nameValuePair "libregig-${name}-migrate" {
+                  description = "Database migrations for libregig-${name}";
+                  environment = defaultEnvironment // instanceCfg.environment;
+                  after = [ "libregig-${name}-setup.service" ];
+                  requires = [ "libregig-${name}-setup.service" ];
+                  before = [ "libregig-${name}.service" ];
+                  requiredBy = [ "libregig-${name}.service" ];
+                  serviceConfig = {
+                    User = "libregig-${name}";
+                    Group = "libregig-${name}";
+                    Type = "oneshot";
+                    WorkingDirectory = "/run/libregig-${name}";
+                    ExecStart = "+${self.packages.${pkgs.system}.env}/bin/rails db:migrate";
+                    StandardOutput = "journal";
+                    StandardError = "journal";
+                  };
+                }
+              ) cfg.instances)
+            ];
+
+            users.users = lib.mapAttrs' (
               name: instanceCfg:
-              lib.nameValuePair "libregig-${name}" (
-                lib.mkIf instanceCfg.enable
-                  (import ./nix/modules/service.nix {
-                    inherit lib pkgs;
-                    inherit (self.packages.${pkgs.system}) env ruby;
-                    libregig = ./.;
-                    inherit name;
-                    port = instanceCfg.port;
-                    environmentConfig = instanceCfg.environment;
-                  }).systemd.services."libregig-${name}"
-              )
+              lib.nameValuePair "libregig-${name}" {
+                isSystemUser = true;
+                group = "libregig-${name}";
+              }
+            ) cfg.instances;
+
+            users.groups = lib.mapAttrs' (
+              name: instanceCfg: lib.nameValuePair "libregig-${name}" { }
             ) cfg.instances;
           };
         };
