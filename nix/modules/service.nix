@@ -20,7 +20,7 @@ let
     RAILS_SERVE_STATIC_FILES = "1";
     SECRET_KEY_BASE = "secret_key_base";
   };
-  setupScript = pkgs.writeShellScriptBin "${serviceName}-setup" ''
+  setupScript = pkgs.writeShellScriptBin "libregig-setup" ''
     set -e
     set -x
     mkdir -p "/var/lib/${runtimeDir}"
@@ -29,7 +29,7 @@ let
     cp -r "/var/lib/${runtimeDir}/." "/run/${runtimeDir}"
     chmod 0664 -R /run/${runtimeDir}
   '';
-  migrateScript = pkgs.writeShellScriptBin "${serviceName}-migrate" ''
+  migrateScript = pkgs.writeShellScriptBin "libregig-migrate" ''
     set -e
     set -x
     cd /run/${runtimeDir}
@@ -39,7 +39,6 @@ in
 {
   users.users.${serviceName} = {
     isSystemUser = true;
-    name = "Libregig service user";
     group = serviceName;
   };
 
@@ -47,7 +46,7 @@ in
 
   systemd.services.${serviceName} = {
     enable = true;
-    # wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
     after = [ "${serviceName}-setup.service" ];
     requires = [ "${serviceName}-setup.service" ];
     environment = defaultEnvironment // environmentConfig;
@@ -66,14 +65,14 @@ in
 
   systemd.services."${serviceName}-setup" = {
     description = "Setup for ${serviceName}";
+    after = [ "users.target" ];
     before = [ "${serviceName}.service" ];
     requiredBy = [ "${serviceName}.service" ];
     serviceConfig = {
       User = serviceName;
       Group = serviceName;
       Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "+${setupScript}/bin/libregig-default-setup";
+      ExecStart = "+${setupScript}/bin/libregig-setup";
     };
   };
 
@@ -85,7 +84,7 @@ in
       Group = serviceName;
       Type = "oneshot";
       WorkingDirectory = "/run/${runtimeDir}";
-      ExecStart = "+${migrateScript}/bin/libregig-default-migrate";
+      ExecStart = "+${migrateScript}/bin/libregig-migrate";
     };
     after = [ "${serviceName}-setup.service" ];
     requires = [ "${serviceName}-setup.service" ];

@@ -36,8 +36,6 @@ pkgs.nixosTest {
   testScript = ''
     machine.start()
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("mkdir /var/lib/libregig-default")
-    machine.succeed("chmod 0664 /var/lib/libregig-default")
     machine.succeed("cp ${libregig}/env-example /var/lib/libregig-default/.env >&2")
     machine.succeed("systemctl start libregig-default-migrate >&2")
     machine.succeed("systemctl start libregig-default >&2 &")
