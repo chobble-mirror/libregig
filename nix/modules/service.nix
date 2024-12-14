@@ -30,7 +30,6 @@ let
     set -e
     set -x
     mkdir -p "/var/lib/${runtimeDir}"
-    #chmod 0664 -R "/var/lib/${runtimeDir}"
     cp -r "${libregig}/." "/run/${runtimeDir}"
     cp -r "/var/lib/${runtimeDir}/." "/run/${runtimeDir}"
   '';

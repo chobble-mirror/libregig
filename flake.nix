@@ -58,6 +58,7 @@
       }
     ))
     // {
+      nixosModules.libregig = ./nix/modules/service.nix;
       nixosModules.default =
         {
           pkgs,
