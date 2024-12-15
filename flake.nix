@@ -5,6 +5,13 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     ruby-nix.url = "github:inscapist/ruby-nix/1f3756f8a713171bf891b39c0d3b1fe6d83a4a63";
     flake-utils.url = "github:numtide/flake-utils/11707dc2f618dd54ca8739b309ec4fc024de578b";
+
+    bundix = {
+      url = "github:inscapist/bundix/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    bob-ruby.url = "github:bobvanderlinden/nixpkgs-ruby";
+    bob-ruby.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -13,31 +20,62 @@
       nixpkgs,
       ruby-nix,
       flake-utils,
+      bundix,
+      bob-ruby,
     }:
     (flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ ruby-nix.overlays.ruby ];
+          overlays = [ bob-ruby.overlays.ruby ];
         };
         rubyNix = ruby-nix.lib pkgs;
+        gemset = import ./gemset.nix;
+        ruby = pkgs."ruby-3.3.6";
+        bundixcli = bundix.packages.${system}.default;
 
+        bundleLock = pkgs.writeShellScriptBin "bundle-lock" ''
+          export BUNDLE_PATH=vendor/bundle
+          bundle lock
+        '';
+        bundleUpdate = pkgs.writeShellScriptBin "bundle-update" ''
+          export BUNDLE_PATH=vendor/bundle
+          bundle lock --update
+        '';
+      in
+      rec {
         inherit
           (rubyNix {
+            inherit gemset ruby;
             name = "libregig";
-            gemset = ./gemset.nix;
-            ruby = pkgs.ruby_3_2;
           })
           env
-          ruby
           ;
-      in
-      {
+
+        devShells = rec {
+          default = dev;
+          dev = pkgs.mkShell {
+            buildInputs =
+              [
+                env
+                bundixcli
+                bundleLock
+                bundleUpdate
+              ]
+              ++ (with pkgs; [
+                yarn
+                rufo
+                # more packages here
+              ]);
+          };
+        };
+
         packages = {
           inherit env ruby;
           default = env;
         };
+
         checks = {
           service-test = import ./nix/tests/service.nix {
             inherit pkgs self;
