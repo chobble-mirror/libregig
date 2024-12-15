@@ -135,15 +135,10 @@
               # copy repo
               cp -r "${./.}/." "/run/libregig-${name}"
 
-              # node_modules
-              rm -rf "/run/libregig-${name}/node_modules"
-              mkdir -p "/var/lib/libregig-${name}/node_modules"
-              ln -s "/var/lib/libregig-${name}/node_modules" "/run/libregig-${name}/node_modules"
-
               # asset builds
               rm -rf "/run/libregig-${name}/app/assets/builds"
               mkdir -p "/var/lib/libregig-${name}/app/assets/builds"
-              mkdir -p "/run/libregig-${name}/app/assets/builds"
+              mkdir -p "/run/libregig-${name}/app/assets"
               ln -s "/var/lib/libregig-${name}/app/assets/builds" "/run/libregig-${name}/app/assets/builds"
 
               # clear storage
