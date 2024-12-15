@@ -1,18 +1,15 @@
 {
   pkgs,
-  env,
-  ruby,
   self,
 }:
 let
-  commonDeps = import ../dependencies.nix { inherit pkgs env ruby; };
   libregig = ../..;
 in
 pkgs.nixosTest {
   name = "service-test";
 
   nodes.machine =
-    { lib, pkgs, ... }:
+    { ... }:
     {
       imports = [ self.nixosModules.default ];
       services.libregig.instances.default = {
@@ -24,7 +21,6 @@ pkgs.nixosTest {
           ASSUME_SSL = "false";
         };
       };
-      environment.systemPackages = commonDeps;
     };
   testScript = ''
     machine.start()

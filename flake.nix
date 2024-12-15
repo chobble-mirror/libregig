@@ -42,12 +42,7 @@
         };
         checks = {
           service-test = import ./nix/tests/service.nix {
-            inherit
-              pkgs
-              env
-              ruby
-              self
-              ;
+            inherit pkgs self;
           };
         };
       }
@@ -62,6 +57,46 @@
         }:
         let
           cfg = config.services.libregig;
+          commonDeps = import ./nix/dependencies.nix {
+            inherit pkgs;
+            env = self.packages.${pkgs.system}.env;
+            ruby = self.packages.${pkgs.system}.ruby;
+          };
+
+          makeBaseServiceConfig = name: {
+            User = "libregig-${name}";
+            Group = "libregig-${name}";
+            StandardOutput = "journal";
+            StandardError = "journal";
+            Path = lib.makeBinPath commonDeps;
+
+            # Security settings
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            PrivateTmp = true;
+            PrivateDevices = true;
+            PrivateUsers = true;
+            ProtectClock = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [
+              "AF_UNIX"
+              "AF_INET"
+              "AF_INET6"
+              "AF_NETLINK"
+            ];
+            RestrictNamespaces = true;
+            LockPersonality = true;
+            MemoryDenyWriteExecute = false;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            RemoveIPC = true;
+            PrivateMounts = true;
+          };
+
           instanceOpts =
             { name, config, ... }:
             {
@@ -93,9 +128,44 @@
             pkgs.writeShellScriptBin "libregig-setup" ''
               set -e
               set -x
-              mkdir -p "/var/lib/libregig-${name}"
+
+              rm -rf "/run/libregig-${name}"
+              mkdir "/run/libregig-${name}"
+
+              # copy repo
               cp -r "${./.}/." "/run/libregig-${name}"
-              cp -r "/var/lib/libregig-${name}/." "/run/libregig-${name}"
+
+              # node_modules
+              rm -rf "/run/libregig-${name}/node_modules"
+              mkdir -p "/var/lib/libregig-${name}/node_modules"
+              ln -s "/var/lib/libregig-${name}/node_modules" "/run/libregig-${name}/node_modules"
+
+              # asset builds
+              rm -rf "/run/libregig-${name}/app/assets/builds"
+              mkdir -p "/var/lib/libregig-${name}/app/assets/builds"
+              mkdir -p "/run/libregig-${name}/app/assets/builds"
+              ln -s "/var/lib/libregig-${name}/app/assets/builds" "/run/libregig-${name}/app/assets/builds"
+
+              # clear storage
+              rm -rf "/run/libregig-${name}/storage"
+              mkdir -p "/var/lib/libregig-${name}/storage"
+              ln -s "/var/lib/libregig-${name}/storage" "/run/libregig-${name}/storage"
+
+              # clear log
+              rm -rf "/run/libregig-${name}/log"
+              mkdir -p "/var/lib/libregig-${name}/log"
+              ln -s "/var/lib/libregig-${name}/log" "/run/libregig-${name}/log"
+
+              # clear tmp
+              rm -rf "/run/libregig-${name}/tmp"
+              mkdir -p "/var/lib/libregig-${name}/tmp"
+              ln -s "/var/lib/libregig-${name}/tmp" "/run/libregig-${name}/tmp"
+
+              # link env
+              rm -f "/run/libregig-${name}/.env"
+              ln -s "/var/lib/libregig-${name}/.env" "/run/libregig-${name}/.env"
+
+              chown -R libregig-${name}:libregig-${name} /var/lib/libregig-${name}
             '';
         in
         {
@@ -119,19 +189,15 @@
                   wantedBy = [ "multi-user.target" ];
                   after = [ "libregig-${name}-setup.service" ];
                   requires = [ "libregig-${name}-setup.service" ];
-                  serviceConfig = {
-                    User = "libregig-${name}";
-                    Group = "libregig-${name}";
+                  serviceConfig = makeBaseServiceConfig name // {
                     Type = "simple";
+                    CacheDirectory = "libregig-${name}";
                     RuntimeDirectory = "libregig-${name}";
                     StateDirectory = "libregig-${name}";
                     WorkingDirectory = "/run/libregig-${name}";
-                    # ExecStart = "+${self.packages.${pkgs.system}.env}/bin/rails server -p ${toString instanceCfg.port}";
                     ExecStart = "+${
                       self.packages.${pkgs.system}.env
                     }/bin/bundle exec rails server -p ${toString instanceCfg.port}";
-                    StandardOutput = "journal";
-                    StandardError = "journal";
                   };
                 }
               ) cfg.instances)
@@ -145,13 +211,9 @@
                   after = [ "users.target" ];
                   before = [ "libregig-${name}.service" ];
                   requiredBy = [ "libregig-${name}.service" ];
-                  serviceConfig = {
-                    User = "libregig-${name}";
-                    Group = "libregig-${name}";
+                  serviceConfig = makeBaseServiceConfig name // {
                     Type = "oneshot";
                     ExecStart = "+${makeSetupScript name}/bin/libregig-setup";
-                    StandardOutput = "journal";
-                    StandardError = "journal";
                   };
                 }
               ) cfg.instances)
@@ -166,14 +228,10 @@
                   requires = [ "libregig-${name}-setup.service" ];
                   before = [ "libregig-${name}.service" ];
                   requiredBy = [ "libregig-${name}.service" ];
-                  serviceConfig = {
-                    User = "libregig-${name}";
-                    Group = "libregig-${name}";
+                  serviceConfig = makeBaseServiceConfig name // {
                     Type = "oneshot";
                     WorkingDirectory = "/run/libregig-${name}";
                     ExecStart = "+${self.packages.${pkgs.system}.env}/bin/rails db:migrate";
-                    StandardOutput = "journal";
-                    StandardError = "journal";
                   };
                 }
               ) cfg.instances)

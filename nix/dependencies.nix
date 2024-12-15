@@ -21,5 +21,6 @@
   pkgs.rubyPackages_3_2.sassc
   pkgs.rubyPackages.execjs
   pkgs.sqlite
+  pkgs.tailwindcss
   pkgs.xclip
 ]
