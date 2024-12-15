@@ -5,8 +5,6 @@ ruby "~> 3.2.6"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.0"
 
-gem "sassc-rails"
-
 # The original aet pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

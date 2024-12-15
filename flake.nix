@@ -32,8 +32,6 @@
           env
           ruby
           ;
-
-        commonDeps = import ./nix/dependencies.nix { inherit pkgs env ruby; };
       in
       {
         packages = {

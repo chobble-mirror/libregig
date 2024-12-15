@@ -17,7 +17,6 @@
   pkgs.rubyPackages_3_2.psych
   pkgs.rubyPackages_3_2.rails
   pkgs.rubyPackages_3_2.rugged
-  pkgs.rubyPackages_3_2.sassc
   pkgs.rubyPackages_3_2.tilt
   pkgs.sqlite
 ]
