@@ -471,6 +471,20 @@
     targets = [];
     version = "0.17.4";
   };
+  ffi = {
+    groups = ["default"];
+    platforms = [];
+    source = null;
+    targets = [{
+      remotes = ["https://rubygems.org"];
+      sha256 = "1621lgx1isrwjj4j27lvlxjfd6v3pnq2ahvhn2y6pp8rb6fya58h";
+      target = "x86_64-linux-gnu";
+      targetCPU = "x86_64";
+      targetOS = "linux";
+      type = "gem";
+    }];
+    version = "1.17.0";
+  };
   globalid = {
     dependencies = ["activesupport"];
     groups = ["default"];
@@ -1240,6 +1254,32 @@
     targets = [];
     version = "2.3.2";
   };
+  sassc = {
+    dependencies = ["ffi"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0gpqv48xhl8mb8qqhcifcp0pixn206a7imc07g48armklfqa4q2c";
+      target = "ruby";
+      type = "gem";
+    };
+    targets = [];
+    version = "2.4.0";
+  };
+  sassc-rails = {
+    dependencies = ["railties" "sassc" "sprockets" "sprockets-rails" "tilt"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1d9djmwn36a5m8a83bpycs48g8kh1n2xkyvghn7dr6zwh4wdyksz";
+      target = "ruby";
+      type = "gem";
+    };
+    targets = [];
+    version = "2.1.2";
+  };
   securerandom = {
     groups = ["default" "development" "test"];
     platforms = [];
@@ -1477,6 +1517,18 @@
     };
     targets = [];
     version = "1.3.2";
+  };
+  tilt = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0kds7wkxmb038cwp6ravnwn8k65ixc68wpm8j5jx5bhx8ndg4x6z";
+      target = "ruby";
+      type = "gem";
+    };
+    targets = [];
+    version = "2.4.0";
   };
   timeout = {
     groups = ["default"];

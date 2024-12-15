@@ -55,18 +55,11 @@
         }:
         let
           cfg = config.services.libregig;
-          commonDeps = import ./nix/dependencies.nix {
-            inherit pkgs;
-            env = self.packages.${pkgs.system}.env;
-            ruby = self.packages.${pkgs.system}.ruby;
-          };
-
           makeBaseServiceConfig = name: {
             User = "libregig-${name}";
             Group = "libregig-${name}";
             StandardOutput = "journal";
             StandardError = "journal";
-            Path = lib.makeBinPath commonDeps;
 
             # Security settings
             ProtectSystem = "strict";
