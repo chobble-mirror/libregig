@@ -5,7 +5,7 @@
 <section>
   <h1 class="page-heading"><%= title %></h1>
   <%= form_with(model: @event, local: true,
-    builder: FormBuilders::TailwindFormBuilder) do |form| %>
+    builder: FormBuilders::NiceFormBuilder) do |form| %>
     <%= form.text_field :name %>
     <%= form.text_area :description %>
     <%= form.date_field :date %>

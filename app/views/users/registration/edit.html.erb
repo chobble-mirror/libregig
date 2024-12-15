@@ -9,7 +9,7 @@
   </p>
   <%= form_with local: true,
                 url: resend_confirmation_path,
-                builder: FormBuilders::TailwindFormBuilder do |form| %>
+                builder: FormBuilders::NiceFormBuilder do |form| %>
     <%= form.submit 'Re-send', class: 'primary_button' %>
   <% end %>
   <% if Rails.env.development? %>

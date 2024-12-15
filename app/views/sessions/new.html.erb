@@ -8,7 +8,7 @@
     url: login_path,
     method: :post,
     local: true,
-    builder: FormBuilders::TailwindFormBuilder do |form| %>
+    builder: FormBuilders::NiceFormBuilder do |form| %>
     <%= form.text_field :username %>
     <%= form.password_field :password %>
     <%= form.submit "Log In" %>

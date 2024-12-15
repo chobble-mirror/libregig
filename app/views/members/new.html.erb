@@ -4,7 +4,7 @@
   </h1>
   <%= form_with model: @member,
                 local: true,
-                builder: FormBuilders::TailwindFormBuilder do |form| %>
+                builder: FormBuilders::NiceFormBuilder do |form| %>
     <%= form.text_field :name %>
     <%= form.submit "Add" %>
   <% end %>
