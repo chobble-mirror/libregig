@@ -6,21 +6,18 @@
 [
   env
   ruby
-  pkgs.nodejs_22
   pkgs.glibc
-  pkgs.nodePackages_latest.tailwindcss
   pkgs.libyaml
   pkgs.pkg-config
   pkgs.ruby_3_2
   pkgs.rubyPackages_3_2.concurrent-ruby
+  pkgs.rubyPackages_3_2.ffi
   pkgs.rubyPackages_3_2.htmlbeautifier
   pkgs.rubyPackages_3_2.nokogiri
   pkgs.rubyPackages_3_2.psych
   pkgs.rubyPackages_3_2.rails
   pkgs.rubyPackages_3_2.rugged
   pkgs.rubyPackages_3_2.sassc
-  pkgs.rubyPackages.execjs
+  pkgs.rubyPackages_3_2.tilt
   pkgs.sqlite
-  pkgs.tailwindcss
-  pkgs.xclip
 ]

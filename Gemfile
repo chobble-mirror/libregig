@@ -5,9 +5,9 @@ ruby "~> 3.2.6"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.0"
 
-# gem "sassc-rails"
+gem "sassc-rails"
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+# The original aet pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
 # Use sqlite3 as the database for Active Record
@@ -31,8 +31,6 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-# find unused code
-gem "leftovers", require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -59,6 +57,9 @@ group :development do
   gem "erb_lint"
   # gem "licensed"
   gem "prosopite" # n+1 queries
+
+  # find unused code
+  gem "leftovers", require: false
 end
 
 group :test do
@@ -73,5 +74,3 @@ group :test do
   gem "simplecov", require: false
   gem "simplecov-json", require: false
 end
-
-gem "tailwindcss-rails", "~> 2.4"
