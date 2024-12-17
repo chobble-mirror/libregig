@@ -1,5 +1,4 @@
 <% content_for :title, "Shared Items" %>
-
 <section>
   <div class="flex justify-between mb-8">
     <%= page_heading("Shared Items") %>
@@ -9,55 +8,54 @@
       <% end %>
     </span>
   </div>
-
   <% if @permissions.any? %>
     <div class="relative overflow-x-auto">
       <table>
         <thead>
-        <tr>
-          <th class="w-auto lg:w-80">
-            <%= table_header_sort('permissions', 'name', 'name', 'date') %>
-          </th>
-          <th style="width: 1%">
-            <%= table_header_sort('permissions', 'type', 'type') %>
-          </th>
-          <th style="width: 1%">
-            <%= table_header_sort('permissions', 'status', 'status') %>
-          </th>
-          <th style="width: 1%">
-            <%= table_header_sort('permissions', 'recipient', 'recipient') %>
-          </th>
-          <th class="hidden md:table-cell" style="width: 1%;">
-            <%= table_header_sort('permissions', 'created', 'created') %>
-          </th>
-          <th class="hidden md:table-cell" style="width: 1%;">
-            <%= table_header_sort('permissions', 'last_modified', 'modified') %>
-          </th>
-        </tr>
+          <tr>
+            <th class="w-auto lg:w-80">
+              <%= table_header_sort('permissions', 'name', 'name', 'date') %>
+            </th>
+            <th style="width: 1%">
+              <%= table_header_sort('permissions', 'type', 'type') %>
+            </th>
+            <th style="width: 1%">
+              <%= table_header_sort('permissions', 'status', 'status') %>
+            </th>
+            <th style="width: 1%">
+              <%= table_header_sort('permissions', 'recipient', 'recipient') %>
+            </th>
+            <th class="hidden md:table-cell" style="width: 1%;">
+              <%= table_header_sort('permissions', 'created', 'created') %>
+            </th>
+            <th class="hidden md:table-cell" style="width: 1%;">
+              <%= table_header_sort('permissions', 'last_modified', 'modified') %>
+            </th>
+          </tr>
         </thead>
         <tbody>
-        <% @permissions.each do |permission| %>
-          <tr>
-            <td>
-              <%= link_to permission.item.name, permission.item, class: 'break-all' %>
-            </td>
-            <td>
-              <%= permission.item_type %>
-            </td>
-            <td>
-              <%= permission.status %>
-            </td>
-            <td>
-              <%= permission.user.username %>
-            </td>
-            <td class="hidden md:table-cell whitespace-nowrap" title="<%= permission.created_at %>">
-              <%= time_ago_in_words(permission.created_at) %>
-            </td>
-            <td class="hidden md:table-cell whitespace-nowrap" title="<%= permission.updated_at %>">
-              <%= time_ago_in_words(permission.updated_at) %>
-            </td>
-          </tr>
-        <% end %>
+          <% @permissions.each do |permission| %>
+            <tr>
+              <td>
+                <%= link_to permission.item.name, permission.item, class: 'break-all' %>
+              </td>
+              <td>
+                <%= permission.item_type %>
+              </td>
+              <td>
+                <%= permission.status %>
+              </td>
+              <td>
+                <%= permission.user.username %>
+              </td>
+              <td class="hidden md:table-cell whitespace-nowrap" title="<%= permission.created_at %>">
+                <%= time_ago_in_words(permission.created_at) %>
+              </td>
+              <td class="hidden md:table-cell whitespace-nowrap" title="<%= permission.updated_at %>">
+                <%= time_ago_in_words(permission.updated_at) %>
+              </td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>

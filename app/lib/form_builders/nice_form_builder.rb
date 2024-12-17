@@ -1,5 +1,5 @@
 module FormBuilders
-  class TailwindFormBuilder < ActionView::Helpers::FormBuilder
+  class NiceFormBuilder < ActionView::Helpers::FormBuilder
     class_attribute :text_field_helpers, default: field_helpers - [:label, :check_box, :radio_button, :fields_for, :fields, :hidden_field, :file_field]
     #  leans on the FormBuilder class_attribute `field_helpers`
     #  you'll want to add a method for each of the specific helpers listed here if you want to style them
@@ -10,7 +10,7 @@ module FormBuilders
 
     text_field_helpers.each do |field_method|
       define_method(field_method) do |method, options = {}|
-        if options.delete(:tailwindified)
+        if options.delete(:already_nice)
           super(method, options)
         else
           text_like_field(field_method, method, options)
@@ -45,7 +45,7 @@ module FormBuilders
       field = send(field_method, object_method, {
         class: classes,
         title: errors_for(object_method)&.join(" ")
-      }.compact.merge(opts).merge({tailwindified: true}))
+      }.compact.merge(opts).merge({already_nice: true}))
 
       labels = labels(object_method, custom_opts[:label], options)
 
@@ -53,13 +53,13 @@ module FormBuilders
     end
 
     def labels(object_method, label_options, field_options)
-      label = tailwind_label(object_method, label_options, field_options)
+      label = nice_label(object_method, label_options, field_options)
       error_label = error_label(object_method, field_options)
 
       label + error_label
     end
 
-    def tailwind_label(object_method, label_options, field_options)
+    def nice_label(object_method, label_options, field_options)
       text, label_opts = if label_options.present?
         [label_options[:text], label_options.except(:text)]
       else
@@ -76,7 +76,7 @@ module FormBuilders
     def error_label(object_method, options)
       if errors_for(object_method).present?
         error_message = @object.errors[object_method].collect(&:titleize).join(", ")
-        tailwind_label(object_method, {text: error_message, class: "error_message"}, options)
+        nice_label(object_method, {text: error_message, class: "error_message"}, options)
       end
     end
 

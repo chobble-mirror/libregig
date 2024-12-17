@@ -13,10 +13,15 @@ class Band < ApplicationRecord
   audit_log_columns :name, :description
 
   def owner
-    permissions.where(status: :owned).first&.user
+    permission.where(status: :owned).first&.user
   end
 
   def url
     Rails.application.routes.url_helpers.edit_band_path(self)
+  end
+
+  def editable?
+    Current.user.admin? ||
+    Current.user.owned_bands.any? {|b| b.id == @band.id}
   end
 end

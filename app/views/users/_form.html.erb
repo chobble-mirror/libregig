@@ -1,6 +1,6 @@
 <%= form_with model: @user,
               local: true,
-              builder: FormBuilders::TailwindFormBuilder do |form| %>
+              builder: FormBuilders::NiceFormBuilder do |form| %>
   <%= form.text_field :username, readonly: true %>
   <%= form.text_field :email %>
   <%= form.select :time_zone,

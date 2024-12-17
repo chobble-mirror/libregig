@@ -5,7 +5,7 @@
   <%= form_with model: @user,
                 url: account_path,
                 local: true,
-                builder: FormBuilders::TailwindFormBuilder do |form| %>
+                builder: FormBuilders::NiceFormBuilder do |form| %>
     <%= form.text_field :name %>
     <%= form.text_field :email %>
     <%= form.select :time_zone,
@@ -21,7 +21,6 @@
     <%= form.submit "Save" %>
   <% end %>
 </section>
-
 <section>
   <%= form_with(url: logout_path, method: :delete) do %>
     <%= submit_tag "log out", data: { confirm: "Are you sure?" } %>

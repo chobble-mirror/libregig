@@ -6,7 +6,7 @@
   <%= form_with model: @user,
       local: true,
       url: confirm_registration_submit_path,
-      builder: FormBuilders::TailwindFormBuilder do |form| %>
+      builder: FormBuilders::NiceFormBuilder do |form| %>
     <%= hidden_field_tag :token, @token %>
     <%= form.submit "Confirm Registration", class: "primary_button" %>
   <% end %>

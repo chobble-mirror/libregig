@@ -1,10 +1,9 @@
 <%= form_with model: @member,
               local: true,
-              builder: FormBuilders::TailwindFormBuilder do |form| %>
+              builder: FormBuilders::NiceFormBuilder do |form| %>
   <%= form.text_field :name, required: true %>
   <%= form.text_area :description %>
   <%= form.text_area :skills_list %>
-
   <div class="mb-8">
     <%= form.label :bands, "Bands" %>
     <%= form.collection_check_boxes :band_ids, Band.all, :id, :name do |b| %>
@@ -14,6 +13,5 @@
       </div>
     <% end %>
   </div>
-
   <%= form.submit %>
 <% end %>

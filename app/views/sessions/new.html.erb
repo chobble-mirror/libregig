@@ -1,5 +1,4 @@
 <% content_for :title, "Log In" %>
-
 <section class="w-full max-w-xs mt-4">
   <h1>
     Log In
@@ -8,7 +7,7 @@
     url: login_path,
     method: :post,
     local: true,
-    builder: FormBuilders::TailwindFormBuilder do |form| %>
+    builder: FormBuilders::NiceFormBuilder do |form| %>
     <%= form.text_field :username %>
     <%= form.password_field :password %>
     <%= form.submit "Log In" %>

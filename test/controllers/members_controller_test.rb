@@ -82,7 +82,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "render edit form if update fails " do
-      Member.any_instance.expects(:update).returns(false)
+      Member.any_instance.expects(:save).returns(false)
 
       patch member_url(@member), params: {member: {name: "Updated Name"}}
 

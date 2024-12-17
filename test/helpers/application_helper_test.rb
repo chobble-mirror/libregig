@@ -52,7 +52,7 @@ class ApplicationHelperTest < ActionView::TestCase
     should "return correct structure for message" do
       render inline: flash_banner(:notice, "Testing, testing")
       assert_select "div.notice" do
-        assert_select "span", text: "Testing, testing"
+        assert_select "div", text: "Testing, testing"
         assert_select "input[type=checkbox][id=banneralert-notice]"
         assert_select "label.close[for=banneralert-notice]", text: "Close"
       end
@@ -61,7 +61,7 @@ class ApplicationHelperTest < ActionView::TestCase
     should "return correct structure for block" do
       render inline: flash_banner(:alert) { "Testing, testing" }
       assert_select "div.alert" do
-        assert_select "span", text: "Testing, testing"
+        assert_select "div", text: "Testing, testing"
         assert_select "input[type=checkbox][id=banneralert-alert]"
         assert_select "label.close[for=banneralert-alert]", text: "Close"
       end

@@ -54,7 +54,6 @@ yarn-debug.log*
 # pre-commit
 .pre-commit-config.yaml
 
-/app/assets/builds/*
 !/app/assets/builds/.keep
 
 .DS_Store

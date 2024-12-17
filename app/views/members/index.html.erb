@@ -15,28 +15,28 @@
           <col style="width: 1%">
         </colgroup>
         <thead>
-        <tr>
-          <th>Name</th>
-          <th>Created</th>
-          <th>Modified</th>
-        </tr>
+          <tr>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Modified</th>
+          </tr>
         </thead>
         <tbody>
-        <% @members.each do |member| %>
-          <tr style="<%= 'font-weight: bold' if member.editable %>">
-            <td>
-              <%= link_to member.name, member, class: 'break-all' %>
-            </td>
-            <td class="whitespace-nowrap"
+          <% @members.each do |member| %>
+            <tr style="<%= 'font-weight: bold' if member.editable %>">
+              <td>
+                <%= link_to member.name, member, class: 'break-all' %>
+              </td>
+              <td class="whitespace-nowrap"
                 title="<%= member.created_at.strftime("%m/%d/%Y, %H:%M") %>">
-              <%= time_ago_in_words(member.created_at) %> ago
-            </td>
-            <td class="whitespace-nowrap"
+                <%= time_ago_in_words(member.created_at) %> ago
+              </td>
+              <td class="whitespace-nowrap"
                 title="<%= member.updated_at.strftime("%m/%d/%Y, %H:%M") %>">
-              <%= time_ago_in_words(member.updated_at) %> ago
-            </td>
-          </tr>
-        <% end %>
+                <%= time_ago_in_words(member.updated_at) %> ago
+              </td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>

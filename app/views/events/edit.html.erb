@@ -1,26 +1,21 @@
 <% title = @editable ? "Editing Event" : "Viewing Event" %>
-
 <% content_for :title, title %>
-
 <section>
   <h1 class="page-heading"><%= title %></h1>
   <%= form_with(model: @event, local: true,
-    builder: FormBuilders::TailwindFormBuilder) do |form| %>
+    builder: FormBuilders::NiceFormBuilder) do |form| %>
     <%= form.text_field :name %>
     <%= form.text_area :description %>
     <%= form.date_field :date %>
     <%= form.time_field :date, as: :time %>
     <%= form.collection_select(:band_ids, Band.all, :id, :name, {},
       { multiple: true }) %>
-
     <% if flash[:saved] %>
       <div class="success_message">Saved Successfully!</div>
     <% end %>
-
     <%= form.submit 'Save', class: 'primary_button' %>
   <% end %>
 </section>
-
 <section>
   <ul>
     <li>
