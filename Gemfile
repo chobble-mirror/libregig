@@ -37,6 +37,7 @@ group :development, :test do
   gem "debug", platforms: %i[mri windows]
   gem "dotenv"
   gem "parallel_tests"
+  gem "htmlbeautifier"
 end
 
 group :development do
@@ -53,7 +54,6 @@ group :development do
   gem "standard"
   gem "letter_opener"
 
-  gem "better_html"
   gem "erb_lint"
   # gem "licensed"
   gem "prosopite" # n+1 queries

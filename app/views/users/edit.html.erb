@@ -21,7 +21,6 @@
     <%= form.submit "Save" %>
   <% end %>
 </section>
-
 <section>
   <%= form_with(url: logout_path, method: :delete) do %>
     <%= submit_tag "log out", data: { confirm: "Are you sure?" } %>

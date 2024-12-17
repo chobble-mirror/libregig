@@ -1,5 +1,4 @@
 <% content_for :title, "Mails" %>
-
 <section>
   <div class="flex justify-between mb-8">
     <%= page_heading("Mails") %>
@@ -17,38 +16,38 @@
           <col style="width: 1%">
         </colgroup>
         <thead>
-        <tr>
-          <th>
-            <%= table_header_sort("user_mails", "subject", "subject", "subject") %>
-          </th>
-          <th>
-            <%= table_header_sort("user_mails", "created", "created") %>
-          </th>
-          <th>
-            <%= table_header_sort("user_mails", "last_modified", "modified") %>
-          </th>
-          <th>
-            <%= table_header_sort("user_mails", "state", "state") %>
-          </th>
-        </tr>
+          <tr>
+            <th>
+              <%= table_header_sort("user_mails", "subject", "subject", "subject") %>
+            </th>
+            <th>
+              <%= table_header_sort("user_mails", "created", "created") %>
+            </th>
+            <th>
+              <%= table_header_sort("user_mails", "last_modified", "modified") %>
+            </th>
+            <th>
+              <%= table_header_sort("user_mails", "state", "state") %>
+            </th>
+          </tr>
         </thead>
         <tbody>
-        <% @mails.each do |mail| %>
-          <tr>
-            <td>
-              <%= link_to mail.subject, mail, class: "break-all" %>
-            </td>
-            <td class="whitespace-nowrap">
-              <%= time_ago_in_words(mail.created_at) %>
-            </td>
-            <td class="whitespace-nowrap">
-              <%= time_ago_in_words(mail.updated_at) %>
-            </td>
-            <td>
-              <%= mail.state %>
-            </td>
-          </tr>
-        <% end %>
+          <% @mails.each do |mail| %>
+            <tr>
+              <td>
+                <%= link_to mail.subject, mail, class: "break-all" %>
+              </td>
+              <td class="whitespace-nowrap">
+                <%= time_ago_in_words(mail.created_at) %>
+              </td>
+              <td class="whitespace-nowrap">
+                <%= time_ago_in_words(mail.updated_at) %>
+              </td>
+              <td>
+                <%= mail.state %>
+              </td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>

@@ -1,0 +1,14 @@
+<section>
+  <h1>
+    <%= @band.name %>
+  </h1>
+  <ul>
+    <li>
+      <strong>Updated:</strong>
+      <%= @band.updated_at %>
+    </li>
+    <li>
+      <%= link_to "Edit", edit_admin_band_path(@band) %>
+    </li>
+  </ul>
+</section>
