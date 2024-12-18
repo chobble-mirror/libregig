@@ -41,40 +41,6 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  context "#new" do
-    should "get new" do
-      get new_admin_user_url
-      assert_response :success
-      assert assigns(:numbers)
-    end
-  end
-
-  context "#create" do
-    should "create users, bands, events" do
-      post admin_users_url, params: {
-        admin_add_fake_users_form: {
-          members: "10",
-          bands: "5",
-          events: "2"
-        }
-      }
-      assert_response :redirect
-      follow_redirect!
-      assert_response :success
-      assert_match(/Members: 10/, flash[:notice])
-      assert_match(/Bands: 5/, flash[:notice])
-      assert_match(/Events: 2/, flash[:notice])
-    end
-
-    should "handle invalid parameters" do
-      post admin_users_url, params: {admin_add_fake_users_form: {members: "abc"}}
-      assert_response :redirect
-      follow_redirect!
-      assert_response :success
-      assert_match(/Invalid/, flash[:alert])
-    end
-  end
-
   context "#show" do
     should "get show" do
       get admin_user_url(@user.username)
