@@ -18,6 +18,23 @@ class EventsController < ApplicationController
   def show
   end
 
+  def create
+    @event = Event.new(event_params)
+    if @event.save!
+      permission = Permission.new(
+        item_type: Event,
+        item_id: @event.id,
+        user_id: Current.user.id,
+        status: :owned,
+        permission_type: :edit
+      )
+      permission.save!
+      redirect_to @event, notice: "Event was successfully created"
+    else
+      render :edit
+    end
+  end
+
   def update
     if @event.update(event_params)
       redirect_to @event, notice: "Event was successfully updated."
@@ -45,9 +62,9 @@ class EventsController < ApplicationController
   def filter_events_by_period(events, period)
     case period
     when "past"
-      events.where(date: ..Time.now.utc)
+      events.where('date < ? OR date IS NULL', Time.now.utc)
     when "future", nil
-      events.where(date: Time.now.utc..)
+      events.where('date > ? OR date IS NULL', Time.now.utc)
     else
       events
     end

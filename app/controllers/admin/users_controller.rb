@@ -1,9 +1,7 @@
 module Admin
   class UsersController < AdminController
     before_action :set_user, except: %i[
-      create
       index
-      new
     ]
 
     def index
@@ -22,25 +20,6 @@ module Admin
         else
           User.all
         end
-    end
-
-    def new
-      @numbers = [1, 2, 5, 10, 20, 100]
-      @add_fake_users_form = AdminAddFakeUsersForm.new
-    end
-
-    def create
-      form = AdminAddFakeUsersForm.new
-      if form.submit(add_user_params)
-        notice = <<~MSG
-          Members: #{form.members}
-          Bands: #{form.bands}
-          Events: #{form.events}
-        MSG
-        redirect_to new_admin_user_path, notice: notice
-      else
-        redirect_to new_admin_user_path, alert: "Invalid request"
-      end
     end
 
     def show
@@ -78,10 +57,6 @@ module Admin
         :email,
         :user_type
       )
-    end
-
-    def add_user_params
-      params.require(:admin_add_fake_users_form).permit(:members, :bands, :events)
     end
   end
 end

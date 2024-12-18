@@ -52,21 +52,51 @@
         </colgroup>
         <thead>
           <tr>
-            <th><%= table_header_sort('events', 'name', 'name', 'date') %></th>
-            <th><%= table_header_sort('events', 'date', 'date', 'date') %></th>
-            <th><%= table_header_sort('events', 'date', 'time', 'date') %></th>
-            <th class="hidden md:table-cell"><%= table_header_sort('events', 'created', 'created') %></th>
-            <th class="hidden md:table-cell"><%= table_header_sort('events', 'last_modified', 'modified') %></th>
+            <th>
+              <%= table_header_sort('events', 'name', 'name', 'date') %>
+            </th>
+            <th>
+              <%= table_header_sort('events', 'date', 'date', 'date') %>
+            </th>
+            <th>
+              <%= table_header_sort('events', 'date', 'time', 'date') %>
+            </th>
+            <th class="hidden md:table-cell">
+              <%= table_header_sort('events', 'created', 'created') %>
+            </th>
+            <th class="hidden md:table-cell">
+              <%= table_header_sort('events', 'last_modified', 'modified') %>
+            </th>
           </tr>
         </thead>
         <tbody>
           <% @events.each do |event| %>
             <tr>
               <td><%= link_to event.description, event_path(event), class: 'break-all', title: event.description %></td>
-              <td class="whitespace-nowrap" title="<%= event.date.strftime('%a %d %b %Y') %>"><%= event.date.strftime('%a %d %b %Y') %></td>
-              <td class="whitespace-nowrap" title="<%= event.date.strftime('%H:%M') %>"><%= event.date.strftime('%H:%M') %></td>
-              <td class="hidden md:table-cell whitespace-nowrap" title="<%= event.created_at %>"><%= time_ago_in_words(event.created_at) %></td>
-              <td class="hidden md:table-cell whitespace-nowrap" title="<%= event.updated_at %>"><%= time_ago_in_words(event.updated_at) %></td>
+              <td
+                class="whitespace-nowrap"
+                title="<%= event.date&.strftime('%a %d %b %Y') %>"
+              >
+                <%= event.date&.strftime('%a %d %b %Y') %>
+              </td>
+              <td
+                class="whitespace-nowrap"
+                title="<%= event.date&.strftime('%H:%M') %>"
+              >
+                <%= event.date&.strftime('%H:%M') %>
+              </td>
+              <td
+                class="hidden md:table-cell whitespace-nowrap"
+                title="<%= event.created_at %>"
+              >
+                <%= time_ago_in_words(event.created_at) %>
+              </td>
+              <td
+               class="hidden md:table-cell whitespace-nowrap"
+              title="<%= event.updated_at %>"
+              >
+                <%= time_ago_in_words(event.updated_at) %>
+              </td>
             </tr>
           <% end %>
         </tbody>
