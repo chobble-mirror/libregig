@@ -67,7 +67,11 @@
                 yarn
                 rufo
                 tailwindcss
-                # more packages here
+                nodePackages."@tailwindcss/aspect-ratio"
+                nodePackages."@tailwindcss/forms"
+                nodePackages."@tailwindcss/language-server"
+                nodePackages."@tailwindcss/line-clamp"
+                nodePackages."@tailwindcss/typography"
               ]);
           };
         };
