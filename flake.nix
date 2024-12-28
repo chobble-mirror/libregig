@@ -66,6 +66,7 @@
               ++ (with pkgs; [
                 yarn
                 rufo
+                tailwindcss
                 # more packages here
               ]);
           };
