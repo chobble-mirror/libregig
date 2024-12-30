@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :list_bands, only: [:edit, :update]
 
   def index
     @events = Current.user.events
@@ -88,6 +89,10 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :description, :date, :band_id)
+    params.require(:event).permit(:name, :description, :date, :event_band_ids)
+  end
+
+  def list_bands
+    @bands = Current.user.bands
   end
 end

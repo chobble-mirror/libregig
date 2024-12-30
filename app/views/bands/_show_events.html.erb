@@ -1,8 +1,21 @@
 <section>
+  <% if @band.editable? %>
+    <p class="text-right">
+      <%= link_to "Create event for '#{@band.name}'",
+        url_for(
+          controller: "events",
+          action: "new",
+          band_id: @band.id
+        ),
+        class: "primary_button"
+      %>
+    </p>
+  <% end %>  
   <% if @band.events.any? %>
     <table>
       <thead>
         <tr>
+          <th>Name</th>
         </tr>
       </thead>
     </table>

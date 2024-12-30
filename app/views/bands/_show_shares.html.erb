@@ -1,4 +1,17 @@
 <section>
+  <% if Current.user.organiser? || Current.user.admin? %>
+    <p class="text-right">
+      <%= link_to "Share '#{@band.name}' with other users",
+        url_for(
+          controller: "permissions",
+          action: "new",
+          item_type: "band",
+          item_id: @band.id
+        ),
+        class: "primary_button"
+      %>
+    </p>
+  <% end %>
   <% if @band.permission.any? %>
     <table class="mb-8">
       <thead>
@@ -35,18 +48,5 @@
         <% end %>
       </tbody>
     </table>
-  <% end %>
-  <% if Current.user.organiser? || Current.user.admin? %>
-    <p>
-      <%= link_to "Invite users to share this item",
-        url_for(
-          controller: "permissions",
-          action: "new",
-          item_type: "band",
-          item_id: @band.id
-        ),
-        class: "primary_button"
-      %>
-    </p>
   <% end %>
 </section>

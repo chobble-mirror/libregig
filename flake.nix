@@ -67,6 +67,7 @@
                 yarn
                 rufo
                 ruby-lsp
+                sqlite
                 tailwindcss
                 nodePackages."@tailwindcss/aspect-ratio"
                 nodePackages."@tailwindcss/forms"
