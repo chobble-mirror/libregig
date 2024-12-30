@@ -1,5 +1,6 @@
 class BandsController < ApplicationController
   before_action :set_band, only: [:show, :edit, :update, :destroy]
+  before_action :set_view, only: [:show, :edit]
 
   def index
     @bands = Current.user.bands
@@ -24,8 +25,15 @@ class BandsController < ApplicationController
 
   def create
     @band = Band.new(band_params)
-
     if @band.save
+      permission = Permission.new(
+        item_type: Band,
+        item_id: @band.id,
+        user_id: Current.user.id,
+        status: :owned,
+        permission_type: :edit
+      )
+      permission.save!
       redirect_to @band, notice: "Band was successfully created"
     else
       render :new, status: :unprocessable_entity
@@ -55,6 +63,14 @@ class BandsController < ApplicationController
 
   def set_band
     @band = Current.user.bands.find(params[:id])
+  end
+
+  def set_view
+    @views = %w[overview events shares]
+    @view =
+      @views.include?(params["view"]) ?
+        params["view"] :
+        "overview"
   end
 
   def sort_bands(bands, sort_param)

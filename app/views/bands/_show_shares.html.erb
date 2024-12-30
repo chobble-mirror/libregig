@@ -1,0 +1,38 @@
+<section>
+  <% if @band.permission.empty? %>
+    <h1>No shares found</h1>
+    <% if Current.user.organiser? || Current.user.admin? %>
+      <p>
+        Invite users to view or edit this band using the link below:
+      </p>
+      <p>
+        <%= link_to "Share with users",
+          url_for(
+            controller: "permissions",
+            action: "new",
+            item_type: "band",
+            item_id: @band.id
+          ),
+          class: "primary_button"
+        %>
+      </p>
+    <% else %>
+      <p>Its owner can invite other users to view or edit</p>
+    <% end %>
+  <% else %>
+    <table>
+      <thead>
+        <th>User</th>
+      </thead>
+      <tbody>
+        <% @band.permission.each do |permission| %>
+          <tr>
+            <td>
+              <%= permission.user %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</section>

@@ -1,0 +1,12 @@
+{
+  "language_overrides": {
+    "ERB": {
+      "formatter": {
+        "external": {
+          "command": "erb-format",
+          "arguments": ["--stdin", "--print-width", "80"]
+        }
+      }
+    }
+  }
+}

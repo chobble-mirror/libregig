@@ -1,30 +1,28 @@
 <% content_for :title, @event.name %>
-<div class="md:flex">
-  <section class="md:mr-4 w-full">
-    <h1 class="page-heading"><%= @event.name %></h1>
-    <p><strong>Description:</strong> <%= @event.description %></p>
-    <p><strong>Date:</strong> <%= @event.date&.strftime('%Y-%m-%d') %></p>
-    <p><strong>Time:</strong> <%= @event.date&.strftime('%H:%M') %></p>
-    <p><strong>Bands:</strong> <%= @event.bands.pluck(:name).join(", ") %></p>
-    <div class="mt-4">
-      <%= link_to 'Edit', edit_event_path(@event),
-        class: 'primary_button' %>
-      <%= link_to 'Back', events_path, class: 'secondary_button' %>
-    </div>
-  </section>
-  <section class="w-full">
-    <ul>
-      <% if @event.date %>
-        <li>
-          This event is:
-          <strong><%= distance_of_time_in_words(Time.now, @event.date) %>
-            from now</strong>
-        </li>
-      <% end %>
+
+<section class="md:mr-4 w-full" >
+  <h1 class="page-heading"><%= @event.name %></h1>
+  <p><strong>Description:</strong> <%= @event.description %></p>
+  <p><strong>Date:</strong> <%= @event.date&.strftime('%Y-%m-%d') %></p>
+  <p><strong>Time:</strong> <%= @event.date&.strftime('%H:%M') %></p>
+  <p><strong>Bands:</strong> <%= @event.bands.pluck(:name).join(", ") %></p>
+  <div class="mt-4">
+    <%= link_to 'Edit', edit_event_path(@event),
+      class: 'primary_button' %>
+    <%= link_to 'Back', events_path, class: 'secondary_button' %>
+  </div>
+</section>
+<section>
+  <ul>
+    <% if @event.date %>
       <li>
-        <strong>Versions:</strong>
-        <!-- Here you could add versioning info -->
+        This event is:
+        <strong><%= distance_of_time_in_words(Time.now, @event.date) %>
+          from now</strong>
       </li>
-    </ul>
-  </section>
-</div>
+    <% end %>
+    <li>
+      <strong>Versions:</strong>
+    </li>
+  </ul>
+</section>

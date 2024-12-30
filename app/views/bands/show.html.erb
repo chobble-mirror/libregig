@@ -1,21 +1,12 @@
-<section>
-  <h1 class="my-4">
-    <%= @band.name %>
-  </h1>
-  <pre><%= @band.description %></pre>
-  <% if @band.members.any? %>
-    <ul>
-      <li><strong>Members:</strong></li>
-      <% @band.members.each do |member| %>
-        <li>
-          <%= link_to member.name, member %>
-        </li>
-      <% end %>
-    </ul>
-  <% end %>
-  <% if @band.editable? %>
-    <p>
-      <%= link_to "Edit", edit_band_path(@band), class: "primary_button" %>
-    </p>
-  <% end %>
-</section>
+<% content_for :title, @band.name %>
+
+<% content_for :nav do %>
+  <%= render 'band_nav', band: @band %>
+<% end %>
+
+<% case @view %>
+<% when "overview" %>
+  <%= render "show_overview", band: @band %>
+<% when "shares" %>
+  <%= render "show_shares", band: @band %>
+<% end %>

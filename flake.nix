@@ -66,6 +66,7 @@
               ++ (with pkgs; [
                 yarn
                 rufo
+                ruby-lsp
                 tailwindcss
                 nodePackages."@tailwindcss/aspect-ratio"
                 nodePackages."@tailwindcss/forms"
