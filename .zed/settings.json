@@ -8,5 +8,10 @@
         }
       }
     }
+  },
+  "tabs": {
+    "git_status": true,
+    "close_position": "left",
+    "file_icons": true
   }
 }

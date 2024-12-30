@@ -86,8 +86,8 @@
           <%= render partial: 'shared/tabs', locals: { tabs: nav_tabs } %>
         </nav>
       <% end %>
-      <%= yield :nav %>
       <%= render partial: 'shared/banners' %>
+      <%= yield :nav %>
       <div class="tab-body">
         <%= yield %>
       </div>

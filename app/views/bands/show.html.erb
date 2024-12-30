@@ -4,9 +4,4 @@
   <%= render 'band_nav', band: @band %>
 <% end %>
 
-<% case @view %>
-<% when "overview" %>
-  <%= render "show_overview", band: @band %>
-<% when "shares" %>
-  <%= render "show_shares", band: @band %>
-<% end %>
+<%= render "show_#{@view}", band: @band %>

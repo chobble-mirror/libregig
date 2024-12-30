@@ -1,6 +1,6 @@
 class BandsController < ApplicationController
   before_action :set_band, only: [:show, :edit, :update, :destroy]
-  before_action :set_view, only: [:show, :edit]
+  before_action :set_view, only: [:show, :edit, :update]
 
   def index
     @bands = Current.user.bands
