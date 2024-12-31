@@ -5,13 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     ruby-nix.url = "github:inscapist/ruby-nix/1f3756f8a713171bf891b39c0d3b1fe6d83a4a63";
     flake-utils.url = "github:numtide/flake-utils/11707dc2f618dd54ca8739b309ec4fc024de578b";
-
-    bundix = {
-      url = "github:inscapist/bundix/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    bob-ruby.url = "github:bobvanderlinden/nixpkgs-ruby";
-    bob-ruby.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -20,20 +13,16 @@
       nixpkgs,
       ruby-nix,
       flake-utils,
-      bundix,
-      bob-ruby,
     }:
     (flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ bob-ruby.overlays.ruby ];
         };
         rubyNix = ruby-nix.lib pkgs;
         gemset = import ./gemset.nix;
-        ruby = pkgs."ruby-3.3.6";
-        bundixcli = bundix.packages.${system}.default;
+        ruby = pkgs.ruby_3_4;
 
         bundleLock = pkgs.writeShellScriptBin "bundle-lock" ''
           export BUNDLE_PATH=vendor/bundle
@@ -59,21 +48,21 @@
             buildInputs =
               [
                 env
-                bundixcli
                 bundleLock
                 bundleUpdate
               ]
               ++ (with pkgs; [
-                yarn
-                rufo
-                ruby-lsp
-                sqlite
-                tailwindcss
+                graphviz
                 nodePackages."@tailwindcss/aspect-ratio"
                 nodePackages."@tailwindcss/forms"
                 nodePackages."@tailwindcss/language-server"
                 nodePackages."@tailwindcss/line-clamp"
                 nodePackages."@tailwindcss/typography"
+                ruby-lsp
+                rufo
+                sqlite
+                tailwindcss
+                yarn
               ]);
           };
         };
