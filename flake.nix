@@ -3,8 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    ruby-nix.url = "github:inscapist/ruby-nix/1f3756f8a713171bf891b39c0d3b1fe6d83a4a63";
-    flake-utils.url = "github:numtide/flake-utils/11707dc2f618dd54ca8739b309ec4fc024de578b";
+    ruby-nix.url = "github:inscapist/ruby-nix";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
@@ -22,7 +22,7 @@
         };
         rubyNix = ruby-nix.lib pkgs;
         gemset = import ./gemset.nix;
-        ruby = pkgs.ruby_3_4;
+        ruby = pkgs.ruby_3_3;
 
         bundleLock = pkgs.writeShellScriptBin "bundle-lock" ''
           export BUNDLE_PATH=vendor/bundle
@@ -53,17 +53,23 @@
               ]
               ++ (with pkgs; [
                 graphviz
+                libyaml
                 nodePackages."@tailwindcss/aspect-ratio"
                 nodePackages."@tailwindcss/forms"
                 nodePackages."@tailwindcss/language-server"
                 nodePackages."@tailwindcss/line-clamp"
                 nodePackages."@tailwindcss/typography"
+                pkg-config
                 ruby-lsp
+                rubyPackages_3_3.mini_portile2
                 rufo
                 sqlite
                 tailwindcss
                 yarn
               ]);
+            shellHook = ''
+              export GEM_PATH="$PWD/.gems"
+            '';
           };
         };
 
