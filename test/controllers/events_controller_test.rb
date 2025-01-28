@@ -124,7 +124,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   context "#update" do
     should "update event" do
       patch event_url(@event_one), params: event_params(
-        name: "Updated Name", description: "Updated Description"
+        name: "Updated Name",
+        description: "Updated Description"
       )
 
       assert_redirected_to event_url(@event_one)
@@ -139,7 +140,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       Event.any_instance.expects(:update).returns(false)
 
       patch event_url(@event_one), params: event_params(
-        name: "Updated Name", description: "Updated Description"
+        name: "Updated Name",
+        description: "Updated Description"
       )
 
       assert_response :unprocessable_entity
@@ -148,11 +150,128 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     should "redirect if event not found" do
       patch event_url(-1), params: event_params(
-        name: "Updated Name", description: "Updated Description"
+        name: "Updated Name",
+        description: "Updated Description"
       )
 
       assert_redirected_to events_url
       assert_equal "Event not found.", flash[:alert]
+    end
+
+
+    should "update event with new bands" do
+      @band_three = create(:band_with_members)
+
+      patch event_url(@event_one), params: event_params(
+        name: @event_one.name,
+        description: @event_one.description,
+        band_ids: [@band_two.id, @band_three.id]
+      )
+
+      assert_redirected_to event_url(@event_one)
+      @event_one.reload
+
+      assert_equal 2, @event_one.bands.count
+      assert_includes @event_one.bands, @band_two
+      assert_includes @event_one.bands, @band_three
+      refute_includes @event_one.bands, @band_one
+    end
+
+    should "handle empty band selection" do
+      patch event_url(@event_one), params: event_params(
+        name: @event_one.name,
+        description: @event_one.description,
+        band_ids: []
+      )
+
+      assert_redirected_to event_url(@event_one)
+      @event_one.reload
+
+      assert_empty @event_one.bands
+    end
+
+    should "update event with empty name and description" do
+      patch event_url(@event_one), params: event_params(
+        name: "",
+        description: "",
+      )
+      assert_redirected_to event_url(@event_one)
+      @event_one.reload
+
+      assert_equal "", @event_one.name
+      assert_equal "", @event_one.description
+    end
+
+    should "update event with empty date" do
+      patch event_url(@event_one), params: event_params(
+        name: "Name",
+        description: "Description",
+        date: nil
+      )
+      assert_redirected_to event_url(@event_one)
+      @event_one.reload
+      assert_nil @event_one.date
+    end
+
+    should "not update event with invalid date" do
+      # this doesn't test for invalid dates like the 30th February or leap days
+      # or owt - a job for another day
+      patch event_url(@event_one), params: event_params(
+        name: "Name",
+        description: "Description",
+        date: "2000-00-00"
+      )
+      assert_redirected_to event_url(@event_one)
+      @event_one.reload
+      assert_nil @event_one.date
+    end
+
+    should "update event with valid date" do
+      patch event_url(@event_one), params: event_params(
+        name: "Name",
+        description: "Description",
+        date: "2000-01-02 23:55"
+      )
+      assert_redirected_to event_url(@event_one)
+      @event_one.reload
+      assert_equal Time.new(2000, 1, 2, 23, 55), @event_one.date
+    end
+
+    should "update event with valid date and time" do
+      patch event_url(@event_one), params: {
+        event: {
+          name: "Name",
+          description: "Description",
+          "date(1i)": 2000,
+          "date(2i)": 1,
+          "date(3i)": 2,
+          "date(4i)": 23,
+          "date(5i)": 15
+        }
+      }
+      assert_redirected_to event_url(@event_one)
+      @event_one.reload
+      assert_equal Time.new(2000, 1, 2, 23, 15), @event_one.date
+    end
+
+    should "not update event with invalid date and time" do
+      existing_date = @event_one.date
+      assert_raise ActiveRecord::MultiparameterAssignmentErrors do
+        patch event_url(@event_one), params: {
+          event: {
+            name: "Name",
+            description: "Description",
+            "date(1i)": 2000,
+            "date(2i)": 0,
+            "date(3i)": 0,
+            "date(4i)": 25,
+            "date(5i)": 80
+          }
+        }
+      end
+      assert_equal status, 200
+      @event_one.reload
+      assert_equal existing_date, @event_one.date
     end
   end
 
@@ -246,13 +365,18 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   private
 
-  def event_params(name:, description:)
+  def event_params(
+    name:,
+    description:,
+    date: 1.day.from_now,
+    band_ids: []
+  )
     {
       event: {
-        name: name,
-        description: description,
-        date: 1.day.from_now,
-        band_ids: [@band_one.id]
+        name:,
+        description:,
+        date:,
+        band_ids:
       }
     }
   end

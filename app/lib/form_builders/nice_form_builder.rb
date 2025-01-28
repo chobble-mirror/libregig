@@ -97,8 +97,7 @@ module FormBuilders
       labels = labels(method, custom_opts[:label], options)
       field = @template.content_tag("div",
         super(method, opts, html_options.merge(class: classes)),
-        {class: "flex flex-row gap-4"}
-      )
+        {class: "flex flex-row gap-4"})
 
       @template.content_tag("div", labels + field, {class: "field"})
     end
@@ -110,8 +109,7 @@ module FormBuilders
       labels = labels(method, custom_opts[:label], options)
       field = @template.content_tag("div",
         super(method, opts, html_options.merge(class: classes)),
-        {class:  "flex flex-row gap-4"}
-      )
+        {class: "flex flex-row gap-4"})
 
       @template.content_tag("div", labels + field, {class: "field"})
     end
