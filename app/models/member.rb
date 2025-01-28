@@ -32,7 +32,7 @@ class Member < ApplicationRecord
         .downcase
         .split(",")
         .map(&:strip)
-        .reject(&:blank?)
+        .compact_blank
         .uniq
 
     return if skill_names.empty?

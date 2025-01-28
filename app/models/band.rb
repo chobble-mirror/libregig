@@ -22,6 +22,6 @@ class Band < ApplicationRecord
 
   def editable?
     Current.user.admin? ||
-    Current.user.owned_bands.any? {|b| b.id == id}
+      Current.user.owned_bands.any? { |b| b.id == id }
   end
 end

@@ -142,7 +142,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         name: "Updated Name", description: "Updated Description"
       )
 
-      assert_response :success
+      assert_response :unprocessable_entity
       assert_template :edit
     end
 

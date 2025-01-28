@@ -1,38 +1,32 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy]
-  before_action :list_bands, only: [:edit, :update]
+  before_action :set_event, only: %i[show edit update destroy]
+  before_action :set_bands, only: %i[new edit update]
 
   def index
     @events = Current.user.events
-    @events = filter_events_by_period(@events, params[:period])
-    @events = filter_events_by_band(@events, params[:band_id])
-    @events = sort_events(@events, params[:sort])
+      .then { |rel| filter_by_period(rel, params[:period]) }
+      .then { |rel| filter_by_band(rel, params[:band_id]) }
+      .then { |rel| sort_results(rel, params[:sort]) }
   end
 
   def new
     @event = Event.new
   end
 
-  def edit
+  def show
   end
 
-  def show
+  def edit
   end
 
   def create
     @event = Event.new(event_params)
-    if @event.save!
-      permission = Permission.new(
-        item_type: Event,
-        item_id: @event.id,
-        user_id: Current.user.id,
-        status: :owned,
-        permission_type: :edit
-      )
-      permission.save!
+
+    if @event.save
+      create_owner_permission(@event)
       redirect_to @event, notice: "Event was successfully created"
     else
-      render :edit
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -40,16 +34,15 @@ class EventsController < ApplicationController
     if @event.update(event_params)
       redirect_to @event, notice: "Event was successfully updated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if @event.destroy
-      redirect_to events_url, notice: "Event was successfully destroyed."
-    else
-      redirect_to @event, alert: @event.errors.full_messages.to_sentence
-    end
+    @event.destroy!
+    redirect_to events_url, notice: "Event was successfully destroyed."
+  rescue ActiveRecord::RecordNotDestroyed
+    redirect_to @event, alert: @event.errors.full_messages.to_sentence
   end
 
   private
@@ -60,39 +53,46 @@ class EventsController < ApplicationController
     redirect_to events_url, alert: "Event not found."
   end
 
-  def filter_events_by_period(events, period)
+  def set_bands
+    @bands = Current.user.bands
+  end
+
+  def filter_by_period(events, period)
     case period
-    when "past"
-      events.where('date < ? OR date IS NULL', Time.now.utc)
-    when "future", nil
-      events.where('date > ? OR date IS NULL', Time.now.utc)
-    else
-      events
+    when "past" then events.past
+    when "future", nil then events.future
+    else events
     end
   end
 
-  def filter_events_by_band(events, band_id)
-    if band_id.present? && band_id.to_i.nonzero?
-      events.joins(:bands).where(bands: {id: band_id})
-    else
-      events
-    end
+  def filter_by_band(events, band_id)
+    return events unless band_id.present? && band_id.to_i.positive?
+
+    events.joins(:bands).where(bands: {id: band_id})
   end
 
-  def sort_events(events, sort_param)
-    sort_by, sort_order = sort_param&.split
-    if sort_by.present? && Event.column_names.include?(sort_by)
-      events.order(sort_by => ((sort_order == "DESC") ? :desc : :asc))
-    else
-      events.order(date: :asc)
-    end
+  def sort_results(events, sort_param)
+    column, direction = extract_sort_params(sort_param)
+    return events unless Event.attribute_names.include?(column.to_s)
+
+    events.order(column => direction)
+  end
+
+  def extract_sort_params(sort_param)
+    col, dir = sort_param.to_s.split
+    dir = %w[desc DESC].include?(dir) ? :desc : :asc
+    [col.presence || :date, dir]
   end
 
   def event_params
-    params.require(:event).permit(:name, :description, :date, :event_band_ids)
+    params.require(:event).permit(:name, :description, :date)
   end
 
-  def list_bands
-    @bands = Current.user.bands
+  def create_owner_permission(event)
+    event.permissions.create!(
+      user: Current.user,
+      status: :owned,
+      permission_type: :edit
+    )
   end
 end

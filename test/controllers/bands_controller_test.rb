@@ -118,7 +118,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
       @user = create(:user_organiser)
       log_in_as @user
     end
-  
+
     should "create new band" do
       assert_difference("Band.count") do
         post bands_url, params: band_params(

@@ -13,6 +13,8 @@ class SessionsController < ApplicationController
       logger.debug("Login success: #{username}")
       redirect_to events_path, notice: "Logged in successfully."
     else
+      @user = User.new
+      @user.username = username
       logger.debug "Login failed: #{user.inspect}"
       flash[:alert] = "Invalid username or password"
       render :new, status: :unprocessable_entity
