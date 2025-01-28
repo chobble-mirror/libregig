@@ -1,8 +1,16 @@
 .md:flex.justify-between
+  - band_id = params[:band_id]
+  - css = "mr-4"
   %p
-    = filter_link('Upcoming', events_path(band_id: params[:band_id]), 'mr-4', params[:period].nil?)
-    = filter_link('Past', events_path(period: 'past', band_id: params[:band_id], sort: 'date desc'), 'mr-4', params[:period] == 'past')
-    = filter_link('All', events_path(period: 'all', band_id: params[:band_id]), 'mr-4', params[:period] == 'all')
+    - path = events_path(band_id: band_id)
+    - selected = params[:period].nil?
+    = filter_link('Upcoming', path, css, selected)
+    - path = events_path(period: 'past', band_id: band_id, sort: 'date desc')
+    - selected = params[:period] == 'past'
+    = filter_link('Past', path, css, selected)
+    - path = events_path(period: 'all', band_id: band_id)
+    - selected = params[:period] == 'all'
+    = filter_link('All', path, css, selected)
 
 - if @events.any?
   .relative.overflow-x-auto
@@ -16,23 +24,33 @@
         %col{style: "width: 1%;"}
       %thead
         %tr
-          %th= table_header_sort('events', 'name', 'name', 'date')
-          %th= table_header_sort('events', 'date', 'date', 'date')
-          %th= table_header_sort('events', 'date', 'time', 'date')
-          %th.hidden.md:table-cell= table_header_sort('events', 'created', 'created')
-          %th.hidden.md:table-cell= table_header_sort('events', 'last_modified', 'modified')
+          %th
+            = table_header_sort('events', 'name', 'name', 'date')
+          %th
+            = table_header_sort('events', 'date', 'date', 'date')
+          %th
+            = table_header_sort('events', 'date', 'time', 'date')
+          %th.hidden.md:table-cell
+            = table_header_sort('events', 'created', 'created')
+          %th.hidden.md:table-cell
+            = table_header_sort('events', 'last_modified', 'modified')
       %tbody
         - @events.each do |event|
           %tr
             %td
-              = link_to (event.name != "" ? event.name : "NOT SET"), event_path(event), class: 'break-all', title: event.description
-            %td.whitespace-nowrap{title: "#{event.date.strftime('%a %d %b %Y')}"}
+              - name = event.name != "" ? event.name : "NOT SET"
+              - path = event_path(event)
+              - title = event.description
+              = link_to (name), path, class: 'break-all', title:
+            %td.whitespace-nowrap
               = event.date&.strftime('%a %d %b %Y') || "NOT SET"
-            %td.whitespace-nowrap{title: "#{event.date.strftime('%H:%M')}"}
+            %td.whitespace-nowrap
               = event.date&.strftime('%H:%M') || "NOT SET"
-            %td.hidden.md:table-cell.whitespace-nowrap{title: "#{event.created_at}"}
+            - title = "#{event.created_at}"
+            %td.hidden.md:table-cell.whitespace-nowrap{title:}
               = time_ago_in_words(event.created_at)
-            %td.hidden.md:table-cell.whitespace-nowrap{title: "#{event.updated_at}"}
+            - title = "#{event.updated_at}"
+            %td.hidden.md:table-cell.whitespace-nowrap{title:}
               = time_ago_in_words(event.updated_at)
 - else
   - if params[:band_id].present?

@@ -16,6 +16,8 @@ module FormBuilders
     SELECT_FIELD_STYLE = "select_field".freeze
     SUBMIT_BUTTON_STYLE = "primary_button".freeze
     CHECKBOX_FIELD_STYLE = "checkbox_group".freeze
+    DATE_SELECT_STYLE = "date_select".freeze
+    TIME_SELECT_STYLE = "time_select".freeze
 
     text_field_helpers.each do |field_method|
       define_method(field_method) do |method, options = {}|
@@ -50,7 +52,15 @@ module FormBuilders
       @template.content_tag("div", labels + field, {class: "field"})
     end
 
-    def collection_checkboxes(method, collection, value_method, text_method, options = {}, html_options = {}, &block)
+    def collection_checkboxes(
+      method,
+      collection,
+      value_method,
+      text_method,
+      options = {},
+      html_options = {},
+      &block
+    )
       custom_opts, opts = partition_custom_opts(options)
 
       classes = apply_style_classes(
@@ -73,19 +83,37 @@ module FormBuilders
         &block
       )
 
-      # check_box_containers = check_boxes.collect do |boxes|
-      #   @template.content_tag(
-      #     "div",
-      #     boxes,
-      #     {class: "check_box_field"}
-      #   )
-      # end
-
       @template.content_tag(
         "div",
         labels + check_boxes,
         {class: "field"}
       )
+    end
+
+    def date_select(method, options = {}, html_options = {})
+      custom_opts, opts = partition_custom_opts(options)
+      classes = apply_style_classes(nil, custom_opts, method)
+
+      labels = labels(method, custom_opts[:label], options)
+      field = @template.content_tag("div",
+        super(method, opts, html_options.merge(class: classes)),
+        {class: "flex flex-row gap-4"}
+      )
+
+      @template.content_tag("div", labels + field, {class: "field"})
+    end
+
+    def time_select(method, options = {}, html_options = {})
+      custom_opts, opts = partition_custom_opts(options)
+      classes = apply_style_classes(nil, custom_opts, method)
+
+      labels = labels(method, custom_opts[:label], options)
+      field = @template.content_tag("div",
+        super(method, opts, html_options.merge(class: classes)),
+        {class:  "flex flex-row gap-4"}
+      )
+
+      @template.content_tag("div", labels + field, {class: "field"})
     end
 
     private
@@ -133,6 +161,7 @@ module FormBuilders
     end
 
     def border_color_classes(object_method)
+      return "" unless object_method
       "has_error" if errors_for(object_method).present?
     end
 

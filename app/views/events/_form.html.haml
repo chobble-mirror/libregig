@@ -1,8 +1,8 @@
 = form_with(model: @event, local: true, builder: FormBuilders::NiceFormBuilder) do |form|
   = form.text_field :name
   = form.textarea :description, placeholder: "Description"
-  = form.date_field :date, as: :date, label: { text: "Day" }
-  = form.time_field :date, as: :time, label: { text: "Time" }
+  = form.date_select :date, label: { text: "Day" }
+  = form.time_select :date, label: { text: "Time" }, ignore_date: true
   = form.collection_checkboxes :event_band_ids,
     @bands,
     :id,

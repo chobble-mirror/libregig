@@ -7,6 +7,9 @@
           "arguments": ["--stdin", "--print-width", "80"]
         }
       }
+    },
+    "Haml": {
+      "soft_wrap": "none"
     }
   },
   "tabs": {

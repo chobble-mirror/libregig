@@ -272,6 +272,10 @@
         @apply inline-block ml-4;
       }
     }
+    .date_select,
+    .time_select {
+      @apply flex flex-row gap-4;
+    }
   }
 
   footer {
