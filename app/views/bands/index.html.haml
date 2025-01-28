@@ -1,0 +1,9 @@
+- content_for :title, "All Bands"
+%section
+  .block.items-right.text-right{:class => "w-4/5"}
+    = link_to 'Add Band', new_band_path, class: "primary_button"
+  #bands.text-center
+    - if Current.user.admin?
+      %p
+        = link_to "admin bands", admin_bands_path, class: "admin"
+    = render @bands

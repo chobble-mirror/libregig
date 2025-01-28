@@ -1,0 +1,18 @@
+.w-full.max-w-xs.bg-white.shadow-md.p-8.mt-8
+  %h2.text-grey-900.text-md.mb-8
+    Register
+  = form_with model: @user,                          |
+    url: register_path,                              |
+    local: true,                                     |
+    builder: FormBuilders::NiceFormBuilder do |form| |
+    = form.text_field :username
+    = form.text_field :email
+    = form.password_field :password
+    = form.select :user_type,                               |
+      options_for_select(                                   |
+        @allow_admin_user ?                                 |
+          [['Admin', :admin]] :                             |
+          [['Member', :member], ['Organiser', :organiser]], |
+        @user.user_type                                     |
+      )                                                     |
+    = form.submit "Register", class: "primary_button"

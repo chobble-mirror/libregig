@@ -1,0 +1,8 @@
+.w-full.max-w-xs.bg-white.shadow-md.p-8.mt-8
+  %h1
+    Add Member
+  = form_with model: @member,                        |
+    local: true,                                     |
+    builder: FormBuilders::NiceFormBuilder do |form| |
+    = form.text_field :name
+    = form.submit "Add"

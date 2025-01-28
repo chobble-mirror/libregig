@@ -1,0 +1,34 @@
+- content_for :title, "All Bands"
+%section
+  .flex.justify-between.mb-8
+    = page_heading("Admin Bands")
+    %span
+      - if Current.user.organiser?
+        = link_to 'Add Band', new_band_path, class: 'secondary_button ml-2'
+  - if @bands.any?
+    .relative.overflow-x-auto
+      %table
+        %colgroup
+          %col.w-auto/
+          %col.w-min/
+          %col{:style => "width: 1%;"}/
+          %col{:style => "width: 1%"}/
+        %thead
+          %tr
+            %th= table_header_sort('bands', 'name', 'name')
+            %th= table_header_sort('bands', 'owner', 'owner')
+            %th.hidden.md:table-cell
+              = table_header_sort('bands', 'created', 'created')
+            %th.hidden.md:table-cell
+              = table_header_sort('bands', 'last_modified', 'modified')
+        %tbody
+          - @bands.each do |band|
+            %tr
+              %td= link_to band.name, admin_band_path(band), class: 'break-all'
+              %td
+                - if band.owner
+                  = link_to band.owner.username, admin_user_path(band.owner), class: 'break-all'
+              %td.hidden.md:table-cell.whitespace-nowrap{:title => "#{band.created_at}"}= time_ago_in_words(band.created_at)
+              %td.hidden.md:table-cell.whitespace-nowrap{:title => "#{band.updated_at}"}= time_ago_in_words(band.updated_at)
+  - else
+    %p No bands found - a paid user needs to create one.

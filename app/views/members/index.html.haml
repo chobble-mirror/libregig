@@ -1,0 +1,34 @@
+%section
+  .flex.justify-between.mb-8
+    %h1 Members
+    = link_to 'Add Member', new_member_path if (              |
+        Current.user.organiser? ||                            |
+          Current.user.member? && Current.user.members.empty? |
+      )                                                       |
+  - if @members.present?
+    .relative.overflow-x-auto
+      %table
+        %colgroup
+          %col.w-auto.lg:w-80/
+          %col{:style => "width: 1%"}/
+          %col{:style => "width: 1%"}/
+        %thead
+          %tr
+            %th Name
+            %th Created
+            %th Modified
+        %tbody
+          - @members.each do |member|
+            %tr{:style => "#{'font-weight: bold' if member.editable}"}
+              %td
+                = link_to member.name, member, class: 'break-all'
+              %td.whitespace-nowrap{:title => "#{member.created_at.strftime("%m/%d/%Y, %H:%M")}"}
+                = time_ago_in_words(member.created_at)
+                ago
+              %td.whitespace-nowrap{:title => "#{member.updated_at.strftime("%m/%d/%Y, %H:%M")}"}
+                = time_ago_in_words(member.updated_at)
+                ago
+  - elsif Current.user.organiser? || Current.user.member?
+    %p No members found - add one with the button above.
+  - elsif Current.user.admin?
+    %p No members found - an organizer needs to create one.

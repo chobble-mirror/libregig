@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "UTF-8"}/
+  %body
+    %p
+      Hi #{@username}
+    %p
+      To confirm your registration, click here:
+    %p
+      %a{:href => "#{@url}"}= @url

@@ -1,0 +1,14 @@
+%section
+  %h1.my-4
+    = @band.name
+  %pre= @band.description
+  - if @band.members.any?
+    %ul
+      %li
+        %strong Members:
+      - @band.members.each do |member|
+        %li
+          = link_to member.name, member
+  - if @band.editable?
+    %p
+      = link_to "Edit", edit_band_path(@band), class: "primary_button"

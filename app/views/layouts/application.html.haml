@@ -1,0 +1,56 @@
+!!!
+%html{lang: "en"}
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv": "Content-Type"}
+    %meta{charset: "UTF-8"}
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
+    %title
+      = yield :title
+    %meta{content: "width=device-width,initial-scale=1", name: "viewport"}
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag "tailwind"
+    %link{href: "https://fonts.bunny.net", rel: "preconnect"}
+    %link{href: "https://fonts.bunny.net/css?family=rock-salt:400", rel: "stylesheet"}
+    %link{href: "https://fonts.bunny.net/css?family=concert-one:400", rel: "stylesheet"}
+  %body{class: body_class}
+    .container
+      .top-bar
+        = link_to root_path, class: "logo-link" do
+          = image_tag 'logo.png', alt: "", style: "width: 50px"
+          %span Libregig
+        = render partial: 'shared/account_menu'
+      - my_pending_invites&.each do |invite|
+        = flash_banner("notice") do
+          %strong
+            = invite.item_type
+            invite:
+          - if invite.bestowing_user
+            User
+            %strong= invite.bestowing_user.username
+            has
+          - else
+            We have
+          invited you to #{invite.permission_type}
+          %strong= "'#{invite.item.name}'"
+          \.
+          %br
+          = form_with model: invite, method: :patch, class: "inline-block font-bold", local: true do |f|
+            %div
+              = f.radio_button :status, "accepted", id: "status_accepted_#{invite.id}"
+              = f.label :status, "Accept", for: "status_accepted_#{invite.id}"
+              = f.radio_button :status, "rejected", id: "status_rejected_#{invite.id}"
+              = f.label :status, "Decline", for: "status_rejected_#{invite.id}"
+            = f.submit 'Save', class: 'linkify'
+          or
+          = form_with model: invite, method: :patch, class: "inline-block font-bold", local: true do |f|
+            = f.hidden_field :status, value: "rejected"
+            = f.submit 'Decline', class: 'linkify'
+      - if nav_tabs
+        %nav.top-nav
+          = render partial: 'shared/tabs', locals: { tabs: nav_tabs }
+      = render partial: 'shared/banners'
+      = yield :nav
+      .tab-body
+        = yield
+      %footer

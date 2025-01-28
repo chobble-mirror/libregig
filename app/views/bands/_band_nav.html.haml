@@ -1,0 +1,7 @@
+%nav.sub-nav
+  %ul.sub-nav-tabs
+    - @views.each do |view|
+      %li
+        = link_to view.titlecase,               |
+          url_for(view: view),                  |
+          class: "#{'active' if @view == view}" |

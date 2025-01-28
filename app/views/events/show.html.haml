@@ -1,0 +1,29 @@
+- content_for :title, @event.name
+%section.md:mr-4.w-full
+  %h1.page-heading= @event.name
+  %p
+    %strong Description:
+    = @event.description
+  %p
+    %strong Date:
+    = @event.date&.strftime('%Y-%m-%d')
+  %p
+    %strong Time:
+    = @event.date&.strftime('%H:%M')
+  %p
+    %strong Bands:
+    = @event.bands.pluck(:name).join(", ")
+  .mt-4
+    = link_to 'Edit', edit_event_path(@event), |
+      class: 'primary_button'                  |
+    = link_to 'Back', events_path, class: 'secondary_button'
+%section
+  %ul
+    - if @event.date
+      %li
+        This event is:
+        %strong
+          = distance_of_time_in_words(Time.now, @event.date)
+          from now
+    %li
+      %strong Versions:

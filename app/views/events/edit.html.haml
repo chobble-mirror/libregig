@@ -1,0 +1,5 @@
+- content_for :title, "Edit Event"
+%section
+  %h1.my-4
+    = @event.name
+  = render 'form', event: @event

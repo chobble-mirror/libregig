@@ -1,0 +1,14 @@
+.w-full.max-w-xs.bg-white.shadow-md.p-8.mt-8
+  %h1
+    = @user.name
+  %p
+    = @user.updated_at
+  %p
+    time zone: #{@user.time_zone}
+  %ul
+    - if Current.user == @user
+      %li
+        = link_to "edit", edit_user_path(@user)
+    - if Current.user.admin?
+      %li
+        = link_to "admin edit", admin_user_path(@user), class: "admin"

@@ -1,0 +1,35 @@
+%section
+  - if Current.user.organiser? || Current.user.admin?
+    %p.text-right
+      = link_to "Share '#{@band.name}' with other users", |
+        url_for(                                          |
+          controller: "permissions",                      |
+          action: "new",                                  |
+          item_type: "band",                              |
+          item_id: @band.id                               |
+        ),                                                |
+        class: "primary_button"                           |
+  - if @band.permission.any?
+    %table.mb-8
+      %thead
+        %th User
+        %th Status
+        %th Type
+        %th Created
+      %tbody
+        - @band.permission.each do |permission|
+          %tr
+            %td
+              - if Current.user.admin?
+                = link_to permission.user.name,    |
+                  admin_user_path(permission.user) |
+              - else
+                = permission.user.name
+              - if Current.user == permission.user
+                %em - that's you!
+            %td
+              = permission.status
+            %td
+              = permission.permission_type
+            %td
+              = permission.created_at

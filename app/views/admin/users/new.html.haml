@@ -1,0 +1,8 @@
+%section
+  %h1 Add Fake Users
+  = form_with model: @add_fake_users_form, local: true, url: admin_users_url, |
+    builder: FormBuilders::NiceFormBuilder do |form|                          |
+    = form.select :members, @numbers
+    = form.select :bands, @numbers
+    = form.select :events, @numbers
+    = form.submit "Save"

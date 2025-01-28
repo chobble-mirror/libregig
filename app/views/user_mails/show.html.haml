@@ -1,0 +1,20 @@
+%section
+  %h1= @mail.subject
+  %ul
+    %li
+      %strong State:
+      = @mail.state
+    %li
+      %strong Created:
+      = l(@mail.created_at)
+    %li
+      %strong Updated:
+      = l(@mail.updated_at)
+  %hr/
+  %h2 HTML Content
+  .email_content
+    = @mail.html_content
+  %hr/
+  %h2 Text Content
+  .email_content
+    = simple_format(@mail.text_content)

@@ -1,0 +1,19 @@
+- if Current.user.present?
+  .account-menu.z-10
+    .account-menu-contents
+      %h1.tracking-wide.text-lg= Current.user.name
+      %ul
+        %li= link_to 'account settings', edit_admin_user_url(Current.user)
+        - if Current.user.admin?
+          %li= link_to 'users admin', admin_users_path
+        - if Current.impersonating?
+          %li stop impersonating
+        %li profile
+        %li notifications
+        %li linked devices
+        %li
+          = form_with url: logout_url, method: :delete, local: true do
+            = submit_tag 'log out', class: 'linkify'
+    %input#account-menu-toggle.hidden{:type => "checkbox"}/
+    %label{:for => "account-menu-toggle"}
+      %img{:src => "#{image_path("account_placeholder.png")}", :style => "width: 40px"}/

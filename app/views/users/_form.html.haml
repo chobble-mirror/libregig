@@ -1,0 +1,15 @@
+= form_with model: @user,                          |
+  local: true,                                     |
+  builder: FormBuilders::NiceFormBuilder do |form| |
+  = form.text_field :username, readonly: true
+  = form.text_field :email
+  = form.select :time_zone,                   |
+    ActiveSupport::TimeZone.all.collect { |t| |
+      t.tzinfo.name                           |
+    }.sort.uniq,                              |
+    selected: @user.time_zone                 |
+  %hr/
+  %h2 Change Password:
+  = form.password_field :password
+  = form.password_field :password_confirmation
+  = form.submit "Save"

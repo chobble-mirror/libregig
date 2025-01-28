@@ -1,0 +1,13 @@
+- provide(:title, 'Not Confirmed')
+%section
+  %h1
+    Your registration is not confirmed.
+  %p
+    You must click the link in the confirmation email we sent you to continue.
+  = form_with local: true,                           |
+    url: resend_confirmation_path,                   |
+    builder: FormBuilders::NiceFormBuilder do |form| |
+    = form.submit 'Re-send', class: 'primary_button'
+  - if Rails.env.development?
+    %hr/
+    = button_to 'Skip (debug)', debug_confirm_users_path, method: :post, class: 'danger_button'

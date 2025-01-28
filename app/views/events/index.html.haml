@@ -1,0 +1,8 @@
+- content_for :title, "All Events"
+%section
+  .flex.justify-between.mb-8
+    = page_heading("Events")
+    %span
+      - if Current.user.organiser?
+        = link_to 'Add Event', new_event_path, class: 'secondary_button ml-2'
+  = render "list", events: @events

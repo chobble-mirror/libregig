@@ -1,0 +1,15 @@
+= form_with(model: @event, local: true, builder: FormBuilders::NiceFormBuilder) do |form|
+  = form.text_field :name
+  = form.textarea :description, placeholder: "Description"
+  = form.date_field :date, as: :date, label: { text: "Day" }
+  = form.time_field :date, as: :time, label: { text: "Time" }
+  = form.collection_checkboxes :event_band_ids,
+    @bands,
+    :id,
+    :name,
+    { label: { text: "Bands" } },
+    { multiple: true }
+  - if flash[:saved]
+    .success_message Saved Successfully!
+  %p.text-right
+    = form.submit 'Save', class: 'primary_button'

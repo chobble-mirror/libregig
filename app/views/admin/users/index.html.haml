@@ -1,0 +1,52 @@
+- content_for :title, "Users"
+.md:flex
+  %section
+    .flex.justify-between.mb-8
+      %h1
+        Users (#{@users.count})
+    %p
+      = link_to "all users",                                    |
+        admin_users_path,                                       |
+        class: "#{@user_type.nil? ? 'mr-4 font-bold' : 'mr-4'}" |
+      - @user_types.each do |type|
+        = link_to type,                                                        |
+          url_for(controller: 'admin/users', action: :index, user_type: type), |
+          class: "#{@user_type == type ? 'mr-4 font-bold' : 'mr-4'}"           |
+    - if @users.present?
+      .relative.overflow-x-auto
+        %table.md:whitespace-nowrap
+          %colgroup
+            %col.w-auto.lg:w-80/
+            %col.w-auto.lg:w-80/
+            %col{:style => "width: 1%"}/
+            %col{:style => "width: 1%"}/
+            %col{:style => "width: 1%"}/
+            %col{:style => "width: 1%"}/
+            %col{:style => "width: 1%"}/
+          %thead
+            %tr
+              %th username
+              %th name
+              %th confirmed
+              %th type
+              %th created
+              %th updated
+          %tbody
+            - @users.each do |user|
+              %tr
+                %td
+                  = link_to user.username, |
+                    admin_user_path(user), |
+                    class: "break-all"     |
+                %td
+                  = user.name
+                %td
+                  = user.confirmed
+                %td
+                  = user.user_type
+                %td{:title => "#{user.created_at}"}
+                  = time_ago_in_words(user.created_at)
+                %td{:title => "#{user.updated_at}"}
+                  = time_ago_in_words(user.updated_at)
+    - else
+      %p No users found.

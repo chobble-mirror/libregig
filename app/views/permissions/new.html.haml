@@ -1,0 +1,10 @@
+.w-full.max-w-xs.bg-white.shadow-md.p-8.mt-8
+  %h1
+    Create Invitation
+  = form_with model: @permission,                    |
+    local: true,                                     |
+    builder: FormBuilders::NiceFormBuilder do |form| |
+    = form.select :user_id, @users
+    = form.select :item, @items
+    = form.select :permission_type, @permission_types
+    = form.submit "Create Invite"

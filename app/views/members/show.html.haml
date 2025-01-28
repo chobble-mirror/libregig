@@ -1,0 +1,23 @@
+- content_for :title, @member.name
+%section
+  %h1 Member Details
+  %p
+    %strong Name:
+    = @member.name
+  %p
+    %strong Description:
+    = @member.description
+  - if @member.skills.any?
+    %section.skills
+      %h2 Skills:
+      %ul
+        - @member.skills.each do |skill|
+          %li= skill.name
+  - if @member.bands.any?
+    %h2 Bands:
+    %ul
+      - @member.bands.each do |band|
+        %li= band.name
+  = link_to 'Edit', edit_member_path(@member)
+  |
+  \#{link_to 'Back', members_path}

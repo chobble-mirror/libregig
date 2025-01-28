@@ -1,0 +1,9 @@
+%section
+  %h1
+    = @band.name
+  %ul
+    %li
+      %strong Updated:
+      = @band.updated_at
+    %li
+      = link_to "Edit", edit_admin_band_path(@band)

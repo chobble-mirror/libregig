@@ -1,0 +1,45 @@
+- content_for :title, "Shared Items"
+%section
+  .flex.justify-between.mb-8
+    = page_heading("Shared Items")
+    %span
+      - if Current.user.organiser?
+        = link_to 'New Invite', new_permission_path, class: 'secondary_button ml-2'
+  - if @permissions.any?
+    .relative.overflow-x-auto
+      %table
+        %thead
+          %tr
+            %th.w-auto.lg:w-80
+              = table_header_sort('permissions', 'name', 'name', 'date')
+            %th{:style => "width: 1%"}
+              = table_header_sort('permissions', 'type', 'type')
+            %th{:style => "width: 1%"}
+              = table_header_sort('permissions', 'status', 'status')
+            %th{:style => "width: 1%"}
+              = table_header_sort('permissions', 'recipient', 'recipient')
+            %th.hidden.md:table-cell{:style => "width: 1%;"}
+              = table_header_sort('permissions', 'created', 'created')
+            %th.hidden.md:table-cell{:style => "width: 1%;"}
+              = table_header_sort('permissions', 'last_modified', 'modified')
+        %tbody
+          - @permissions.each do |permission|
+            %tr
+              %td
+                = link_to permission.item.name, permission.item, class: 'break-all'
+              %td
+                = permission.item_type
+              %td
+                = permission.status
+              %td
+                = permission.user.username
+              %td.hidden.md:table-cell.whitespace-nowrap{:title => "#{permission.created_at}"}
+                = time_ago_in_words(permission.created_at)
+              %td.hidden.md:table-cell.whitespace-nowrap{:title => "#{permission.updated_at}"}
+                = time_ago_in_words(permission.updated_at)
+  - elsif Current.user.organiser?
+    %p No shares found - invite a member to share an item with the button above.
+  - elsif Current.user.member?
+    %p No shares found - an organiser can invite you to edit or view.
+  - elsif Current.user.admin?
+    %p No shares found - an organiser needs to create one.

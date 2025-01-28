@@ -21,20 +21,21 @@ class UserMailTest < ActiveSupport::TestCase
       @expected_content = <<~HTML
         <!DOCTYPE html>
         <html>
-          <head>
-            <meta charset="UTF-8">
-          </head>
-          <body>
-            <p>
-              Hi Steve McSteverson
-            </p>
-            <p>
-              To confirm your registration, click here:
-            </p>
-            <p>
-              <a href="https://moo.com">https://moo.com</a>
-            </p>
-          </body>
+        <head>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+        <meta charset='UTF-8'>
+        </head>
+        <body>
+        <p>
+        Hi Steve McSteverson
+        </p>
+        <p>
+        To confirm your registration, click here:
+        </p>
+        <p>
+        <a href='https://moo.com'>https://moo.com</a>
+        </p>
+        </body>
         </html>
       HTML
     end
@@ -50,7 +51,7 @@ class UserMailTest < ActiveSupport::TestCase
       @user_mail = create(:user_mail, params:)
       @expected_content = "Hi Steve McSteverson\n\n" \
         "To confirm your registration, click here:\n\n" \
-        "https://moo.com\n"
+        "https://moo.com\n\n"
     end
 
     should "render template and params as text" do

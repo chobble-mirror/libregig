@@ -1,0 +1,37 @@
+- content_for :title, "Mails"
+%section
+  .flex.justify-between.mb-8
+    = page_heading("Mails")
+    = form_with url: user_mails_path, method: :post, local: true do
+      = submit_tag 'Send Confirmation', class: 'secondary_button'
+  - if @mails.any?
+    .relative.overflow-x-auto
+      %table
+        %colgroup
+          %col{:style => "width: auto"}/
+          %col{:style => "width: 1%"}/
+          %col{:style => "width: 1%"}/
+          %col{:style => "width: 1%"}/
+        %thead
+          %tr
+            %th
+              = table_header_sort("user_mails", "subject", "subject", "subject")
+            %th
+              = table_header_sort("user_mails", "created", "created")
+            %th
+              = table_header_sort("user_mails", "last_modified", "modified")
+            %th
+              = table_header_sort("user_mails", "state", "state")
+        %tbody
+          - @mails.each do |mail|
+            %tr
+              %td
+                = link_to mail.subject, mail, class: "break-all"
+              %td.whitespace-nowrap
+                = time_ago_in_words(mail.created_at)
+              %td.whitespace-nowrap
+                = time_ago_in_words(mail.updated_at)
+              %td
+                = mail.state
+  - else
+    %p No mail found.
