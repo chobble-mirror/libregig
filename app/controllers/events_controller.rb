@@ -85,7 +85,12 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :description, :date)
+    params.require(:event).permit(
+      :name,
+      :description,
+      :date,
+      band_ids: []
+    )
   end
 
   def create_owner_permission(event)

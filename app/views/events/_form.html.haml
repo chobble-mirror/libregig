@@ -3,10 +3,7 @@
   = form.textarea :description, placeholder: "Description"
   = form.date_select :date, label: { text: "Day" }
   = form.time_select :date, label: { text: "Time" }, ignore_date: true
-  = form.collection_checkboxes :event_band_ids,
-    @bands,
-    :id,
-    :name,
+  = form.collection_checkboxes :band_ids, @bands, :id, :name,
     { label: { text: "Bands" } },
     { multiple: true }
   - if flash[:saved]
