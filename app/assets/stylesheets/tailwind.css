@@ -1037,17 +1037,7 @@ section {
 ul {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  li {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
-  li {
-    margin-left: 0px;
-    margin-right: 0px;
-  }
-  li {
-    padding: 0px;
-  }
+  padding-left: 1rem;
   &.small_list {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -1061,6 +1051,14 @@ ul {
       padding-top: 0.125rem;
       padding-bottom: 0.125rem;
     }
+  }
+}
+
+figure {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  figcaption {
+    font-weight: 700;
   }
 }
 
@@ -1116,7 +1114,7 @@ ul.nav-tabs {
 
 ul.sub-nav-tabs {
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: -0.25rem;
   display: flex;
   font-size: 0.875rem;
   line-height: 1.25rem;

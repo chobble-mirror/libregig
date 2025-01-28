@@ -10,9 +10,15 @@
   %p
     %strong Time:
     = @event.date&.strftime('%H:%M')
-  %p
-    %strong Bands:
-    = @event.bands.pluck(:name).join(", ")
+  %figure
+    %figcaption Bands:
+    %ul
+      - @event.bands.each do |band|
+        %li
+          - name = band.name != "" ? band.name : "NOT SET"
+          - path = band_path(band)
+          - title = band.description
+          = link_to (name), path, class: 'break-all', title:
   .mt-4
     = link_to 'Edit', edit_event_path(@event), |
       class: 'primary_button'                  |

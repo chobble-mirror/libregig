@@ -30,9 +30,21 @@ module ApplicationHelper
     params = {sort: "#{column} #{new_sort_direction}"}
     params[:period] = request.params[:period] if request.params[:period]
 
-    sort_path = send(:"#{resource}_path", **params)
+    new_params = request.query_parameters
+      .except(:page, :sort)
+      .merge(sort: "#{column} #{new_sort_direction}")
 
-    link_to "#{display_text}#{sort_icon}".html_safe, sort_path
+    route_params = {
+      only_path: true,
+      controller: controller.controller_path,
+      action: controller.action_name,
+      **request.path_parameters,
+      **new_params
+    }
+
+    sort_url = url_for(route_params)
+
+    link_to "#{display_text}#{sort_icon}".html_safe, sort_url
   end
 
   def flash_banner(key, msg = nil, &block)

@@ -72,6 +72,7 @@ class BandsController < ApplicationController
 
   def set_view
     @views = %w[overview events shares]
+    @views_subtitles = [nil, "(#{@band.events.count})", nil]
     @view =
       @views.include?(params["view"]) ?
         params["view"] :
