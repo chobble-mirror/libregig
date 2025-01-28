@@ -1,32 +1,32 @@
 <div class="md:flex justify-between">
   <p>
     <%= filter_link(
-          'Upcoming',
-          events_path(
-            band_id: params[:band_id]
-          ),
-          'mr-4',
-          params[:period].nil?)
+      'Upcoming',
+      events_path(
+        band_id: params[:band_id]
+      ),
+      'mr-4',
+      params[:period].nil?)
     %>
     <%= filter_link(
-          'Past',
-          events_path(
-            period: 'past',
-            band_id: params[:band_id],
-            sort: 'date desc'
-          ),
-          'mr-4',
-          params[:period] == 'past'
-        ) %>
+      'Past',
+      events_path(
+        period: 'past',
+        band_id: params[:band_id],
+        sort: 'date desc'
+      ),
+      'mr-4',
+      params[:period] == 'past'
+    ) %>
     <%= filter_link(
-          'All',
-          events_path(
-            period: 'all',
-            band_id: params[:band_id]
-          ),
-          'mr-4',
-          params[:period] == 'all'
-        ) %>
+      'All',
+      events_path(
+        period: 'all',
+        band_id: params[:band_id]
+      ),
+      'mr-4',
+      params[:period] == 'all'
+    ) %>
   </p>
 </div>
 <% if @events.any? %>
@@ -62,18 +62,24 @@
       <tbody>
         <% @events.each do |event| %>
           <tr>
-            <td><%= link_to event.description, event_path(event), class: 'break-all', title: event.description %></td>
+            <td>
+              <%= link_to (event.name != "" ? event.name : "NOT SET"),
+                event_path(event),
+                class: 'break-all',
+                title: event.description
+              %>
+            </td>
             <td
               class="whitespace-nowrap"
               title="<%= event.date&.strftime('%a %d %b %Y') %>"
             >
-              <%= event.date&.strftime('%a %d %b %Y') %>
+              <%= event.date&.strftime('%a %d %b %Y') || "NOT SET" %>
             </td>
             <td
               class="whitespace-nowrap"
               title="<%= event.date&.strftime('%H:%M') %>"
             >
-              <%= event.date&.strftime('%H:%M') %>
+              <%= event.date&.strftime('%H:%M') || "NOT SET" %>
             </td>
             <td
               class="hidden md:table-cell whitespace-nowrap"

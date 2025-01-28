@@ -236,32 +236,19 @@
 
   .field {
     @apply p-0 my-4;
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      @apply block shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight border-gray-600 focus:border-yellow-700;
+    }
     input,
     select,
     textarea {
-      @apply shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight border-gray-600 focus:border-yellow-700;
-    }
-    .disabled {
-      @apply border-none shadow-none p-0;
-    }
-    input {
-      &:focus {
-        @apply outline-none;
-      }
+      &.disabled,
       &:disabled {
-        @apply border-none disabled:shadow-none p-0;
-      }
-      &[type="text"] {
-        @apply shadow appearance-none border w-full rounded mb-4 py-2 px-3 text-gray-700 leading-tight;
-        &:focus {
-          @apply outline-none;
-        }
-      }
-    }
-    select {
-      @apply block text-gray-700 w-full mb-4 py-2 px-4 rounded leading-tight;
-      &:focus {
-        @apply outline-none;
+        @apply border-none shadow-none p-0;
       }
     }
     label {
@@ -278,6 +265,12 @@
     }
     .error_message {
       @apply font-bold text-red-500;
+    }
+    input.checkbox_group {
+      @apply inline-block;
+      & + label {
+        @apply inline-block ml-4;
+      }
     }
   }
 

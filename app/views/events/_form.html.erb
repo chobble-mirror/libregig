@@ -1,14 +1,33 @@
 <%= form_with(model: @event, local: true,
   builder: FormBuilders::NiceFormBuilder) do |form| %>
   <%= form.text_field :name %>
-  <%= form.text_area :description %>
-  <%= form.date_field :date, as: :date %>
-  <%= form.time_field :date, as: :time %>
-  <%= form.collection_select :event_band_ids, @bands, :id, :name, {},
-    { multiple: true } %>
+
+  <%= form.textarea :description, placeholder: "Description" %>
+
+  <%=
+    form.date_field :date,
+    as: :date,
+    label: { text: "Day" }
+  %>
+
+  <%=
+    form.time_field :date,
+    as: :time,
+    label: { text: "Time" }
+  %>
+
+  <%= form.collection_checkboxes :event_band_ids,
+    @bands,
+    :id,
+    :name,
+    { label: { text:"Bands" } },
+    { multiple: true }
+  %>
+
   <% if flash[:saved] %>
     <div class="success_message">Saved Successfully!</div>
   <% end %>
+
   <p class="text-right">
     <%= form.submit 'Save', class: 'primary_button' %>
   </p>
