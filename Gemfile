@@ -7,6 +7,8 @@ gem "rails", "~> 8.0.1"
 
 gem "sassc-rails"
 
+gem "haml-rails"
+
 # The original aet pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
