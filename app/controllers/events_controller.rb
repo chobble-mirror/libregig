@@ -1,6 +1,8 @@
 class EventsController < ApplicationController
+  include EventsHelper
+
   before_action :set_event, only: %i[show edit update destroy]
-  before_action :set_bands, only: %i[new edit update]
+  before_action :set_bands, only: %i[new edit create update]
 
   def index
     @events = Current.user.events
@@ -57,40 +59,23 @@ class EventsController < ApplicationController
     @bands = Current.user.bands
   end
 
-  def filter_by_period(events, period)
-    case period
-    when "past" then events.past
-    when "future", nil then events.future
-    else events
-    end
-  end
-
-  def filter_by_band(events, band_id)
-    return events unless band_id.present? && band_id.to_i.positive?
-
-    events.joins(:bands).where(bands: {id: band_id})
-  end
-
-  def sort_results(events, sort_param)
-    column, direction = extract_sort_params(sort_param)
-    return events unless Event.attribute_names.include?(column.to_s)
-
-    events.order(column => direction)
-  end
-
-  def extract_sort_params(sort_param)
-    col, dir = sort_param.to_s.split
-    dir = %w[desc DESC].include?(dir) ? :desc : :asc
-    [col.presence || :date, dir]
-  end
-
   def event_params
-    params.require(:event).permit(
+    permitted = params.require(:event).permit(
       :name,
       :description,
       :date,
       band_ids: []
     )
+
+    permitted_band_ids = @bands.pluck(:id)
+
+    permitted.tap do |params|
+      params[:band_ids] = params[:band_ids].to_a.compact_blank.map(&:to_i)
+      invalid_bands = params[:band_ids] - permitted_band_ids
+      if invalid_bands.any?
+        raise ArgumentError, "Invalid band_ids: #{invalid_bands}"
+      end
+    end
   end
 
   def create_owner_permission(event)

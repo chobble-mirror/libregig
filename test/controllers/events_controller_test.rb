@@ -275,6 +275,77 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  context "#create" do
+    should "create event with associated bands" do
+      @band = create(:band_with_members)
+      assert_difference "Event.count" do
+        post events_url, params: event_params(
+          name: "New Event",
+          description: "New Description",
+          band_ids: [@band.id]
+        )
+      end
+
+      event = Event.last
+      assert_equal "New Event", event.name
+      assert_equal "New Description", event.description
+      assert_includes event.bands, @band
+    end
+
+    should "create event with multiple bands" do
+      band_one = create(:band_with_members)
+      band_two = create(:band_with_members)
+
+      assert_difference "Event.count" do
+        post events_url, params: event_params(
+          name: "New Event",
+          description: "New Description",
+          band_ids: [band_one.id, band_two.id]
+        )
+      end
+
+      event = Event.last
+      assert_equal 2, event.bands.count
+      assert_includes event.bands, band_one
+      assert_includes event.bands, band_two
+    end
+
+    should "assign event to organiser as owner" do
+      band_one = create(:band_with_members)
+      organiser_user = band_one.owner
+      log_in_as(organiser_user)
+
+      assert_difference "Event.count" do
+        post events_url, params: event_params(
+          name: "New Event",
+          description: "New Description",
+          band_ids: [band_one.id]
+        )
+      end
+
+      event = Event.last
+      assert_equal organiser_user, event.owner
+    end
+
+    should "only let organiser create events for their own bands" do
+      band_one = create(:band_with_members)
+      band_two = create(:band_with_members)
+
+      organiser_user = band_one.owner
+      # band_two has a different owner
+
+      log_in_as(organiser_user)
+
+      assert_raise ArgumentError do
+        post events_url, params: event_params(
+          name: "New Event",
+          description: "New Description",
+          band_ids: [band_one.id, band_two.id]
+        )
+      end
+    end
+  end
+
   context "#destroy" do
     should "destroy event" do
       assert_difference("Event.count", -1) do

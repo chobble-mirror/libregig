@@ -1,14 +1,19 @@
 .md:flex.justify-between
   - band_id = params[:band_id]
   - css = "mr-4"
+  - path_generator = local_assigns.fetch(:path_helper) { ->(options) { events_path(options) }}
+  - base_options = { band_id: band_id }
   %p
-    - path = events_path(band_id: band_id)
+    - options = base_options
+    - path = path_generator.call(options)
     - selected = params[:period].nil?
     = filter_link('Upcoming', path, css, selected)
-    - path = events_path(period: 'past', band_id: band_id, sort: 'date desc')
+    - options = base_options.merge(period: 'past', sort: 'date desc')
+    - path = path_generator.call(options)
     - selected = params[:period] == 'past'
     = filter_link('Past', path, css, selected)
-    - path = events_path(period: 'all', band_id: band_id)
+    - options = base_options.merge(period: 'all')
+    - path = path_generator.call(options)
     - selected = params[:period] == 'all'
     = filter_link('All', path, css, selected)
 

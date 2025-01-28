@@ -1,7 +1,6 @@
-= form_with model: band,                           |
-  builder: FormBuilders::NiceFormBuilder do |form| |
+= form_with model: band, builder: FormBuilders::NiceFormBuilder do |form|
   = form.text_field :name, required: true
-  = form.text_area :description, required: false
+  = form.textarea :description, required: false
   .mb-8
     = form.label :bands, "Members"
     = form.collection_check_boxes :member_ids, Member.all, :id, :name do |b|

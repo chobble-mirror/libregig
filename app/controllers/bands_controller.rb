@@ -1,4 +1,6 @@
 class BandsController < ApplicationController
+  include EventsHelper
+
   before_action :set_band, only: [:show, :edit, :update, :destroy]
   before_action :set_view, only: [:show, :edit, :update]
 
@@ -63,6 +65,9 @@ class BandsController < ApplicationController
 
   def set_band
     @band = Current.user.bands.find(params[:id])
+    @events = @band.events
+      .then { |rel| filter_by_period(rel, params[:period]) }
+      .then { |rel| sort_results(rel, params[:sort]) }
   end
 
   def set_view
