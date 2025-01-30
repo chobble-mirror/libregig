@@ -42,7 +42,7 @@ module ApplicationHelper
       **new_params
     }
 
-    sort_url = url_for(route_params)
+    sort_url = url_for(new_params)
 
     link_to "#{display_text}#{sort_icon}".html_safe, sort_url
   end

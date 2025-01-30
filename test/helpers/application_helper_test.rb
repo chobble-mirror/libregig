@@ -25,6 +25,10 @@ class ApplicationHelperTest < ActionView::TestCase
   context "#table_header_sort" do
     setup do
       @request = ActionDispatch::TestRequest.create
+      @request.path_parameters.merge!(
+        controller: "events",
+        action: "index"
+      )
       @controller = ApplicationController.new
       @controller.request = @request
     end

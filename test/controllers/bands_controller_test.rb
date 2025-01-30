@@ -132,7 +132,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "render new band form if band save fails" do
-      Band.any_instance.expects(:save).returns(false)
+      Band.any_instance.expects(:save!).returns(false)
 
       assert_no_difference("Band.count") do
         post bands_url, params: band_params(

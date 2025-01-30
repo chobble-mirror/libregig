@@ -1,8 +1,10 @@
 class BandsController < ApplicationController
   include EventsHelper
 
-  before_action :set_band, only: [:show, :edit, :update, :destroy]
-  before_action :set_view, only: [:show, :edit, :update]
+  before_action :set_band, only: %i[show edit update destroy]
+  before_action :set_view, only: %i[show edit update]
+  before_action :verify_organiser, only: %i[create]
+  before_action :verify_organiser_or_admin, only: %i[destroy]
 
   def index
     @bands = Current.user.bands
@@ -27,17 +29,20 @@ class BandsController < ApplicationController
 
   def create
     @band = Band.new(band_params)
-    if @band.save
-      permission = Permission.new(
-        item_type: Band,
-        item_id: @band.id,
-        user_id: Current.user.id,
-        status: :owned,
-        permission_type: :edit
-      )
-      permission.save!
+
+    begin
+      Band.transaction do
+        @band.save!
+        Permission.create!(
+          item_type: "Band",
+          item_id: @band.id,
+          user_id: Current.user.id,
+          status: :owned,
+          permission_type: :edit
+        )
+      end
       redirect_to @band, notice: "Band was successfully created"
-    else
+    rescue ActiveRecord::RecordInvalid
       render :new, status: :unprocessable_entity
     end
   end
@@ -77,6 +82,14 @@ class BandsController < ApplicationController
       @views.include?(params["view"]) ?
         params["view"] :
         "overview"
+  end
+
+  def verify_organiser
+    redirect_to bands_url unless Current.user.organiser?
+  end
+
+  def verify_organiser_or_admin
+    redirect_to bands_url unless Current.user.organiser? || Current.user.admin?
   end
 
   def sort_bands(bands, sort_param)
