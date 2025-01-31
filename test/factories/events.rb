@@ -2,14 +2,17 @@ FactoryBot.define do
   factory :event, class: Event do
     sequence(:name) { |n| "Event #{format("%05d", n)}" }
     sequence(:description) { |n| "Event #{format("%05d", n)} description" }
-    date { (Time.now.utc - 60) }
+    start_date { (Time.now.utc - 60) }
+    end_date { (Time.now.utc - 60) }
 
     factory :event_future do
-      date { Time.now.utc + 1.day }
+      start_date { Time.now.utc + 1.day }
+      end_date { Time.now.utc + 1.day }
     end
 
     factory :event_past do
-      date { Time.now.utc - 1.day }
+      start_date { Time.now.utc - 1.day }
+      end_date { Time.now.utc - 1.day }
     end
 
     factory :owned_event do

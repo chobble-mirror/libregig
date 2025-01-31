@@ -3,11 +3,20 @@ class Event < ApplicationRecord
   has_many :bands, through: :event_bands
   has_many :permissions, as: :item, dependent: :destroy
 
-  scope :past, -> { where("date IS NULL OR date <= CURRENT_TIMESTAMP") }
-  scope :future, -> { where("date IS NULL OR date >= CURRENT_TIMESTAMP") }
+  scope :past, -> { where(<<~SQL) }
+    end_date IS NULL OR
+    start_date IS NULL OR
+    end_date <= CURRENT_TIMESTAMP
+  SQL
+
+  scope :future, -> { where(<<~SQL) }
+    end_date IS NULL OR
+    start_date IS NULL OR
+    end_date >= CURRENT_TIMESTAMP
+  SQL
 
   include Auditable
-  audit_log_columns :name, :description, :date
+  audit_log_columns :name, :description, :start_date, :end_date
 
   def owner
     permissions.where(status: :owned).first&.user

@@ -34,14 +34,6 @@ module ApplicationHelper
       .except(:page, :sort)
       .merge(sort: "#{column} #{new_sort_direction}")
 
-    route_params = {
-      only_path: true,
-      controller: controller.controller_path,
-      action: controller.action_name,
-      **request.path_parameters,
-      **new_params
-    }
-
     sort_url = url_for(new_params)
 
     link_to "#{display_text}#{sort_icon}".html_safe, sort_url

@@ -6,10 +6,10 @@
     = @event.description
   %p
     %strong Date:
-    = @event.date&.strftime('%Y-%m-%d')
+    = @event.start_date&.strftime('%Y-%m-%d')
   %p
     %strong Time:
-    = @event.date&.strftime('%H:%M')
+    = @event.start_date&.strftime('%H:%M')
   %figure
     %figcaption Bands:
     %ul
@@ -25,11 +25,11 @@
     = link_to 'Back', events_path, class: 'secondary_button'
 %section
   %ul
-    - if @event.date
+    - if @event.start_date
       %li
         This event is:
         %strong
-          = distance_of_time_in_words(Time.now, @event.date)
+          = distance_of_time_in_words(Time.now, @event.start_date)
           from now
     %li
       %strong Versions:

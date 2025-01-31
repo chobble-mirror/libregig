@@ -1,10 +1,10 @@
 %section
   - if @band.editable?
-    .md:flex.flex-col.sm:flex-row.justify-between.items-center.gap-4
+    .sm:flex.flex-row.justify-between.items-center.gap-4
       %h1.mb-4
         = "#{@band.name} Events"
       - url = url_for( controller: "events", action: "new", band_id: @band.id)
-      - text = "Create event for '#{@band.name}'"
+      - text = "Create event"
       = link_to text, url, class: "primary_button mb-4"
   - if @band.events.any?
     = render 'events/list', |

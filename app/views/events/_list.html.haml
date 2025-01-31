@@ -32,9 +32,9 @@
           %th
             = table_header_sort('events', 'name', 'name', 'date')
           %th
-            = table_header_sort('events', 'date', 'date', 'date')
+            = table_header_sort('events', 'start_date', 'date', 'date')
           %th
-            = table_header_sort('events', 'date', 'time', 'date')
+            = table_header_sort('events', 'start_date', 'time', 'date')
           %th.hidden.md:table-cell
             = table_header_sort('events', 'created', 'created')
           %th.hidden.md:table-cell
@@ -48,9 +48,9 @@
               - title = event.description
               = link_to (name), path, class: 'break-all', title:
             %td.whitespace-nowrap
-              = event.date&.strftime('%a %d %b %Y') || "NOT SET"
+              = event.start_date&.strftime('%a %d %b %Y') || "NOT SET"
             %td.whitespace-nowrap
-              = event.date&.strftime('%H:%M') || "NOT SET"
+              = event.start_date&.strftime('%H:%M') || "NOT SET"
             - title = "#{event.created_at}"
             %td.hidden.md:table-cell.whitespace-nowrap{title:}
               = time_ago_in_words(event.created_at)

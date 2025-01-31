@@ -13,6 +13,7 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
+    @event.band_ids = [params[:band_id]] if params[:band_id].present?
   end
 
   def show
@@ -63,7 +64,7 @@ class EventsController < ApplicationController
     permitted = params.require(:event).permit(
       :name,
       :description,
-      :date,
+      :start_date,
       band_ids: []
     )
 

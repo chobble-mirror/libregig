@@ -88,8 +88,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     {
       nil => :date_asc,
-      "date ASC" => :date_asc,
-      "date DESC" => :date_desc,
+      "start_date ASC" => :date_asc,
+      "start_date DESC" => :date_desc,
       "name DESC" => :name_desc,
       "created_at ASC" => :created_asc,
       "created_at DESC" => :created_desc,
@@ -202,76 +202,76 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       assert_equal "", @event_one.description
     end
 
-    should "update event with empty date" do
+    should "update event with empty start_date" do
       patch event_url(@event_one), params: event_params(
         name: "Name",
         description: "Description",
-        date: nil
+        start_date: nil
       )
       assert_redirected_to event_url(@event_one)
       @event_one.reload
-      assert_nil @event_one.date
+      assert_nil @event_one.start_date
     end
 
-    should "not update event with invalid date" do
+    should "not update event with invalid start_date" do
       # this doesn't test for invalid dates like the 30th February or leap days
       # or owt - a job for another day
       patch event_url(@event_one), params: event_params(
         name: "Name",
         description: "Description",
-        date: "2000-00-00"
+        start_date: "2000-00-00"
       )
       assert_redirected_to event_url(@event_one)
       @event_one.reload
-      assert_nil @event_one.date
+      assert_nil @event_one.start_date
     end
 
-    should "update event with valid date" do
+    should "update event with valid start_date" do
       patch event_url(@event_one), params: event_params(
         name: "Name",
         description: "Description",
-        date: "2000-01-02 23:55"
+        start_date: "2000-01-02 23:55"
       )
       assert_redirected_to event_url(@event_one)
       @event_one.reload
-      assert_equal Time.new(2000, 1, 2, 23, 55), @event_one.date
+      assert_equal Time.new(2000, 1, 2, 23, 55), @event_one.start_date
     end
 
-    should "update event with valid date and time" do
+    should "update event with valid start_date and time" do
       patch event_url(@event_one), params: {
         event: {
           name: "Name",
           description: "Description",
-          "date(1i)": 2000,
-          "date(2i)": 1,
-          "date(3i)": 2,
-          "date(4i)": 23,
-          "date(5i)": 15
+          "start_date(1i)": 2000,
+          "start_date(2i)": 1,
+          "start_date(3i)": 2,
+          "start_date(4i)": 23,
+          "start_date(5i)": 15
         }
       }
       assert_redirected_to event_url(@event_one)
       @event_one.reload
-      assert_equal Time.new(2000, 1, 2, 23, 15), @event_one.date
+      assert_equal Time.new(2000, 1, 2, 23, 15), @event_one.start_date
     end
 
-    should "not update event with invalid date and time" do
-      existing_date = @event_one.date
+    should "not update event with invalid start_date and time" do
+      existing_date = @event_one.start_date
       assert_raise ActiveRecord::MultiparameterAssignmentErrors do
         patch event_url(@event_one), params: {
           event: {
             name: "Name",
             description: "Description",
-            "date(1i)": 2000,
-            "date(2i)": 0,
-            "date(3i)": 0,
-            "date(4i)": 25,
-            "date(5i)": 80
+            "start_date(1i)": 2000,
+            "start_date(2i)": 0,
+            "start_date(3i)": 0,
+            "start_date(4i)": 25,
+            "start_date(5i)": 80
           }
         }
       end
       assert_equal status, 200
       @event_one.reload
-      assert_equal existing_date, @event_one.date
+      assert_equal existing_date, @event_one.start_date
     end
   end
 
@@ -439,14 +439,14 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   def event_params(
     name:,
     description:,
-    date: 1.day.from_now,
+    start_date: 1.day.from_now,
     band_ids: []
   )
     {
       event: {
         name:,
         description:,
-        date:,
+        start_date:,
         band_ids:
       }
     }
