@@ -95,11 +95,24 @@ module FormBuilders
       classes = apply_style_classes(nil, custom_opts, method)
 
       labels = labels(method, custom_opts[:label], options)
-      field = @template.content_tag("div",
-        super(method, opts, html_options.merge(class: classes)),
-        {class: "flex flex-row gap-4"})
+      field = @template.content_tag(
+        "div",
+        super(
+          method,
+          opts,
+          html_options.merge(class: classes)
+        ),
+        {class: "flex flex-row gap-4"}
+      )
 
-      @template.content_tag("div", labels + field, {class: "field"})
+      field_classes = ["field"]
+      field_classes << custom_opts[:field_class] if custom_opts[:field_class]
+
+      @template.content_tag(
+        "div",
+        labels + field,
+        { class: field_classes.join(" ") }
+      )
     end
 
     def time_select(method, options = {}, html_options = {})
@@ -107,11 +120,24 @@ module FormBuilders
       classes = apply_style_classes(nil, custom_opts, method)
 
       labels = labels(method, custom_opts[:label], options)
-      field = @template.content_tag("div",
-        super(method, opts, html_options.merge(class: classes)),
-        {class: "flex flex-row gap-4"})
+      field = @template.content_tag(
+        "div",
+        super(
+          method,
+          opts,
+          html_options.merge(class: classes)
+        ),
+        {class: "flex flex-row gap-4"}
+      )
 
-      @template.content_tag("div", labels + field, {class: "field"})
+      field_classes = ["field"]
+      field_classes << custom_opts[:field_class] if custom_opts[:field_class]
+
+      @template.content_tag(
+        "div",
+        labels + field,
+        {class: field_classes.join(" ")}
+      )
     end
 
     private
@@ -140,7 +166,11 @@ module FormBuilders
     end
 
     def nice_label(object_method, label_options, field_options)
-      text, label_opts = label_options.present? ? label_options.values_at(:text, :except) : [nil, {}]
+      text, label_opts =
+        label_options.present? ?
+          label_options.values_at(:text, :except) :
+          [nil, {}]
+
       label_opts ||= {}
 
       label_classes = label_opts[:class].to_s
@@ -152,10 +182,17 @@ module FormBuilders
     end
 
     def error_label(object_method, options)
-      return if errors_for(object_method).blank?
+      errors =  errors_for(object_method)
 
-      error_message = @object.errors[object_method].collect(&:titleize).join(", ")
-      nice_label(object_method, {text: error_message, class: "error_message"}, options)
+      return if errors.blank?
+
+      error_message = errors.collect(&:titleize).join(", ")
+
+      nice_label(
+        object_method,
+        {text: error_message, class: "error_message"},
+        options
+      )
     end
 
     def border_color_classes(object_method)
@@ -171,7 +208,7 @@ module FormBuilders
       ].compact.join(" ")
     end
 
-    CUSTOM_OPTS = [:label, :class].freeze
+    CUSTOM_OPTS = [:label, :class, :field_class].freeze
 
     def partition_custom_opts(opts)
       opts.partition { |k, _| CUSTOM_OPTS.include?(k) }.map(&:to_h)

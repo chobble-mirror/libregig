@@ -1,8 +1,22 @@
 = form_with(model: @event, local: true, builder: FormBuilders::NiceFormBuilder) do |form|
   = form.text_field :name
   = form.textarea :description, placeholder: "Description"
-  = form.date_select :date, label: { text: "Day" }
-  = form.time_select :date, label: { text: "Time" }, ignore_date: true
+  .md:flex.gap-4
+    = form.date_select :start_date,
+      label: { text: "Start Day" },
+      field_class: "md:w-2_3"
+    = form.time_select :start_date,
+      label: { text: "Start Time" },
+      field_class: "md:w-1_3",
+      ignore_date: true
+  .md:flex.gap-4
+    = form.date_select :end_date,
+      label: { text: "End Day" },
+      field_class: "md:w-2_3"
+    = form.time_select :end_date,
+      label: { text: "End Time" },
+      field_class: "md:w-1_3",
+      ignore_date: true
   = form.collection_checkboxes :band_ids, @bands, :id, :name,
     { label: { text: "Bands" } },
     { multiple: true }

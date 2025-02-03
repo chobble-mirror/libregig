@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   has_many :event_bands, dependent: :destroy
   has_many :bands, through: :event_bands
   has_many :permissions, as: :item, dependent: :destroy
+  validate :end_date_nil_or_after_start
 
   scope :past, -> { where(<<~SQL) }
     end_date IS NULL OR
@@ -28,5 +29,11 @@ class Event < ApplicationRecord
 
   def external_url
     Rails.application.routes.url_helpers.edit_event_url(self, host: Rails.application.config.server_url)
+  end
+
+  def end_date_nil_or_after_start
+    if end_date.present? && end_date < start_date
+      errors.add(:end_date, "Must be before start")
+    end
   end
 end

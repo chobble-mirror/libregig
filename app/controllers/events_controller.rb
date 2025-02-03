@@ -65,6 +65,7 @@ class EventsController < ApplicationController
       :name,
       :description,
       :start_date,
+      :end_date,
       band_ids: []
     )
 

@@ -280,6 +280,9 @@
     .time_select {
       @apply flex flex-row gap-4;
     }
+    .field_with_errors label {
+      @apply text-red-500;
+    }
   }
 
   footer {

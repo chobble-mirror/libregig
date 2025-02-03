@@ -1533,6 +1533,10 @@ ul.sub-nav-tabs {
     .time_select {
     gap: 1rem;
   }
+  .field_with_errors label {
+    --tw-text-opacity: 1;
+    color: rgb(239 68 68 / var(--tw-text-opacity));
+  }
 }
 
 footer {
@@ -1696,8 +1700,8 @@ footer {
   max-width: 20rem;
 }
 
-.flex-col {
-  flex-direction: column;
+.flex-row {
+  flex-direction: row;
 }
 
 .items-center {
@@ -1819,8 +1823,8 @@ body.admin-background {
 }
 
 @media (min-width: 640px) {
-  .sm\:flex-row {
-    flex-direction: row;
+  .sm\:flex {
+    display: flex;
   }
 }
 
@@ -1835,6 +1839,14 @@ body.admin-background {
 
   .md\:table-cell {
     display: table-cell;
+  }
+
+  .md\:w-1_3 {
+    width: 33.333333%;
+  }
+
+  .md\:w-2_3 {
+    width: 66.666667%;
   }
 
   .md\:w-auto {
