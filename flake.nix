@@ -59,6 +59,7 @@
                 nodePackages."@tailwindcss/language-server"
                 nodePackages."@tailwindcss/line-clamp"
                 nodePackages."@tailwindcss/typography"
+                overmind
                 pkg-config
                 ruby-lsp
                 rubyPackages_3_3.mini_portile2
