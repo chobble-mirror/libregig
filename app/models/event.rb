@@ -1,8 +1,11 @@
 class Event < ApplicationRecord
+  include EventsHelper
+
   has_many :event_bands, dependent: :destroy
   has_many :bands, through: :event_bands
   has_many :permissions, as: :item, dependent: :destroy
   validate :end_date_nil_or_after_start
+  before_validation :set_defaults
 
   scope :past, -> { where(<<~SQL) }
     end_date IS NULL OR
@@ -29,6 +32,18 @@ class Event < ApplicationRecord
 
   def external_url
     Rails.application.routes.url_helpers.edit_event_url(self, host: Rails.application.config.server_url)
+  end
+
+  def duration
+    if start_date.present? && end_date.present?
+      convert_seconds_to_duration(end_date - start_date)
+    end
+  end
+
+  private
+
+  def set_defaults
+    end_date ||= start_date if start_date.present?
   end
 
   def end_date_nil_or_after_start

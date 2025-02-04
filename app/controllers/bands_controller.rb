@@ -1,7 +1,7 @@
 class BandsController < ApplicationController
   include EventsHelper
 
-  before_action :set_band, only: %i[show edit update destroy]
+  before_action :set_band, except: :index
   before_action :set_view, only: %i[show edit update]
   before_action :verify_organiser, only: %i[create]
   before_action :verify_organiser_or_admin, only: %i[destroy]
@@ -21,6 +21,9 @@ class BandsController < ApplicationController
   end
 
   def show
+  end
+
+  def confirm_destroy
   end
 
   def new

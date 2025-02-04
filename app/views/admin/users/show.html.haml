@@ -18,19 +18,6 @@
     %li
       = link_to "Edit", edit_admin_user_path(@user)
 %section.md:w-auto
-  - if @user.owned_links.any?
-    %ul
-      %li
-        %strong Owns:
-      - for item in @user.owned_links
-        %li
-          %strong
-            = item.class
-            \:
-          = link_to item do
-            = item.name
-  - if @user.owned_links.any? && @user.permissions.any?
-    %hr/
   - if @user.permissions.any?
     %ul
       %li
@@ -39,6 +26,7 @@
         %li
           %strong
             = permission.item_type
+            = "(#{permission.status}: #{permission.permission_type})"
             \:
           = link_to permission.item do
             = permission.item.name

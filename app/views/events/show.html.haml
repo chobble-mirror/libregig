@@ -1,15 +1,32 @@
 - content_for :title, @event.name
 %section.md:mr-4.w-full
-  %h1.page-heading= @event.name
-  %p
-    %strong Description:
-    = @event.description
-  %p
-    %strong Date:
-    = @event.start_date&.strftime('%Y-%m-%d')
-  %p
-    %strong Time:
-    = @event.start_date&.strftime('%H:%M')
+  %h1.mb-4= @event.name
+  - if @event.description.present?
+    %p
+      = @event.description
+  - if @event.duration
+    %p
+      %strong Start Date:
+      = @event.start_date&.strftime('%Y-%m-%d')
+    %p
+      %strong Start Time:
+      = @event.start_date&.strftime('%H:%M')
+    %p
+      %strong End Date:
+      = @event.end_date&.strftime('%Y-%m-%d')
+    %p
+      %strong End Time:
+      = @event.end_date&.strftime('%H:%M')
+    %p
+      %strong Duration:
+      = @event.duration
+  - else
+    %p
+      %strong Date:
+      = @event.start_date&.strftime('%Y-%m-%d')
+    %p
+      %strong Time:
+      = @event.start_date&.strftime('%H:%M')
   %figure
     %figcaption Bands:
     %ul

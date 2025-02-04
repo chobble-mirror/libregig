@@ -22,7 +22,10 @@ Rails.application.routes.draw do
   end
 
   resources :members
-  resources :bands
+  resources :bands do
+    get :confirm_destroy, on: :member
+  end
+
   resources :events
   resources :user_mails, only: [:index, :create, :show]
   resources :sessions, only: [:new, :create, :destroy]

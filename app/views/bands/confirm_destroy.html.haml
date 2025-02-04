@@ -1,0 +1,4 @@
+- content_for :title, @band.name
+- content_for :nav do
+  = render 'band_nav', band: @band
+= render "show_#{@view}", band: @band

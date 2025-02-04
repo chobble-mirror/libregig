@@ -23,4 +23,27 @@ module EventsHelper
     dir = %w[desc DESC].include?(dir) ? :desc : :asc
     [col.presence || :date, dir]
   end
+
+  def convert_seconds_to_duration(seconds)
+    return nil if seconds < 60
+
+    days = (seconds / 86400).floor
+    remaining = seconds % 86400
+
+    hours = (remaining / 3600).floor
+    remaining %= 3600
+
+    minutes = (remaining / 60).floor
+
+    parts = []
+    parts << "#{days} day#{'s' unless days == 1}" if days > 0
+    parts << "#{hours} hour#{'s' unless hours == 1}" if hours > 0
+    parts << "#{minutes} minute#{'s' unless minutes == 1}" if minutes > 0
+
+    case parts.size
+    when 1 then parts.first
+    else
+      parts[0...-1].join(', ') + " and #{parts.last}"
+    end
+  end
 end
