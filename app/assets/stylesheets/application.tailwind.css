@@ -24,7 +24,7 @@
   }
 
   p {
-    @apply pb-4;
+    @apply my-4;
   }
 
   hr {
@@ -123,7 +123,7 @@
   }
 
   ul {
-    @apply my-4 pl-4;
+    @apply my-4 pl-4 py-0;
     &.small_list {
       @apply text-xs;
       li {

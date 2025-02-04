@@ -1,4 +1,17 @@
 - content_for :title, @band.name
 - content_for :nav do
   = render 'band_nav', band: @band
-= render "show_#{@view}", band: @band
+%section
+  %h1.mb-4 Delete "#{@band.name}"
+  - if @band.events.any?
+    %p
+      Deleting this band will remove it from the following events:
+    %ul
+      - @band.events.each do |event|
+        %li
+          = link_to event.name, event
+  %p Are you sure you wish to confirm?
+  .flex.flex-row.gap-4.justify-between.flex-wrap
+    = form_with url: @band, method: :delete, local: true do
+      = submit_tag "I'm sure - delete \"#{@band.name}\"", class: 'danger_button'
+    = link_to "Cancel", @band, class: "primary_button"

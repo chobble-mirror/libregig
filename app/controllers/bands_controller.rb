@@ -2,7 +2,7 @@ class BandsController < ApplicationController
   include EventsHelper
 
   before_action :set_band, except: :index
-  before_action :set_view, only: %i[show edit update]
+  before_action :set_view, only: %i[show edit update confirm_destroy]
   before_action :verify_organiser, only: %i[create]
   before_action :verify_organiser_or_admin, only: %i[destroy]
 
@@ -24,6 +24,7 @@ class BandsController < ApplicationController
   end
 
   def confirm_destroy
+    @view = "overview"
   end
 
   def new
@@ -59,12 +60,9 @@ class BandsController < ApplicationController
   end
 
   def destroy
-    Rails.logger.debug { "Attempting to destroy band: #{@band.inspect}" }
     if @band.destroy
-      Rails.logger.debug { "Band destroyed: #{@band.inspect}" }
-      redirect_to bands_url, notice: "Band was successfully destroyed."
+      redirect_to bands_url, notice: "Band deleted!"
     else
-      Rails.logger.debug { "Band cannot be deleted: #{@band.errors.inspect}" }
       redirect_to @band, alert: @band.errors.full_messages.to_sentence
     end
   end
