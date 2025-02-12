@@ -255,8 +255,8 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
       should "handle failed updates appropriately" do
         log_in_as @member
 
-        my_event = create(:event)
-        organiser = my_event.permissions.where(status: :owned).first.user
+        organiser = create(:user_organiser)
+        my_event = create(:event, owner: organiser)
 
         permission = create(
           :permission,

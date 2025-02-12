@@ -5,6 +5,7 @@ FactoryBot.define do
 
     transient do
       owner { nil }
+      edit_member { nil }
       view_member { nil }
       band_member { nil }
     end
@@ -20,6 +21,7 @@ FactoryBot.define do
           status: :owned
         )
       end
+
       if evaluator.view_member
         create(
           :permission,
@@ -28,6 +30,17 @@ FactoryBot.define do
           bestowing_user: evaluator.owner, # maybe nil
           user: evaluator.view_member,
           permission_type: "view"
+        )
+      end
+
+      if evaluator.edit_member
+        create(
+          :permission,
+          item_type: "Band",
+          item_id: band.id,
+          bestowing_user: evaluator.owner, # maybe nil
+          user: evaluator.edit_member,
+          permission_type: "edit"
         )
       end
 

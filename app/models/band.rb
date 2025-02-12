@@ -14,6 +14,10 @@ class Band < ApplicationRecord
 
   attr_accessor :permission_type
 
+  scope :permitted_for, -> (user_id) {
+    where(BandPermissionQuery.permission_sql(user_id))
+  }
+
   def owner
     permission.where(status: :owned).first&.user
   end
