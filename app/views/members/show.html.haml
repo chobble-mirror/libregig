@@ -1,6 +1,8 @@
 - content_for :title, @member.name
 %section
   %h1 Member Details
+  - if @read_only
+    %p.danger READ ONLY!
   %p
     %strong Name:
     = @member.name
@@ -18,6 +20,7 @@
     %ul
       - @member.bands.each do |band|
         %li= band.name
-  = link_to 'Edit', edit_member_path(@member)
-  |
-  \#{link_to 'Back', members_path}
+  - unless @read_only
+    = link_to 'Edit', edit_member_path(@member)
+    |
+  = link_to 'Back', members_path

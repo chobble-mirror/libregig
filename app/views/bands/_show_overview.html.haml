@@ -8,7 +8,8 @@
       %ul
         - @band.members.each do |member|
           %li
-            = link_to member.name, member
+            - url = member_path(member, band_id: @band.id)
+            = link_to member.name, url
   - if @band.editable?
     %p
       = link_to "Edit", edit_band_path(@band), class: "primary_button"

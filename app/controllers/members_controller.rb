@@ -1,5 +1,6 @@
 class MembersController < ApplicationController
-  before_action :set_member, only: [:show, :edit, :update, :destroy]
+  before_action :set_member, except: %i[index new create]
+  before_action :deny_read_only, only: %i[edit update destroy]
 
   def edit
   end
@@ -54,7 +55,17 @@ class MembersController < ApplicationController
   private
 
   def set_member
-    @member = Current.user.members.find(params[:id])
+    @band = Current.user.bands.find(params[:band_id]) if params[:band_id]
+    @member = Current.user.members.find_by(id: params[:id])
+    if @band && !@member
+      @member = @band.members.find_by(id: params[:id])
+      @read_only = true
+    end
+    redirect_to bands_url, alert: "Member not found" unless @member
+  end
+
+  def deny_read_only
+    redirect_to @member if @read_only
   end
 
   def member_params

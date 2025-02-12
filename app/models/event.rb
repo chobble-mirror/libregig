@@ -8,15 +8,13 @@ class Event < ApplicationRecord
   before_validation :set_defaults
 
   scope :past, -> { where(<<~SQL) }
-    end_date IS NULL OR
     start_date IS NULL OR
-    end_date <= CURRENT_TIMESTAMP
+    COALESCE(end_date, start_date) <= CURRENT_TIMESTAMP
   SQL
 
   scope :future, -> { where(<<~SQL) }
-    end_date IS NULL OR
     start_date IS NULL OR
-    end_date >= CURRENT_TIMESTAMP
+    COALESCE(end_date, start_date) >= CURRENT_TIMESTAMP
   SQL
 
   include Auditable
@@ -43,7 +41,12 @@ class Event < ApplicationRecord
   private
 
   def set_defaults
-    end_date ||= start_date if start_date.present?
+    if start_date.present?
+      end_date ||= start_date
+      if end_date && end_date < start_date
+        end_date = start_date
+      end
+    end
   end
 
   def end_date_nil_or_after_start

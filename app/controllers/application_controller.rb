@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  before_action :set_current_user
+  prepend_before_action :set_current_user
   before_action :require_login
   helper_method :show_tabs, :nav_tabs, :my_pending_invites, :body_class, :set_current_user_by_session
 
