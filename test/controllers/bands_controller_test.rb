@@ -2,7 +2,6 @@ require "test_helper"
 
 class BandsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @admin_user = create(:user_admin)
     @organiser_user = create(:user_organiser)
     @member_user = create(:user_member)
     @band_with_members = create(
@@ -12,13 +11,12 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     )
     @band_without_members = create(:band, owner: @organiser_user)
     @event_past = create(:event_past, bands: [@band_with_members])
-
-    log_in_as @admin_user
   end
 
   context "#index" do
     context "when the user has multiple bands" do
       should "get index" do
+        log_in_as @organiser_user
         get bands_url
         assert_response :success
         assert assigns(:bands)
@@ -26,16 +24,14 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     end
 
     context "when the user has no bands" do
-      setup { log_in_as create(:user) }
-
       should "show new band template" do
+        log_in_as create(:user)
         get bands_url
-
         assert_redirected_to new_band_url
       end
     end
 
-    context "when the user has one band" do
+    context "when a member has one band" do
       should "show band" do
         log_in_as @member_user
         get bands_url
@@ -88,16 +84,29 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#new" do
+    setup do
+      log_in_as @organiser_user
+    end
+
     should "get new band form" do
       get new_band_url
 
       assert_response :success
       assert assigns(:band)
     end
+
+    should "redirect new band form unless organiser" do
+      log_in_as @member_user
+      get new_band_url
+
+      assert_response :redirect
+      assert_redirected_to bands_url
+    end
   end
 
   context "#show" do
     should "show band" do
+      log_in_as @organiser_user
       get band_url(@band_with_members)
 
       assert_response :success
@@ -107,6 +116,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
 
   context "#edit" do
     should "get edit band form" do
+      log_in_as @organiser_user
       get edit_band_url(@band_with_members)
 
       assert_response :success
@@ -116,8 +126,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
 
   context "#create" do
     setup do
-      @user = create(:user_organiser)
-      log_in_as @user
+      log_in_as @organiser_user
     end
 
     should "create new band" do
@@ -147,6 +156,10 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#update" do
+    setup do
+      log_in_as @organiser_user
+    end
+
     should "update band" do
       patch band_url(@band_with_members), params: band_params(
         name: "Updated Name", description: "Updated Description"
@@ -173,6 +186,10 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#destroy" do
+    setup do
+      log_in_as @organiser_user
+    end
+
     should "destroy band" do
       assert_difference("Band.count", -1) do
         delete band_url(@band_without_members)
@@ -182,8 +199,25 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
       assert_equal "Band deleted!", flash[:notice]
     end
 
+    should "not destroy band if user is member" do
+      log_in_as @member_user
+      assert_no_difference("Band.count") do
+        delete band_url(@band_without_members)
+      end
+      assert_response :not_found
+    end
+
+    should "not destroy band if user is not owner" do
+      other_organiser_user = create(:user_organiser)
+      log_in_as other_organiser_user
+      assert_no_difference("Band.count") do
+        delete band_url(@band_without_members)
+      end
+      assert_response :not_found
+    end
+
     should "not destroy an undeletable band" do
-      band = create(:band_with_members)
+      band = create(:band_with_members, owner: @organiser_user)
 
       assert_no_difference "Band.count" do
         delete band_url(band)
@@ -202,8 +236,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     {
       band: {
         name: name,
-        description: description,
-        user_id: @admin_user.id
+        description: description
       }
     }
   end

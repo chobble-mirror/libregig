@@ -6,6 +6,7 @@ FactoryBot.define do
     transient do
       owner { nil }
       view_member { nil }
+      band_member { nil }
     end
 
     after(:create) do |band, evaluator|
@@ -28,6 +29,11 @@ FactoryBot.define do
           user: evaluator.view_member,
           permission_type: "view"
         )
+      end
+
+      if evaluator.band_member
+        band.members.delete_all
+        band.members << evaluator.band_member
       end
     end
 

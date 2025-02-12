@@ -12,6 +12,8 @@ class Band < ApplicationRecord
   include Auditable
   audit_log_columns :name, :description
 
+  attr_accessor :permission_type
+
   def owner
     permission.where(status: :owned).first&.user
   end
@@ -22,6 +24,6 @@ class Band < ApplicationRecord
 
   def editable?
     Current.user.admin? ||
-      Current.user.owned_bands.any? { |b| b.id == id }
+      Current.user.bands.any? { |b| b.id == id }
   end
 end

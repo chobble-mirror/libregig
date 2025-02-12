@@ -6,20 +6,17 @@ class User < ApplicationRecord
     dependent: :destroy,
     inverse_of: :user
 
-  has_many :owned_bands, -> { where(permissions: {item_type: "Band", status: :owned}) },
-    through: :permissions,
-    source: :item,
-    source_type: "Band"
+  def self.has_permitted_association(name, type)
+    has_many name,
+      -> { where(permissions: { status: [:owned, :accepted] }).select("#{name}.*, permissions.permission_type") },
+      through: :permissions,
+      source: :item,
+      source_type: type
+  end
 
-  has_many :owned_events, -> { where(permissions: {item_type: "Event", status: :owned}) },
-    through: :permissions,
-    source: :item,
-    source_type: "Event"
-
-  has_many :owned_members, -> { where(permissions: {item_type: "Member", status: :owned}) },
-    through: :permissions,
-    source: :item,
-    source_type: "Member"
+  has_permitted_association :bands, "Band"
+  has_permitted_association :events, "Event"
+  has_permitted_association :members, "Member"
 
   has_many :confirmation_tokens, dependent: :destroy
 
@@ -65,30 +62,6 @@ class User < ApplicationRecord
       bands.select(:name, :id) +
       events.select(:name, :id) +
       members.select(:name, :id)
-  end
-
-  def bands
-    return @bands if defined?(@bands)
-    @bands =
-      admin? ?
-        Band.all :
-        Band.where(id: band_permissions.map(&:item_id))
-  end
-
-  def events
-    return @events if defined?(@events)
-    @events =
-      admin? ?
-        Event.all :
-        Event.where(id: event_permissions.map(&:item_id))
-  end
-
-  def members
-    return @members if defined?(@members)
-    @members =
-      admin? ?
-        Member.all :
-        Member.where(id: member_permissions.map(&:item_id))
   end
 
   private

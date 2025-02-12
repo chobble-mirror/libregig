@@ -63,9 +63,9 @@ class UserTest < ActiveSupport::TestCase
 
   context "associations" do
     should have_many(:permissions).dependent(:destroy)
-    should have_many(:owned_bands).through(:permissions)
-    should have_many(:owned_events).through(:permissions)
-    should have_many(:owned_members).through(:permissions)
+    should have_many(:bands).through(:permissions)
+    should have_many(:events).through(:permissions)
+    should have_many(:members).through(:permissions)
   end
 
   context "enums" do
@@ -112,11 +112,6 @@ class UserTest < ActiveSupport::TestCase
         should "include owned items for owners" do
           assert_includes @owner.send(method), @target_item
           refute_includes @owner.send(method), @other_item
-        end
-
-        should "include all items for admin users" do
-          assert_includes @admin_user.send(method), @target_item
-          assert_includes @admin_user.send(method), @other_item
         end
       end
     end

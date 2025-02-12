@@ -7,6 +7,8 @@ class Event < ApplicationRecord
   validate :end_date_nil_or_after_start
   before_validation :set_defaults
 
+  attr_accessor :permission_type
+
   scope :past, -> { where(<<~SQL) }
     start_date IS NULL OR
     COALESCE(end_date, start_date) <= CURRENT_TIMESTAMP

@@ -2,17 +2,23 @@ class BandsController < ApplicationController
   include EventsHelper
 
   before_action :set_band, except: %i[index new create]
+  before_action :set_events, except: %i[index new create]
   before_action :set_view, only: %i[show edit update confirm_destroy]
-  before_action :verify_organiser, only: %i[create]
-  before_action :verify_organiser_or_admin, only: %i[destroy]
+  before_action :verify_organiser, only: %i[new create]
+  before_action :verify_organiser_or_admin, only: %i[confirm_destroy destroy]
 
   def index
-    @bands = Current.user.bands
+    @bands =
+      Current.user.admin? ?
+        Band.all :
+        Current.user.bands
     @bands = sort_bands(@bands, params[:sort])
 
-    if @bands.count == 0
+    bands_count = @bands.to_a.count
+
+    if bands_count == 0
       redirect_to action: :new
-    elsif Current.user.member? && @bands.count == 1
+    elsif Current.user.member? && bands_count == 1
       redirect_to @bands.first
     end
   end
@@ -71,6 +77,9 @@ class BandsController < ApplicationController
 
   def set_band
     @band = Current.user.bands.find(params[:id])
+  end
+
+  def set_events
     @events = @band.events
       .then { |rel| filter_by_period(rel, params[:period]) }
       .then { |rel| sort_results(rel, params[:sort]) }

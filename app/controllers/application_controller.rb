@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
 
     if failure_reasons.any?
       if request
-        flash[:alert] = "Impersonation failed: #{failure_reasons.inspect}"
+        flash[:alert] = "Impersonation failed: #{failure_reasons.join(", ")}"
       end
       false
     else

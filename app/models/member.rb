@@ -12,6 +12,8 @@ class Member < ApplicationRecord
   include Auditable
   audit_log_columns :name, :description
 
+  attr_accessor :permission_type
+
   def owner
     Permission.where(
       status: :owned,

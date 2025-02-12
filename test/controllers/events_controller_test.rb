@@ -158,11 +158,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#update" do
-    setup do
-      log_in_as @user_organiser
-    end
-
     should "update event" do
+      log_in_as @user_organiser
       patch event_url(@event_one), params: event_params(
         name: "Updated Name",
         description: "Updated Description"
@@ -177,6 +174,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "render edit form if update fails" do
+      log_in_as @user_organiser
       Event.any_instance.expects(:update).returns(false)
 
       patch event_url(@event_one), params: event_params(
@@ -189,6 +187,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "redirect if event not found" do
+      log_in_as @user_organiser
       patch event_url(-1), params: event_params(
         name: "Updated Name",
         description: "Updated Description"
@@ -198,8 +197,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       assert_equal "Event not found.", flash[:alert]
     end
 
-
     should "update event with new bands" do
+      log_in_as @user_organiser
       @band_three = create(:band, owner: @user_organiser)
 
       patch event_url(@event_one), params: event_params(
@@ -218,6 +217,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "handle empty band selection" do
+      log_in_as @user_organiser
       patch event_url(@event_one), params: event_params(
         name: @event_one.name,
         description: @event_one.description,
@@ -231,6 +231,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "update event with empty name and description" do
+      log_in_as @user_organiser
       patch event_url(@event_one), params: event_params(
         name: "",
         description: "",
@@ -243,6 +244,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "update event with empty start_date" do
+      log_in_as @user_organiser
       patch event_url(@event_one), params: event_params(
         name: "Name",
         description: "Description",
@@ -254,6 +256,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "not update event with invalid start_date" do
+      log_in_as @user_organiser
       # this doesn't test for invalid dates like the 30th February or leap days
       # or owt - a job for another day
       patch event_url(@event_one), params: event_params(
@@ -267,6 +270,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "update event with valid start_date" do
+      log_in_as @user_organiser
       patch event_url(@event_one), params: event_params(
         name: "Name",
         description: "Description",
@@ -278,6 +282,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "update event with valid start_date and time" do
+      log_in_as @user_organiser
       patch event_url(@event_one), params: {
         event: {
           name: "Name",
@@ -295,6 +300,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "not update event with invalid start_date and time" do
+      log_in_as @user_organiser
       existing_date = @event_one.start_date
       assert_raise ActiveRecord::MultiparameterAssignmentErrors do
         patch event_url(@event_one), params: {

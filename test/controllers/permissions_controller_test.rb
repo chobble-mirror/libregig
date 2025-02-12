@@ -12,7 +12,7 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
 
       @my_event = create(:event, owner: @organiser)
 
-      assert_equal @organiser.owned_events.to_a, [@my_event]
+      assert_equal @organiser.events.to_a, [@my_event]
 
       @permission = create(
         :permission,

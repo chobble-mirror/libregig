@@ -17,17 +17,50 @@ FactoryBot.define do
 
     transient do
       owner { nil }
+      view_member { nil }
+      edit_member { nil }
+      band { nil }
     end
 
     after(:create) do |event, evaluator|
-      create(
-        :permission,
-        item_type: "Event",
-        item_id: event.id,
-        bestowing_user: nil,
-        user: evaluator.owner || create(:user_organiser),
-        status: :owned
-      )
+      if evaluator.owner
+        create(
+          :permission,
+          item_type: "Event",
+          item_id: event.id,
+          bestowing_user: nil,
+          user: evaluator.owner,
+          status: :owned
+        )
+      end
+
+      if evaluator.edit_member
+        create(
+          :permission,
+          item_type: "Event",
+          item_id: event.id,
+          bestowing_user: nil,
+          user: evaluator.edit_member,
+          status: :accepted
+        )
+      end
+
+      if evaluator.view_member
+        create(
+          :permission,
+          item_type: "Event",
+          item_id: event.id,
+          bestowing_user: nil,
+          user: evaluator.view_member,
+          status: :accepted,
+          permission_type: "view",
+        )
+      end
+
+      if evaluator.band
+        event.bands.delete_all
+        event.bands << evaluator.band
+      end
     end
   end
 end
