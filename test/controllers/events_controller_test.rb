@@ -2,18 +2,43 @@ require "test_helper"
 
 class EventsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @band_one = create(:band_with_members)
-    @event_one = create(:event_future, bands: [@band_one])
+    @user_organiser = create(:user_organiser)
 
-    @band_two = create(:band_with_members)
-    @event_two = create(:event_past, bands: [@band_two])
+    @band_one = create(
+      :band_with_members,
+      owner:
+      @user_organiser
+    )
 
-    @admin_user = create(:user_admin)
-    log_in_as @admin_user
+    assert_equal @user_organiser, @band_one.owner
+
+    @event_one = create(
+      :event_future,
+      bands: [@band_one],
+      owner: @user_organiser
+    )
+
+    assert_equal @user_organiser, @event_one.owner
+
+    @band_two = create(
+      :band_with_members,
+      owner: @user_organiser
+    )
+
+    assert_equal @user_organiser, @band_two.owner
+
+    @event_two = create(
+      :event_past,
+      bands: [@band_two],
+      owner: @user_organiser
+    )
+
+    assert_equal @user_organiser, @event_two.owner
   end
 
   context "#new" do
     should "create a new event" do
+      log_in_as @user_organiser
       get new_event_url
       assert assigns(:event)
     end
@@ -22,6 +47,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   context "#index" do
     context "when no band is set" do
       should "get index" do
+        log_in_as @user_organiser
         get events_url, params: {period: "all"}
 
         assert_response :success
@@ -35,6 +61,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     context "when band is set" do
       should "show only events for band" do
+        log_in_as @user_organiser
         get events_url, params: {
           band_id: @band_one.id, period: "all"
         }
@@ -50,6 +77,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     context "when past events requested" do
       should "show only past events" do
+        log_in_as @user_organiser
         get events_url, params: {period: "past"}
 
         assert_response :success
@@ -63,6 +91,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     context "when future events requested" do
       should "show only future events" do
+        log_in_as @user_organiser
         get events_url, params: {period: "future"}
 
         assert_response :success
@@ -77,13 +106,17 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   context "#index sorting" do
     setup do
-      @user = create(:user)
-      @events = ["ZZZ", "AAA", "MMM"].map.with_index do |name, index|
-        create(:event, name: "#{name} Event", created_at: (index + 1).days.ago).tap do |event|
-          create(:owned_permission, user: @user, item: event)
+      @new_owner = create(:user_organiser)
+      @events =
+        ["ZZZ", "AAA", "MMM"].map.with_index do |name, index|
+          create(
+            :event,
+            name: "#{name} Event",
+            created_at: (index + 1).days.ago,
+            owner: @new_owner
+          )
         end
-      end
-      log_in_as @user
+      log_in_as @new_owner
     end
 
     {
@@ -116,12 +149,19 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
             raise "No expected order?"
           end
 
-        assert_equal expected_events, assigns(:events).to_a
+        assigned_events_array = assigns(:events).to_a
+
+        assert_equal expected_events.length, assigned_events_array.length
+        assert_equal expected_events, assigned_events_array
       end
     end
   end
 
   context "#update" do
+    setup do
+      log_in_as @user_organiser
+    end
+
     should "update event" do
       patch event_url(@event_one), params: event_params(
         name: "Updated Name",
@@ -160,7 +200,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
 
     should "update event with new bands" do
-      @band_three = create(:band_with_members)
+      @band_three = create(:band, owner: @user_organiser)
 
       patch event_url(@event_one), params: event_params(
         name: @event_one.name,
@@ -276,8 +316,12 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#create" do
+    setup do
+      log_in_as @user_organiser
+    end
+
     should "create event with associated bands" do
-      @band = create(:band_with_members)
+      @band = create(:band_with_members, owner: @user_organiser)
       assert_difference "Event.count" do
         post events_url, params: event_params(
           name: "New Event",
@@ -293,8 +337,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "create event with multiple bands" do
-      band_one = create(:band_with_members)
-      band_two = create(:band_with_members)
+      band_one = create(:band_with_members, owner: @user_organiser)
+      band_two = create(:band_with_members, owner: @user_organiser)
 
       assert_difference "Event.count" do
         post events_url, params: event_params(
@@ -311,8 +355,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "assign event to organiser as owner" do
-      band_one = create(:band_with_members)
-      organiser_user = band_one.owner
+      organiser_user = create(:user_organiser)
+      band_one = create(:band_with_members, owner: organiser_user)
       log_in_as(organiser_user)
 
       assert_difference "Event.count" do
@@ -328,7 +372,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "only let organiser create events for their own bands" do
-      band_one = create(:band_with_members)
+      organiser_user = create(:user_organiser)
+      band_one = create(:band_with_members, owner: organiser_user)
       band_two = create(:band_with_members)
 
       organiser_user = band_one.owner
@@ -347,6 +392,10 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#destroy" do
+    setup do
+      log_in_as @user_organiser
+    end
+
     should "destroy event" do
       assert_difference("Event.count", -1) do
         delete event_url(@event_one)

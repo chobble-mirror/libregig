@@ -8,9 +8,9 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
       @admin = create(:user, user_type: :admin)
       @member = create(:user_member)
       @member_two = create(:user_member)
+      @organiser = create(:user_organiser)
 
-      @my_event = create(:owned_event)
-      @organiser = @my_event.permissions.where(status: :owned).first.user
+      @my_event = create(:event, owner: @organiser)
 
       assert_equal @organiser.owned_events.to_a, [@my_event]
 
@@ -68,14 +68,8 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
       should "not allow member to view other users' permissions" do
         log_in_as @member_two
 
-        other_owned_event = create(:owned_event)
-        other_organiser = other_owned_event.owner
-        other_permission = create(
-          :permission,
-          bestowing_user: other_organiser,
-          user: create(:user_member),
-          item: other_owned_event
-        )
+        other_organiser = create(:user_organiser)
+        other_owned_event = create(:event, owner: other_organiser)
 
         get permissions_path
 
@@ -261,7 +255,7 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
       should "handle failed updates appropriately" do
         log_in_as @member
 
-        my_event = create(:owned_event)
+        my_event = create(:event)
         organiser = my_event.permissions.where(status: :owned).first.user
 
         permission = create(

@@ -4,8 +4,13 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @admin_user = create(:user_admin)
     @organiser_user = create(:user_organiser)
-    @band_with_members = create(:band_with_members)
-    @band_without_members = create(:band)
+    @member_user = create(:user_member)
+    @band_with_members = create(
+      :band_with_members,
+      owner: @organiser_user,
+      view_member: @member_user
+    )
+    @band_without_members = create(:band, owner: @organiser_user)
     @event_past = create(:event_past, bands: [@band_with_members])
 
     log_in_as @admin_user
@@ -32,27 +37,23 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
 
     context "when the user has one band" do
       should "show band" do
-        band = create(:band)
-        mock_relation = mock("relation")
-        mock_relation.stubs(:order).returns([band])
-
-        User.any_instance.expects(:bands).returns(mock_relation)
-
-        log_in_as @organiser_user
+        log_in_as @member_user
         get bands_url
-
-        assert_redirected_to band_url(band)
+        assert_redirected_to band_url(@band_with_members)
       end
     end
   end
 
   context "#index sorting" do
     setup do
-      @user = create(:user)
+      @user = create(:user_organiser)
       @bands = ["ZZZ", "AAA", "MMM"].map.with_index do |name, index|
-        create(:band, name: "#{name} Band", created_at: (index + 1).days.ago).tap do |band|
-          create(:owned_permission, user: @user, item: band)
-        end
+        create(
+          :band,
+          name: "#{name} Band",
+          created_at: (index + 1).days.ago,
+          owner: @user
+        )
       end
       log_in_as @user
     end
@@ -178,7 +179,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to bands_url
-      assert_equal "Band was successfully destroyed.", flash[:notice]
+      assert_equal "Band deleted!", flash[:notice]
     end
 
     should "not destroy an undeletable band" do

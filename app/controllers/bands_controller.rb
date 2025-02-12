@@ -1,7 +1,7 @@
 class BandsController < ApplicationController
   include EventsHelper
 
-  before_action :set_band, except: :index
+  before_action :set_band, except: %i[index new create]
   before_action :set_view, only: %i[show edit update confirm_destroy]
   before_action :verify_organiser, only: %i[create]
   before_action :verify_organiser_or_admin, only: %i[destroy]
@@ -12,7 +12,7 @@ class BandsController < ApplicationController
 
     if @bands.count == 0
       redirect_to action: :new
-    elsif !Current.user.admin? && @bands.count == 1
+    elsif Current.user.member? && @bands.count == 1
       redirect_to @bands.first
     end
   end

@@ -15,17 +15,19 @@ FactoryBot.define do
       end_date { Time.now.utc - 1.day }
     end
 
-    factory :owned_event do
-      after(:create) do |event|
-        create(
-          :permission,
-          item_type: "Event",
-          item_id: event.id,
-          bestowing_user: nil,
-          user: create(:user_organiser),
-          status: :owned
-        )
-      end
+    transient do
+      owner { nil }
+    end
+
+    after(:create) do |event, evaluator|
+      create(
+        :permission,
+        item_type: "Event",
+        item_id: event.id,
+        bestowing_user: nil,
+        user: evaluator.owner || create(:user_organiser),
+        status: :owned
+      )
     end
   end
 end

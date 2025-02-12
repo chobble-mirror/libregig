@@ -47,7 +47,7 @@ class Event < ApplicationRecord
   end
 
   def end_date_nil_or_after_start
-    if end_date.present? && end_date < start_date
+    if end_date.present? && start_date.present? && end_date < start_date
       errors.add(:end_date, "Must be before start")
     end
   end
