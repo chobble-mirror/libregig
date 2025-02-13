@@ -161,14 +161,16 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "create new band" do
-      assert_difference("Band.count") do
-        post bands_url, params: band_params(
-          name: "New Band", description: "New description"
-        )
-      end
+      name = "#{SecureRandom.random_number(4294967295)}"
+      description = "#{SecureRandom.random_number(4294967295)}"
 
-      new_band = Band.last
-      assert_redirected_to band_url(new_band)
+      assert_difference("Band.count") do
+        post bands_url, params: band_params(name:, description:)
+      end
+      assert_response :redirect
+      band = assigns(:band)
+      assert_equal name, band.name
+      assert_equal description, band.description
       assert_equal "Band was successfully created", flash[:notice]
     end
 

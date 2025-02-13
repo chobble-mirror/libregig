@@ -64,8 +64,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         end
         assert_redirected_to account_path
         assert_equal "You registered successfully. Well done!", flash[:notice]
-        assert_equal User.last.id, session[:user_id]
-        assert_not User.last.confirmed
+        user = assigns(:user)
+        assert_equal user.id, session[:user_id]
+        assert_not user.confirmed
       end
 
       should "not create user with invalid parameters" do
@@ -84,7 +85,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           post register_path, params: admin_params
         end
         assert_redirected_to account_path
-        assert_equal "admin", User.last.user_type
+        assert_equal "admin", assigns(:user).user_type
       end
 
       should "not allow creating admin user when admin already exists" do

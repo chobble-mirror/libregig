@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include RandomId
+
   enum :user_type, {admin: 0, member: 1, organiser: 2}
 
   has_secure_password

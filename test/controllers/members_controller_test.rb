@@ -67,7 +67,9 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
           }
       end
 
-      assert_redirected_to member_url(Member.last)
+      assert_response :redirect
+      member = assigns(:member)
+      assert_equal "John Doe", member.name
     end
 
     should "render new member form if save fails" do

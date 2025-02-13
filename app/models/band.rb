@@ -1,4 +1,6 @@
 class Band < ApplicationRecord
+  include RandomId
+
   has_many :event_bands, dependent: :destroy
   has_many :events, through: :event_bands
 

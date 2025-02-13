@@ -14,14 +14,16 @@ module EventsHelper
 
   def sort_results(events, sort_param)
     column, direction = extract_sort_params(sort_param)
-    return events unless Event.attribute_names.include?(column.to_s)
+    unless Event.attribute_names.include?(column.to_s)
+      return events.order(:start_date)
+    end
     events.order(column => direction)
   end
 
   def extract_sort_params(sort_param)
     col, dir = sort_param.to_s.split
     dir = %w[desc DESC].include?(dir) ? :desc : :asc
-    [col.presence || :date, dir]
+    [col.presence || :start_date, dir]
   end
 
   def convert_seconds_to_duration(seconds)

@@ -1,5 +1,6 @@
 class Event < ApplicationRecord
   include EventsHelper
+  include RandomId
 
   has_many :event_bands, dependent: :destroy
   has_many :bands, through: :event_bands

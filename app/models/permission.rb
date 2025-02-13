@@ -1,4 +1,5 @@
 class Permission < ApplicationRecord
+  include RandomId
   include PermissionsHelper
 
   belongs_to :user, class_name: "User"

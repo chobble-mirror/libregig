@@ -109,10 +109,14 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       @new_owner = create(:user_organiser)
       @events =
         ["ZZZ", "AAA", "MMM"].map.with_index do |name, index|
+          created = (index + 1).days.ago.floor
+          date = Date.today.next_day(index)
           create(
             :event,
             name: "#{name} Event",
-            created_at: (index + 1).days.ago,
+            created_at: created,
+            start_date: date,
+            end_date: date,
             owner: @new_owner
           )
         end
@@ -120,22 +124,22 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     {
-      nil => :date_asc,
-      "start_date ASC" => :date_asc,
-      "start_date DESC" => :date_desc,
+      nil => :start_date_asc,
+      "start_date ASC" => :start_date_asc,
+      "start_date DESC" => :start_date_desc,
       "name DESC" => :name_desc,
       "created_at ASC" => :created_asc,
       "created_at DESC" => :created_desc,
-      "invalid_column ASC" => :date_asc
+      "invalid_column ASC" => :start_date_asc
     }.each do |sort_param, expected_order|
-      should "sort events correctly with sort param '#{sort_param}'" do
+      should "sort events correctly with sort param '#{sort_param}' / #{expected_order}" do
         get events_url, params: {sort: sort_param, period: "all"}
 
         expected_events =
           case expected_order
-          when :date_asc
+          when :start_date_asc
             [@events[0], @events[1], @events[2]]
-          when :date_desc
+          when :start_date_desc
             [@events[2], @events[1], @events[0]]
           when :name_asc
             [@events[1], @events[2], @events[0]]
@@ -329,15 +333,12 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       @band = create(:band_with_members, owner: @user_organiser)
       assert_difference "Event.count" do
         post events_url, params: event_params(
-          name: "New Event",
-          description: "New Description",
           band_ids: [@band.id]
         )
       end
 
-      event = Event.last
-      assert_equal "New Event", event.name
-      assert_equal "New Description", event.description
+      assert_response :redirect
+      event = assigns(:event)
       assert_includes event.bands, @band
     end
 
@@ -353,7 +354,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         )
       end
 
-      event = Event.last
+      assert_response :redirect
+      event = assigns(:event)
       assert_equal 2, event.bands.count
       assert_includes event.bands, band_one
       assert_includes event.bands, band_two
@@ -364,7 +366,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       band_one = create(:band_with_members, owner: organiser_user)
       log_in_as(organiser_user)
 
-      assert_difference "Event.count" do
+      assert_difference "Event.count", 1 do
         post events_url, params: event_params(
           name: "New Event",
           description: "New Description",
@@ -372,7 +374,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         )
       end
 
-      event = Event.last
+      assert_response :redirect
+      event = assigns(:event)
       assert_equal organiser_user, event.owner
     end
 
@@ -489,8 +492,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   private
 
   def event_params(
-    name:,
-    description:,
+    name: "New Event",
+    description: "Description",
     start_date: 1.day.from_now,
     band_ids: []
   )
