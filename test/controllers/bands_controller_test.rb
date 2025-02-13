@@ -4,11 +4,14 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @organiser_user = create(:user_organiser)
     @member_user = create(:user_member)
+
     @band_with_members = create(
-      :band_with_members,
+      :band,
       owner: @organiser_user,
       view_member: @member_user
     )
+    @band_with_members.members << create(:member)
+
     @band_without_members = create(:band, owner: @organiser_user)
     @event_past = create(:event_past, bands: [@band_with_members])
   end
@@ -213,13 +216,15 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
 
     should "not destroy an undeletable band" do
       log_in_as @organiser_user
-      band = create(:band_with_members, owner: @organiser_user)
+      band = create(:band, owner: @organiser_user)
+      band.members << create(:member)
 
       assert_no_difference "Band.count" do
         delete band_url(band)
       end
 
       assert_redirected_to band
+      assert_nil flash[:notice]
 
       alert = "Cannot delete record because dependent band members exist"
       assert_equal alert, flash[:alert]

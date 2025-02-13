@@ -3,7 +3,7 @@ class EventsController < ApplicationController
 
   before_action :get_events
   before_action :set_event, except: %i[index new create]
-  # before_action :deny_read_only, only: %i[edit update destroy]
+  before_action :deny_read_only, only: %i[edit update destroy]
 
   before_action :set_bands, only: %i[new edit create update]
 

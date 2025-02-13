@@ -3,7 +3,7 @@ class BandsController < ApplicationController
 
   before_action :get_bands
   before_action :set_band, except: %i[index new create]
-  # before_action :deny_read_only, only: %i[edit update destroy]
+  before_action :deny_read_only, only: %i[edit update destroy]
 
   before_action :set_events, except: %i[index new create]
   before_action :set_view, only: %i[show edit update confirm_destroy]

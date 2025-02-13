@@ -6,12 +6,6 @@ class User < ApplicationRecord
     dependent: :destroy,
     inverse_of: :user
 
-  def self.has_permitted_association(name, type)
-    define_method name do |**options|
-      type.constantize.permitted_for(id)
-    end
-  end
-
   def members
     Member.permitted_for(id)
   end

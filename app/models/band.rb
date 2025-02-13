@@ -12,7 +12,7 @@ class Band < ApplicationRecord
   include Auditable
   audit_log_columns :name, :description
 
-  attr_accessor :permission_type
+  attribute :permission_type, :string
 
   scope :permitted_for, ->(user_id) {
     select(

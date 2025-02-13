@@ -234,6 +234,13 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         name: "",
         description: "",
       )
+
+      if response.status == 422
+        # Debug information
+        puts "Update failed with errors: #{@event_one.errors.full_messages}"
+        puts "Current event state: #{@event_one.attributes}"
+      end
+
       assert_redirected_to event_url(@event_one)
       @event_one.reload
 
