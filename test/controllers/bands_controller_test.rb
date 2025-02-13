@@ -161,8 +161,8 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "create new band" do
-      name = "#{SecureRandom.random_number(4294967295)}"
-      description = "#{SecureRandom.random_number(4294967295)}"
+      name = SecureRandom.random_number(4294967295).to_s
+      description = SecureRandom.random_number(4294967295).to_s
 
       assert_difference("Band.count") do
         post bands_url, params: band_params(name:, description:)

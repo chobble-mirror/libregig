@@ -40,15 +40,15 @@ class PermissionsHelperTest < ActionView::TestCase
       other_member = create(:user_member)
       create(:member, owner: other_owner, view_member: other_member)
 
-      assert_equal 1, user_organiser.members.to_a.count
-      assert_equal 1, user_member.members.to_a.count
+      assert_equal 1, user_organiser.members.to_a.size
+      assert_equal 1, user_member.members.to_a.size
     end
 
     should "member:  can view if user has access to a band containing this member" do
       user_organiser = create(:user_organiser)
       user_member = create(:user_member)
       member = create(:member, owner: user_organiser)
-      band = create(
+      create(
         :band,
         owner: user_organiser,
         view_member: user_member,

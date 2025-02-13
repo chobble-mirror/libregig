@@ -110,7 +110,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       @events =
         ["ZZZ", "AAA", "MMM"].map.with_index do |name, index|
           created = (index + 1).days.ago.floor
-          date = Date.today.next_day(index)
+          date = Time.zone.today.next_day(index)
           create(
             :event,
             name: "#{name} Event",
@@ -236,7 +236,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       log_in_as @user_organiser
       patch event_url(@event_one), params: event_params(
         name: "",
-        description: "",
+        description: ""
       )
 
       assert_redirected_to event_url(@event_one)
@@ -281,7 +281,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       )
       assert_redirected_to event_url(@event_one)
       @event_one.reload
-      assert_equal Time.new(2000, 1, 2, 23, 55), @event_one.start_date
+      assert_equal Time.zone.local(2000, 1, 2, 23, 55), @event_one.start_date
     end
 
     should "update event with valid start_date and time" do
@@ -299,7 +299,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       }
       assert_redirected_to event_url(@event_one)
       @event_one.reload
-      assert_equal Time.new(2000, 1, 2, 23, 15), @event_one.start_date
+      assert_equal Time.zone.local(2000, 1, 2, 23, 15), @event_one.start_date
     end
 
     should "not update event with invalid start_date and time" do

@@ -22,9 +22,9 @@ class Event < ApplicationRecord
 
   scope :permitted_for, ->(user_id) {
     select(
-      "events.*, #{EventPermissionQuery.with_permission_type_sql(user_id)}").
-      where(EventPermissionQuery.permission_sql(user_id)
+      "events.*, #{EventPermissionQuery.with_permission_type_sql(user_id)}"
     )
+      .where(EventPermissionQuery.permission_sql(user_id))
   }
 
   include Auditable
@@ -54,7 +54,7 @@ class Event < ApplicationRecord
     if start_date.present?
       end_date ||= start_date
       if end_date && end_date < start_date
-        end_date = start_date
+        start_date
       end
     end
   end

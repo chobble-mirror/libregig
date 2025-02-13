@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     logger.debug("Login attempt from #{username}")
     user = User.find_or_create_by(username: username)
 
-    if Rails.env == "development" && params.dig(:user, :debug_skip)
+    if Rails.env.development? && params.dig(:user, :debug_skip)
       session[:user_id] = user.id
       logger.debug("Skipped login: #{username}")
       redirect_to events_path, notice: "Skipped login."

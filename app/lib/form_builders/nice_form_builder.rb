@@ -111,7 +111,7 @@ module FormBuilders
       @template.content_tag(
         "div",
         labels + field,
-        { class: field_classes.join(" ") }
+        {class: field_classes.join(" ")}
       )
     end
 
@@ -182,7 +182,7 @@ module FormBuilders
     end
 
     def error_label(object_method, options)
-      errors =  errors_for(object_method)
+      errors = errors_for(object_method)
 
       return if errors.blank?
 

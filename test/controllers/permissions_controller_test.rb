@@ -69,7 +69,7 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
         log_in_as @member_two
 
         other_organiser = create(:user_organiser)
-        other_owned_event = create(:event, owner: other_organiser)
+        create(:event, owner: other_organiser)
 
         get permissions_path
 

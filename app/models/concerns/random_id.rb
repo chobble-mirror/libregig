@@ -8,8 +8,9 @@ module RandomId
   private
 
   def randomise_id
-    begin
+    loop do
       self.id = SecureRandom.random_number(4294967295)
-    end while self.class.where(id: self.id).exists?
+      break unless self.class.where(id: id).exists?
+    end
   end
 end

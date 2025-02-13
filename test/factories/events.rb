@@ -53,7 +53,7 @@ FactoryBot.define do
           bestowing_user: nil,
           user: evaluator.view_member,
           status: :accepted,
-          permission_type: "view",
+          permission_type: "view"
         )
       end
 

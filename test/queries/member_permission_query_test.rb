@@ -77,7 +77,7 @@ class MemberPermissionQueryTest < ActiveSupport::TestCase
     end
 
     should "handle empty bands" do
-      empty_band = create(:band)
+      create(:band)
 
       sql =
         MemberPermissionQuery.shares_band_with_permitted_member_sql(@user.id)

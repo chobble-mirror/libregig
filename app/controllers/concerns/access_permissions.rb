@@ -15,13 +15,13 @@ module AccessPermissions
       Current.user.admin? ?
         resource_class.all :
         Current.user.send(controller_name)
-    instance_variable_set("@#{controller_name}", @resources)
+    instance_variable_set(:"@#{controller_name}", @resources)
   end
 
   def set_resource
     @resource = @resources.find(params[:id])
     @read_only = @resource.permission_type != "edit"
-    instance_variable_set("@#{controller_name.singularize}", @resource)
+    instance_variable_set(:"@#{controller_name.singularize}", @resource)
   end
 
   def deny_read_only

@@ -21,11 +21,9 @@ module PermissionsHelper
 
   def get_ownership(user, item, method, klass)
     if (direct_permission = user.send(method).find_by(id: item.id))
-      return direct_permission[:permission_type]
+      direct_permission[:permission_type]
     elsif klass.permitted_for(user.id).find_by(id: item.id)
-      return "view"
-    else
-      return nil
+      "view"
     end
   end
 

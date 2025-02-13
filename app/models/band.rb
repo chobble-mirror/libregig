@@ -18,9 +18,9 @@ class Band < ApplicationRecord
 
   scope :permitted_for, ->(user_id) {
     select(
-      "bands.*, #{BandPermissionQuery.with_permission_type_sql(user_id)}").
-      where(BandPermissionQuery.permission_sql(user_id)
+      "bands.*, #{BandPermissionQuery.with_permission_type_sql(user_id)}"
     )
+      .where(BandPermissionQuery.permission_sql(user_id))
   }
 
   def owner

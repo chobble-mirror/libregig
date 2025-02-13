@@ -10,7 +10,7 @@ class BandsController < ApplicationController
   def index
     @bands = sort_bands(@bands, params[:sort])
 
-    bands_count = @bands.to_a.count
+    bands_count = @bands.to_a.size
 
     if bands_count == 0
       redirect_to action: :new
