@@ -8,7 +8,12 @@ class SessionsController < ApplicationController
     username, password = login_params.values_at(:username, :password)
     logger.debug("Login attempt from #{username}")
     user = User.find_or_create_by(username: username)
-    if user.authenticate(password)
+
+    if Rails.env == "development" && params.dig(:user, :debug_skip)
+      session[:user_id] = user.id
+      logger.debug("Skipped login: #{username}")
+      redirect_to events_path, notice: "Skipped login."
+    elsif user.authenticate(password)
       session[:user_id] = user.id
       logger.debug("Login success: #{username}")
       redirect_to events_path, notice: "Logged in successfully."

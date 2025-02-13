@@ -11,3 +11,15 @@
     = form.password_field :password
     = form.submit "Log In"
     = link_to "Register", register_path, class: "float-right secondary_button"
+  - if Rails.env == "development"
+    %ul
+      %li
+        %strong (debug) skip login:
+      - for user in User.all
+        %li
+          = form_with model: user,
+            url: login_path,
+            method: :post do |form|
+            = form.hidden_field :username
+            = form.hidden_field :debug_skip, value: "1"
+            = form.submit user.username
