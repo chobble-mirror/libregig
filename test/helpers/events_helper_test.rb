@@ -17,6 +17,9 @@ class EventsHelperTest < ActionView::TestCase
       one_day = convert_seconds_to_duration(86400)
       assert_equal "1 day", one_day
 
+      one_day_one_minute = convert_seconds_to_duration(86460)
+      assert_equal "1 day and 1 minute", one_day_one_minute
+
       one_day_ten_mins = convert_seconds_to_duration(87000)
       assert_equal "1 day and 10 minutes", one_day_ten_mins
 

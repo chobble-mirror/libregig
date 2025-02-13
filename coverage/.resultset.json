@@ -24173,25 +24173,25 @@
           null,
           null,
           1,
-          8,
+          9,
           null,
-          6,
-          6,
+          7,
+          7,
           null,
-          6,
-          6,
+          7,
+          7,
           null,
-          6,
+          7,
           null,
-          6,
-          6,
-          6,
-          6,
+          7,
+          7,
+          7,
+          7,
           null,
-          6,
+          7,
           4,
           null,
-          2,
+          3,
           null,
           null,
           null
@@ -24216,35 +24216,35 @@
           },
           "[:if, 13, 28, 4, 28, 30]": {
             "[:then, 14, 28, 4, 28, 14]": 2,
-            "[:else, 15, 28, 4, 28, 30]": 6
+            "[:else, 15, 28, 4, 28, 30]": 7
           },
           "[:if, 16, 39, 4, 39, 61]": {
-            "[:then, 17, 39, 4, 39, 49]": 4,
+            "[:then, 17, 39, 4, 39, 49]": 5,
             "[:else, 18, 39, 4, 39, 61]": 2
           },
           "[:unless, 19, 39, 27, 39, 47]": {
-            "[:else, 20, 39, 27, 39, 47]": 3,
+            "[:else, 20, 39, 27, 39, 47]": 4,
             "[:then, 21, 39, 27, 39, 30]": 1
           },
           "[:if, 22, 40, 4, 40, 65]": {
             "[:then, 23, 40, 4, 40, 52]": 2,
-            "[:else, 24, 40, 4, 40, 65]": 4
+            "[:else, 24, 40, 4, 40, 65]": 5
           },
           "[:unless, 25, 40, 29, 40, 50]": {
             "[:else, 26, 40, 29, 40, 50]": 1,
             "[:then, 27, 40, 29, 40, 32]": 1
           },
           "[:if, 28, 41, 4, 41, 73]": {
-            "[:then, 29, 41, 4, 41, 58]": 3,
+            "[:then, 29, 41, 4, 41, 58]": 4,
             "[:else, 30, 41, 4, 41, 73]": 3
           },
           "[:unless, 31, 41, 33, 41, 56]": {
-            "[:else, 32, 41, 33, 41, 56]": 0,
+            "[:else, 32, 41, 33, 41, 56]": 1,
             "[:then, 33, 41, 33, 41, 36]": 3
           },
           "[:case, 34, 43, 4, 47, 7]": {
             "[:when, 35, 44, 16, 44, 27]": 4,
-            "[:else, 36, 46, 6, 46, 53]": 2
+            "[:else, 36, 46, 6, 46, 53]": 3
           }
         }
       },
@@ -24763,15 +24763,6 @@
         ],
         "branches": {}
       },
-      "/home/user/git/libregig/app/models/band_member.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
       "/home/user/git/libregig/app/models/permission.rb": {
         "lines": [
           1,
@@ -24880,11 +24871,173 @@
           }
         }
       },
-      "/home/user/git/libregig/app/models/members_audit.rb": {
+      "/home/user/git/libregig/app/models/band_member.rb": {
         "lines": [
           1,
           1,
           1,
+          null
+        ],
+        "branches": {}
+      },
+      "/home/user/git/libregig/app/queries/member_permission_query.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          92,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          92,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          92,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          92,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          92,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          97,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          92,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          92,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
           null
         ],
         "branches": {}
@@ -25482,168 +25635,6 @@
           }
         }
       },
-      "/home/user/git/libregig/app/queries/member_permission_query.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          92,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          92,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          92,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          92,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          92,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          97,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          92,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          92,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-        "branches": {}
-      },
       "/home/user/git/libregig/app/lib/form_builders/nice_form_builder.rb": {
         "lines": [
           1,
@@ -25917,70 +25908,120 @@
           }
         }
       },
-      "/home/user/git/libregig/app/controllers/admin/impersonation_controller.rb": {
+      "/home/user/git/libregig/app/models/members_audit.rb": {
         "lines": [
           1,
           1,
           1,
-          3,
-          3,
+          null
+        ],
+        "branches": {}
+      },
+      "/home/user/git/libregig/app/models/confirmation_token.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          5,
+          null,
+          1,
+          null,
+          1,
+          5,
+          null,
+          null
+        ],
+        "branches": {}
+      },
+      "/home/user/git/libregig/app/mailers/user_mailer.rb": {
+        "lines": [
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
           null,
           null,
           null,
           null,
           null,
-          3,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          1,
+          null,
+          0,
+          0,
+          null,
+          null,
+          1,
           null,
           null,
           1,
           2,
           null,
-          1,
-          1,
-          1,
           null,
-          1,
-          1,
-          null,
-          1,
           null,
           null,
           null
         ],
         "branches": {
-          "[:unless, 0, 15, 6, 15, 115]": {
-            "[:else, 1, 15, 6, 15, 115]": 1,
-            "[:then, 2, 15, 6, 15, 84]": 1
+          "[:if, 0, 26, 4, 31, 7]": {
+            "[:then, 1, 27, 6, 27, 45]": 1,
+            "[:else, 2, 29, 6, 30, 64]": 0
           }
         }
       },
-      "/home/user/git/libregig/app/controllers/admin/admin_controller.rb": {
+      "/home/user/git/libregig/app/mailers/application_mailer.rb": {
+        "lines": [
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/home/user/git/libregig/app/jobs/send_mail_job.rb": {
         "lines": [
           1,
           1,
           1,
           null,
           1,
+          0,
+          0,
           null,
+          null
+        ],
+        "branches": {}
+      },
+      "/home/user/git/libregig/app/jobs/application_job.rb": {
+        "lines": [
           1,
-          18,
-          2,
           null,
           null,
           null,
-          null,
-          1,
-          16,
           null,
           null,
           null
         ],
-        "branches": {
-          "[:unless, 0, 8, 6, 11, 9]": {
-            "[:else, 1, 8, 6, 11, 9]": 16,
-            "[:then, 2, 9, 8, 10, 28]": 2
-          }
-        }
+        "branches": {}
       },
       "/home/user/git/libregig/app/queries/band_permission_query.rb": {
         "lines": [
@@ -26120,229 +26161,6 @@
           null
         ],
         "branches": {}
-      },
-      "/home/user/git/libregig/app/models/events_audit.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/user/git/libregig/app/controllers/users/registration_controller.rb": {
-        "lines": [
-          1,
-          1,
-          null,
-          null,
-          null,
-          null,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          4,
-          4,
-          null,
-          null,
-          4,
-          3,
-          3,
-          1,
-          null,
-          null,
-          null,
-          3,
-          1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          null,
-          1,
-          3,
-          3,
-          null,
-          null,
-          3,
-          null,
-          2,
-          1,
-          1,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          null,
-          1,
-          null,
-          1,
-          2,
-          2,
-          null,
-          null
-        ],
-        "branches": {
-          "[:unless, 0, 11, 4, 11, 76]": {
-            "[:else, 1, 11, 4, 11, 76]": 0,
-            "[:then, 2, 11, 4, 11, 52]": 1
-          },
-          "[:if, 3, 21, 6, 24, 9]": {
-            "[:then, 4, 22, 8, 23, 53]": 1,
-            "[:else, 5, 21, 6, 24, 9]": 2
-          },
-          "[:\"&.\", 6, 26, 9, 26, 48]": {
-            "[:then, 7, 26, 9, 26, 48]": 1,
-            "[:else, 8, 26, 9, 26, 48]": 2
-          },
-          "[:if, 9, 26, 6, 29, 9]": {
-            "[:then, 10, 27, 8, 28, 33]": 1,
-            "[:else, 11, 26, 6, 29, 9]": 2
-          },
-          "[:\"&.\", 12, 43, 9, 43, 49]": {
-            "[:then, 13, 43, 9, 43, 49]": 2,
-            "[:else, 14, 43, 9, 43, 49]": 0
-          },
-          "[:if, 15, 43, 6, 51, 9]": {
-            "[:then, 16, 44, 8, 47, 30]": 1,
-            "[:else, 17, 49, 8, 50, 33]": 1
-          },
-          "[:if, 18, 62, 4, 62, 48]": {
-            "[:then, 19, 62, 4, 62, 28]": 1,
-            "[:else, 20, 62, 4, 62, 48]": 1
-          }
-        }
-      },
-      "/home/user/git/libregig/app/mailers/user_mailer.rb": {
-        "lines": [
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          1,
-          null,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          1,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          1,
-          null,
-          0,
-          0,
-          null,
-          null,
-          1,
-          null,
-          null,
-          1,
-          2,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-        "branches": {
-          "[:if, 0, 26, 4, 31, 7]": {
-            "[:then, 1, 27, 6, 27, 45]": 1,
-            "[:else, 2, 29, 6, 30, 64]": 0
-          }
-        }
-      },
-      "/home/user/git/libregig/app/mailers/application_mailer.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/user/git/libregig/app/controllers/user_mails_controller.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null,
-          1,
-          null,
-          null,
-          1,
-          null,
-          3,
-          1,
-          null,
-          2,
-          null,
-          null,
-          null,
-          1,
-          2,
-          null,
-          2,
-          1,
-          null,
-          1,
-          null,
-          null,
-          null,
-          1,
-          null,
-          1,
-          5,
-          null,
-          null,
-          1,
-          5,
-          null,
-          2,
-          null,
-          null
-        ],
-        "branches": {
-          "[:if, 0, 10, 6, 14, 9]": {
-            "[:then, 1, 11, 8, 11, 41]": 1,
-            "[:else, 2, 13, 8, 13, 73]": 2
-          },
-          "[:if, 3, 20, 4, 24, 7]": {
-            "[:then, 4, 21, 6, 21, 75]": 1,
-            "[:else, 5, 23, 6, 23, 71]": 1
-          },
-          "[:if, 6, 34, 4, 34, 80]": {
-            "[:then, 7, 34, 4, 34, 10]": 3,
-            "[:else, 8, 34, 4, 34, 80]": 2
-          }
-        }
       },
       "/home/user/git/libregig/app/controllers/bands_controller.rb": {
         "lines": [
@@ -26544,6 +26362,169 @@
         ],
         "branches": {}
       },
+      "/home/user/git/libregig/app/controllers/users/registration_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          4,
+          4,
+          null,
+          null,
+          4,
+          3,
+          3,
+          1,
+          null,
+          null,
+          null,
+          3,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          null,
+          1,
+          3,
+          3,
+          null,
+          null,
+          3,
+          null,
+          2,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          2,
+          2,
+          null,
+          null
+        ],
+        "branches": {
+          "[:unless, 0, 11, 4, 11, 76]": {
+            "[:else, 1, 11, 4, 11, 76]": 0,
+            "[:then, 2, 11, 4, 11, 52]": 1
+          },
+          "[:if, 3, 21, 6, 24, 9]": {
+            "[:then, 4, 22, 8, 23, 53]": 1,
+            "[:else, 5, 21, 6, 24, 9]": 2
+          },
+          "[:\"&.\", 6, 26, 9, 26, 48]": {
+            "[:then, 7, 26, 9, 26, 48]": 1,
+            "[:else, 8, 26, 9, 26, 48]": 2
+          },
+          "[:if, 9, 26, 6, 29, 9]": {
+            "[:then, 10, 27, 8, 28, 33]": 1,
+            "[:else, 11, 26, 6, 29, 9]": 2
+          },
+          "[:\"&.\", 12, 43, 9, 43, 49]": {
+            "[:then, 13, 43, 9, 43, 49]": 2,
+            "[:else, 14, 43, 9, 43, 49]": 0
+          },
+          "[:if, 15, 43, 6, 51, 9]": {
+            "[:then, 16, 44, 8, 47, 30]": 1,
+            "[:else, 17, 49, 8, 50, 33]": 1
+          },
+          "[:if, 18, 62, 4, 62, 48]": {
+            "[:then, 19, 62, 4, 62, 28]": 1,
+            "[:else, 20, 62, 4, 62, 48]": 1
+          }
+        }
+      },
+      "/home/user/git/libregig/app/controllers/user_mails_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          null,
+          3,
+          1,
+          null,
+          2,
+          null,
+          null,
+          null,
+          1,
+          2,
+          null,
+          2,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          5,
+          null,
+          null,
+          1,
+          5,
+          null,
+          2,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 10, 6, 14, 9]": {
+            "[:then, 1, 11, 8, 11, 41]": 1,
+            "[:else, 2, 13, 8, 13, 73]": 2
+          },
+          "[:if, 3, 20, 4, 24, 7]": {
+            "[:then, 4, 21, 6, 21, 75]": 1,
+            "[:else, 5, 23, 6, 23, 71]": 1
+          },
+          "[:if, 6, 34, 4, 34, 80]": {
+            "[:then, 7, 34, 4, 34, 10]": 3,
+            "[:else, 8, 34, 4, 34, 80]": 2
+          }
+        }
+      },
+      "/home/user/git/libregig/app/models/events_audit.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
       "/home/user/git/libregig/app/controllers/permissions_controller.rb": {
         "lines": [
           1,
@@ -26675,6 +26656,71 @@
           }
         }
       },
+      "/home/user/git/libregig/app/controllers/admin/impersonation_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          3,
+          3,
+          null,
+          null,
+          null,
+          null,
+          null,
+          3,
+          null,
+          null,
+          1,
+          2,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null
+        ],
+        "branches": {
+          "[:unless, 0, 15, 6, 15, 115]": {
+            "[:else, 1, 15, 6, 15, 115]": 1,
+            "[:then, 2, 15, 6, 15, 84]": 1
+          }
+        }
+      },
+      "/home/user/git/libregig/app/controllers/admin/admin_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          18,
+          2,
+          null,
+          null,
+          null,
+          null,
+          1,
+          16,
+          null,
+          null,
+          null
+        ],
+        "branches": {
+          "[:unless, 0, 8, 6, 11, 9]": {
+            "[:else, 1, 8, 6, 11, 9]": 16,
+            "[:then, 2, 9, 8, 10, 28]": 2
+          }
+        }
+      },
       "/home/user/git/libregig/app/controllers/users_controller.rb": {
         "lines": [
           1,
@@ -26796,52 +26842,6 @@
             "[:then, 17, 90, 4, 90, 28]": 1
           }
         }
-      },
-      "/home/user/git/libregig/app/models/confirmation_token.rb": {
-        "lines": [
-          1,
-          1,
-          null,
-          1,
-          null,
-          1,
-          null,
-          5,
-          null,
-          1,
-          null,
-          1,
-          5,
-          null,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/user/git/libregig/app/jobs/send_mail_job.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null,
-          1,
-          0,
-          0,
-          null,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/user/git/libregig/app/jobs/application_job.rb": {
-        "lines": [
-          1,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-        "branches": {}
       },
       "/home/user/git/libregig/app/controllers/admin/users_controller.rb": {
         "lines": [
@@ -26998,7 +26998,7 @@
         "branches": {}
       }
     },
-    "timestamp": 1739416280
+    "timestamp": 1739416392
   },
   "Minitest-8": {
     "coverage": {
