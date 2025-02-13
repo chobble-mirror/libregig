@@ -13,7 +13,18 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     @band_with_members.members << create(:member)
 
     @band_without_members = create(:band, owner: @organiser_user)
-    @event_past = create(:event_past, bands: [@band_with_members])
+    @event_past = create(
+      :event_past,
+      bands: [@band_with_members, @band_without_members]
+    )
+
+    @solo_member_user = create(:user_member)
+    @solo_member = create(:member, owner: @solo_member_user)
+    @solo_band = create(
+      :band,
+      owner: @solo_member_user,
+      band_member: @solo_member
+    )
   end
 
   context "#index" do
@@ -36,9 +47,9 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
 
     context "when a member has one band" do
       should "show band" do
-        log_in_as @member_user
+        log_in_as @solo_member_user
         get bands_url
-        assert_redirected_to band_url(@band_with_members)
+        assert_redirected_to band_url(@solo_band)
       end
     end
   end

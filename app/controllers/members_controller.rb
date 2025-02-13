@@ -60,7 +60,6 @@ class MembersController < ApplicationController
 
   def set_member
     @member = @members.find(params[:id])
-    redirect_to members_url unless @member
   end
 
   def deny_read_only

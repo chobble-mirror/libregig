@@ -84,11 +84,10 @@ class BandsController < ApplicationController
 
   def set_band
     @band = @bands.find(params[:id])
-    redirect_to bands_url unless @band
   end
 
   def deny_read_only
-    redirect_to @band unless @band.permission_type == "edit"
+    raise ActiveRecord::RecordNotFound unless @band.permission_type == "edit"
   end
 
   def set_band

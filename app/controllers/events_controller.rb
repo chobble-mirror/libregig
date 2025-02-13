@@ -59,7 +59,6 @@ class EventsController < ApplicationController
 
   def set_event
     @event = @events.find(params[:id])
-    redirect_to events_url unless @event
   end
 
   def deny_read_only
