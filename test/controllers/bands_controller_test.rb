@@ -156,11 +156,8 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#update" do
-    setup do
-      log_in_as @organiser_user
-    end
-
     should "update band" do
+      log_in_as @organiser_user
       patch band_url(@band_with_members), params: band_params(
         name: "Updated Name", description: "Updated Description"
       )
@@ -174,6 +171,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "render edit band form if update fails" do
+      log_in_as @organiser_user
       Band.any_instance.expects(:update).returns(false)
 
       patch band_url(@band_with_members), params: band_params(
@@ -186,11 +184,8 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#destroy" do
-    setup do
-      log_in_as @organiser_user
-    end
-
     should "destroy band" do
+      log_in_as @organiser_user
       assert_difference("Band.count", -1) do
         delete band_url(@band_without_members)
       end
@@ -217,6 +212,7 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "not destroy an undeletable band" do
+      log_in_as @organiser_user
       band = create(:band_with_members, owner: @organiser_user)
 
       assert_no_difference "Band.count" do

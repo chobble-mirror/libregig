@@ -192,9 +192,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         name: "Updated Name",
         description: "Updated Description"
       )
-
-      assert_redirected_to events_url
-      assert_equal "Event not found.", flash[:alert]
+      assert_response :not_found
     end
 
     should "update event with new bands" do
@@ -398,11 +396,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   context "#destroy" do
-    setup do
-      log_in_as @user_organiser
-    end
-
     should "destroy event" do
+      log_in_as @user_organiser
       assert_difference("Event.count", -1) do
         delete event_url(@event_one)
       end
@@ -412,15 +407,16 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "redirect if event not found" do
+      log_in_as @user_organiser
       assert_no_difference "Event.count" do
         delete event_url(-1)
       end
 
-      assert_redirected_to events_url
-      assert_equal "Event not found.", flash[:alert]
+      assert_response :not_found
     end
 
     should "handle failed destruction" do
+      log_in_as @user_organiser
       Event.any_instance.stubs(:destroy).returns(false)
       Event.any_instance.stubs(:errors).returns(
         ActiveModel::Errors.new(Event.new).tap { |e| e.add(:base, "Cannot delete this event") }

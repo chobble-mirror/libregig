@@ -1,7 +1,10 @@
 class BandsController < ApplicationController
   include EventsHelper
 
+  before_action :get_bands
   before_action :set_band, except: %i[index new create]
+  # before_action :deny_read_only, only: %i[edit update destroy]
+
   before_action :set_events, except: %i[index new create]
   before_action :set_view, only: %i[show edit update confirm_destroy]
   before_action :verify_organiser, only: %i[new create]
@@ -74,6 +77,19 @@ class BandsController < ApplicationController
   end
 
   private
+
+  def get_bands
+    @bands = Current.user.admin? ? Band.all : Current.user.bands
+  end
+
+  def set_band
+    @band = @bands.find(params[:id])
+    redirect_to bands_url unless @band
+  end
+
+  def deny_read_only
+    redirect_to @band unless @band.permission_type == "edit"
+  end
 
   def set_band
     @band = Current.user.bands.find(params[:id])

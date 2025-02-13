@@ -1,12 +1,13 @@
 class EventsController < ApplicationController
   include EventsHelper
 
-  before_action :set_event, only: %i[show edit update destroy]
+  before_action :get_events
+  before_action :set_event, except: %i[index new create]
+  # before_action :deny_read_only, only: %i[edit update destroy]
+
   before_action :set_bands, only: %i[new edit create update]
 
   def index
-    @events = Current.user.admin? ? Event.all : Current.user.events
-
     @events = @events
       .then { |rel| filter_by_period(rel, params[:period]) }
       .then { |rel| filter_by_band(rel, params[:band_id]) }
@@ -52,10 +53,17 @@ class EventsController < ApplicationController
 
   private
 
+  def get_events
+    @events = Current.user.admin? ? Event.all : Current.user.events
+  end
+
   def set_event
-    @event = Current.user.events.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to events_url, alert: "Event not found."
+    @event = @events.find(params[:id])
+    redirect_to events_url unless @event
+  end
+
+  def deny_read_only
+    redirect_to @event unless @event.permission_type == "edit"
   end
 
   def set_bands
