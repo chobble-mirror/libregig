@@ -7,16 +7,22 @@ class User < ApplicationRecord
     inverse_of: :user
 
   def self.has_permitted_association(name, type)
-    has_many name,
-      -> { where(permissions: { status: [:owned, :accepted] }).select("#{name}.*, permissions.permission_type") },
-      through: :permissions,
-      source: :item,
-      source_type: type
+    define_method name do |**options|
+      type.constantize.permitted_for(id)
+    end
   end
 
-  has_permitted_association :bands, "Band"
-  has_permitted_association :events, "Event"
-  has_permitted_association :members, "Member"
+  def members
+    Member.permitted_for(id)
+  end
+
+  def bands
+    Band.permitted_for(id)
+  end
+
+  def events
+    Event.permitted_for(id)
+  end
 
   has_many :confirmation_tokens, dependent: :destroy
 

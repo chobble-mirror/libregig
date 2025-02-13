@@ -33,7 +33,7 @@ module PermissionsHelper
 
   def pluck_and_prefix(klass, owner)
     owned_permissions = owner.send(:"#{klass.to_s.downcase.pluralize}")
-    owned_item_ids = owned_permissions.pluck(:item_id)
+    owned_item_ids = owned_permissions.pluck(:id)
     items = klass.where(id: owned_item_ids).pluck(:id, :name)
     items.map do |id, name|
       ["#{name} (#{klass})", "#{klass}_#{id}"]

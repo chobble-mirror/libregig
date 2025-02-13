@@ -5,10 +5,7 @@ class EventsController < ApplicationController
   before_action :set_bands, only: %i[new edit create update]
 
   def index
-    @events =
-      Current.user.admin? ?
-      Event.all :
-      Current.user.events
+    @events = Current.user.admin? ? Event.all : Current.user.events
 
     @events = @events
       .then { |rel| filter_by_period(rel, params[:period]) }

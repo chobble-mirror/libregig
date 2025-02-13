@@ -1,4 +1,5 @@
 class MembersController < ApplicationController
+  before_action :get_members
   before_action :set_member, except: %i[index new create]
   before_action :deny_read_only, only: %i[edit update destroy]
 
@@ -9,7 +10,6 @@ class MembersController < ApplicationController
   end
 
   def index
-    @members = Member.all
   end
 
   def new
@@ -54,18 +54,16 @@ class MembersController < ApplicationController
 
   private
 
+  def get_members
+    @members = Current.user.admin? ? Member.all : Current.user.members
+  end
+
   def set_member
-    @band = Current.user.bands.find(params[:band_id]) if params[:band_id]
-    @member = Current.user.members.find_by(id: params[:id])
-    if @band && !@member
-      @member = @band.members.find_by(id: params[:id])
-      @read_only = true
-    end
-    redirect_to bands_url, alert: "Member not found" unless @member
+    @member = @members.find(params[:id])
   end
 
   def deny_read_only
-    redirect_to @member if @read_only
+    redirect_to @member if @member.permission_type == "read"
   end
 
   def member_params

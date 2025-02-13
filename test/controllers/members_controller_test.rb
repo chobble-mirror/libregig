@@ -2,8 +2,16 @@ require "test_helper"
 
 class MembersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @member = create(:member_with_user_with_edit_permission)
-    @user = @member.owner
+    @user = create(:user)
+    @member = create(:member, view_member: @user)
+    @band = create(:band)
+
+    @unrelated_member = create(:member)
+    @member_in_same_band = create(:member)
+
+    @band.members << @member
+    @band.members << @member_in_same_band
+
     log_in_as @user
   end
 
@@ -11,6 +19,10 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
     should "get index" do
       get members_url
       assert_response :success
+      members = assigns(:members)
+      assert_includes members, @member
+      assert_includes members, @member_in_same_band
+      assert_not_includes members, @unrelated_member
     end
   end
 

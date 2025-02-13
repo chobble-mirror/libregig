@@ -19,8 +19,11 @@ class Event < ApplicationRecord
     COALESCE(end_date, start_date) >= CURRENT_TIMESTAMP
   SQL
 
-  scope :permitted_for, -> (user_id) {
-    where(EventPermissionQuery.permission_sql(user_id))
+  scope :permitted_for, ->(user_id) {
+    select(
+      "events.*, #{EventPermissionQuery.with_permission_type_sql(user_id)}").
+      where(EventPermissionQuery.permission_sql(user_id)
+    )
   }
 
   include Auditable

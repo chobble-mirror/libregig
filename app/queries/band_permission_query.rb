@@ -29,6 +29,28 @@ class BandPermissionQuery
       SQL
     end
 
+    def with_permission_type_sql(user_id)
+      <<~SQL
+        CASE
+          WHEN EXISTS (
+            SELECT 1 FROM permissions
+            WHERE permissions.user_id = #{user_id}
+              AND permissions.status IN ('owned', 'accepted')
+              AND permissions.item_type = 'Band'
+              AND permissions.item_id = bands.id
+          ) THEN (
+            SELECT permission_type FROM permissions
+            WHERE permissions.user_id = #{user_id}
+              AND permissions.status IN ('owned', 'accepted')
+              AND permissions.item_type = 'Band'
+              AND permissions.item_id = bands.id
+            LIMIT 1
+          )
+          ELSE 'view'
+        END as permission_type
+      SQL
+    end
+
     private
 
     def direct_permission_sql

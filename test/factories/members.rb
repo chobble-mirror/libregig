@@ -3,6 +3,7 @@ FactoryBot.define do
     sequence(:name) { |n| "member#{format("%05d", n)}" }
     sequence(:description) { |n| "this is test member #{format("%05d", n)}" }
     skills { [create(:skill)] }
+
     transient do
       owner { nil }
       edit_member { nil }
@@ -10,37 +11,43 @@ FactoryBot.define do
     end
 
     after(:create) do |member, evaluator|
-      if evaluator.owner
+      def create_permission(
+        member_id:,
+        user:,
+        status: :accepted,
+        permission_type: "edit"
+      )
         create(
           :permission,
           item_type: "Member",
-          item_id: member.id,
+          item_id: member_id,
           bestowing_user: nil,
+          user:,
+          status:,
+          permission_type:
+        )
+      end
+
+      if evaluator.owner
+        create_permission(
+          member_id: member.id,
           user: evaluator.owner,
           status: :owned
         )
       end
 
       if evaluator.edit_member
-        create(
-          :permission,
-          item_type: "Member",
-          item_id: member.id,
-          bestowing_user: nil,
-          user: evaluator.edit_member,
-          status: :accepted
+        create_permission(
+          member_id: member.id,
+          user: evaluator.edit_member
         )
       end
 
       if evaluator.view_member
-        create(
-          :permission,
-          item_type: "Member",
-          item_id: member.id,
-          bestowing_user: nil,
+        create_permission(
+          member_id: member.id,
           user: evaluator.view_member,
-          status: :accepted,
-          permission_type: "view",
+          permission_type: "view"
         )
       end
     end

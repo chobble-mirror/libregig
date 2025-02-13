@@ -63,9 +63,6 @@ class UserTest < ActiveSupport::TestCase
 
   context "associations" do
     should have_many(:permissions).dependent(:destroy)
-    should have_many(:bands).through(:permissions)
-    should have_many(:events).through(:permissions)
-    should have_many(:members).through(:permissions)
   end
 
   context "enums" do

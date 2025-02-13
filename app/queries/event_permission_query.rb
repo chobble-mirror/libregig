@@ -18,6 +18,28 @@ class EventPermissionQuery
       SQL
     end
 
+    def with_permission_type_sql(user_id)
+      <<~SQL
+        CASE
+          WHEN EXISTS (
+            SELECT 1 FROM permissions
+            WHERE permissions.user_id = #{user_id}
+              AND permissions.status IN ('owned', 'accepted')
+              AND permissions.item_type = 'Event'
+              AND permissions.item_id = events.id
+          ) THEN (
+            SELECT permission_type FROM permissions
+            WHERE permissions.user_id = #{user_id}
+              AND permissions.status IN ('owned', 'accepted')
+              AND permissions.item_type = 'Event'
+              AND permissions.item_id = events.id
+            LIMIT 1
+          )
+          ELSE 'view'
+        END as permission_type
+      SQL
+    end
+
     private
 
     def direct_permission_sql

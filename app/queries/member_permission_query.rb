@@ -33,7 +33,27 @@ class MemberPermissionQuery
       SQL
     end
 
-    private
+    def with_permission_type_sql(user_id)
+      <<~SQL
+        CASE
+          WHEN EXISTS (
+            SELECT 1 FROM permissions
+            WHERE permissions.user_id = #{user_id}
+              AND permissions.status IN ('owned', 'accepted')
+              AND permissions.item_type = 'Member'
+              AND permissions.item_id = members.id
+          ) THEN (
+            SELECT permission_type FROM permissions
+            WHERE permissions.user_id = #{user_id}
+              AND permissions.status IN ('owned', 'accepted')
+              AND permissions.item_type = 'Member'
+              AND permissions.item_id = members.id
+            LIMIT 1
+          )
+          ELSE 'view'
+        END as permission_type
+      SQL
+    end
 
     def direct_permission_sql
       <<~SQL
@@ -74,25 +94,25 @@ class MemberPermissionQuery
     def shares_band_with_permitted_member_sql(user_id)
       <<~SQL
         /* Find members who are in the same bands as members you can access */
-        SELECT other_members.member_id
-        /* Start with members you have permission for */
-        FROM band_members AS my_bands
-        /* Find other members in the same bands */
-        JOIN band_members AS other_members
-          ON other_members.band_id = my_bands.band_id
-        /* Check that you have permission to the original member */
-        JOIN permissions AS p
-          ON p.item_type = 'Member'
-          AND p.item_id = my_bands.member_id
-        WHERE p.user_id = #{user_id}
-          AND p.status IN ('owned', 'accepted')
+        SELECT DISTINCT other_members.member_id AS id
+        FROM band_members AS other_members
+        /* Find bands where there's at least one member you have permission for */
+        WHERE other_members.band_id IN (
+          SELECT band_members.band_id
+          FROM band_members
+          JOIN permissions AS p
+            ON p.item_type = 'Member'
+            AND p.item_id = band_members.member_id
+          WHERE p.user_id = #{user_id}
+            AND p.status IN ('owned', 'accepted')
+        )
       SQL
     end
 
     def shares_event_with_permitted_member_sql(user_id)
       <<~SQL
         /* Find members who are playing at the same events as members you can access */
-        SELECT band_member.member_id
+        SELECT band_member.member_id AS id
         /* Start with a member in a band */
         FROM band_members AS band_member
         /* Find events where their band is playing */
@@ -116,7 +136,7 @@ class MemberPermissionQuery
     def shares_event_with_permitted_band_sql(user_id)
       <<~SQL
         /* Find members who are playing at events where you have permission to another band */
-        SELECT band_member.member_id
+        SELECT band_member.member_id AS id
         /* Start with a member in a band */
         FROM band_members AS band_member
         /* Find events where their band is playing */

@@ -14,8 +14,11 @@ class Member < ApplicationRecord
 
   attr_accessor :permission_type
 
-  scope :permitted_for, -> (user_id) {
-    where(MemberPermissionQuery.permission_sql(user_id))
+  scope :permitted_for, ->(user_id) {
+    select(
+      "members.*, #{MemberPermissionQuery.with_permission_type_sql(user_id)}").
+      where(MemberPermissionQuery.permission_sql(user_id)
+    )
   }
 
   def owner
