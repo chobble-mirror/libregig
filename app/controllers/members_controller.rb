@@ -1,15 +1,13 @@
 class MembersController < ApplicationController
-  before_action :get_members
-  before_action :set_member, except: %i[index new create]
-  # before_action :deny_read_only, only: %i[edit update destroy]
+  include AccessPermissions
+
+  def index
+  end
 
   def edit
   end
 
   def show
-  end
-
-  def index
   end
 
   def new
@@ -53,18 +51,6 @@ class MembersController < ApplicationController
   end
 
   private
-
-  def get_members
-    @members = Current.user.admin? ? Member.all : Current.user.members
-  end
-
-  def set_member
-    @member = @members.find(params[:id])
-  end
-
-  def deny_read_only
-    redirect_to @member unless @member.permission_type == "edit"
-  end
 
   def member_params
     params.require(:member).permit(

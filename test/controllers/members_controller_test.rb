@@ -2,8 +2,9 @@ require "test_helper"
 
 class MembersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = create(:user)
-    @member = create(:member, view_member: @user)
+    @user_member = create(:user_member)
+    @user_organiser = create(:user_organiser)
+    @member = create(:member, owner: @user_organiser, view_member: @user_member)
     @band = create(:band)
 
     @unrelated_member = create(:member)
@@ -12,7 +13,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
     @band.members << @member
     @band.members << @member_in_same_band
 
-    log_in_as @user
+    log_in_as @user_member
   end
 
   context "#index" do
@@ -48,6 +49,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
 
   context "#edit" do
     should "get edit" do
+      log_in_as @user_organiser
       get edit_member_url(@member)
       assert_response :success
     end
@@ -77,7 +79,7 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
             member: {
               name: "John Doe",
               description: "New member description",
-              user_id: @user.id
+              user_id: @user_member.id
             }
           }
       end
@@ -89,13 +91,20 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
 
   context "#update" do
     should "update member and redirect" do
+      log_in_as @user_organiser
       patch member_url(@member), params: {member: {name: "Updated Name"}}
       assert_redirected_to member_url(@member)
     end
 
-    should "render edit form if update fails " do
-      Member.any_instance.expects(:save).returns(false)
+    should "deny member organiser" do
+      log_in_as @user_member
+      patch member_url(@member), params: {member: {name: "Updated Name"}}
+      assert_response :not_found
+    end
 
+    should "render edit form if update fails " do
+      log_in_as @user_organiser
+      Member.any_instance.expects(:save).returns(false)
       patch member_url(@member), params: {member: {name: "Updated Name"}}
 
       assert_response :unprocessable_entity
@@ -105,11 +114,19 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
 
   context "#destroy" do
     should "destroy member" do
+      log_in_as @user_organiser
       assert_difference("Member.count", -1) do
         delete member_url(@member)
       end
-
       assert_redirected_to members_url
+    end
+
+    should "deny destroy to view-only member" do
+      log_in_as @user_member
+      assert_difference("Member.count", 0) do
+        delete member_url(@member)
+      end
+      assert_response :not_found
     end
   end
 end

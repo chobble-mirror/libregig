@@ -15,6 +15,11 @@ class PermissionsController < ApplicationController
           user_id: Current.user.id
         )
       end
+
+    @other_items =
+      Event.permitted_for(Current.user.id) +
+      Band.permitted_for(Current.user.id) +
+      Member.permitted_for(Current.user.id)
   end
 
   def new

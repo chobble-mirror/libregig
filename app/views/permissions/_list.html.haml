@@ -36,3 +36,27 @@
   %p No shares found - an organiser can invite you to edit or view.
 - elsif Current.user.admin?
   %p No shares found - an organiser needs to create one.
+
+
+- if @other_items.any?
+  %hr
+  %h2 Effective permissions
+  .relative.overflow-x-auto
+    %table
+      %thead
+        %tr
+          %th.w-auto.lg:w-80
+            = table_header_sort('permissions', 'name', 'name', 'date')
+          %th{:style => "width: 1%"}
+            = table_header_sort('permissions', 'type', 'type')
+          %th{:style => "width: 1%"}
+            = table_header_sort('permissions', 'status', 'status')
+      %tbody
+        - @other_items.each do |item|
+          %tr
+            %td
+              = link_to item.name, item, class: 'break-all'
+            %td
+              = item.class
+            %td
+              = item.permission_type

@@ -70,18 +70,6 @@ class User < ApplicationRecord
     new_record? || password.present?
   end
 
-  def event_permissions
-    permissions.where(status: [:accepted, :owned], item_type: "Event")
-  end
-
-  def band_permissions
-    permissions.where(status: [:accepted, :owned], item_type: "Band")
-  end
-
-  def member_permissions
-    permissions.where(status: [:accepted, :owned], item_type: "Member")
-  end
-
   def set_default_time_zone
     self.time_zone = "Etc/UTC" if time_zone.blank?
   end

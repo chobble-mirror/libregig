@@ -1,9 +1,6 @@
 class BandsController < ApplicationController
+  include AccessPermissions
   include EventsHelper
-
-  before_action :get_bands
-  before_action :set_band, except: %i[index new create]
-  before_action :deny_read_only, only: %i[edit update destroy]
 
   before_action :set_events, except: %i[index new create]
   before_action :set_view, only: %i[show edit update confirm_destroy]
@@ -11,10 +8,6 @@ class BandsController < ApplicationController
   before_action :verify_organiser_or_admin, only: %i[confirm_destroy destroy]
 
   def index
-    @bands =
-      Current.user.admin? ?
-        Band.all :
-        Current.user.bands
     @bands = sort_bands(@bands, params[:sort])
 
     bands_count = @bands.to_a.count
@@ -77,20 +70,6 @@ class BandsController < ApplicationController
   end
 
   private
-
-  def get_bands
-    @bands = Current.user.admin? ? Band.all : Current.user.bands
-  end
-
-  def set_band
-    @band = @bands.find(params[:id])
-    @permission = @band.permission_type
-    @read_only = @permission != "edit"
-  end
-
-  def deny_read_only
-    raise ActiveRecord::RecordNotFound if @read_only
-  end
 
   def set_events
     @events = @band.events

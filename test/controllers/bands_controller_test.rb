@@ -134,7 +134,6 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
 
       assert_equal @band_without_members, assigns(:band)
-      assert_equal "view", assigns(:permission)
       assert_equal true, assigns(:read_only)
     end
   end
