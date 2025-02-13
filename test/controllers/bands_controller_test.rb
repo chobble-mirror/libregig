@@ -126,6 +126,17 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert assigns(:band)
     end
+
+    should "show read-only band" do
+      log_in_as @member_user
+      get band_url @band_without_members
+
+      assert_response :success
+
+      assert_equal @band_without_members, assigns(:band)
+      assert_equal "view", assigns(:permission)
+      assert_equal true, assigns(:read_only)
+    end
   end
 
   context "#edit" do
@@ -135,6 +146,13 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert assigns(:band)
+    end
+
+    should "deny for read-only band" do
+      log_in_as @member_user
+      get edit_band_url(@band_with_members)
+
+      assert_response :not_found
     end
   end
 
@@ -194,6 +212,14 @@ class BandsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_template :edit
+    end
+
+    should "deny access to read-only bands" do
+      log_in_as @member_user
+      patch band_url(@band_with_members), params: band_params(
+        name: "Updated Name", description: "Updated Description"
+      )
+      assert_response :not_found
     end
   end
 

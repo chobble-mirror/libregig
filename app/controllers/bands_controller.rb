@@ -84,14 +84,12 @@ class BandsController < ApplicationController
 
   def set_band
     @band = @bands.find(params[:id])
+    @permission = @band.permission_type
+    @read_only = @permission != "edit"
   end
 
   def deny_read_only
-    raise ActiveRecord::RecordNotFound unless @band.permission_type == "edit"
-  end
-
-  def set_band
-    @band = Current.user.bands.find(params[:id])
+    raise ActiveRecord::RecordNotFound if @read_only
   end
 
   def set_events
