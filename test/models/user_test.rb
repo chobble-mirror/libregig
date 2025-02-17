@@ -85,6 +85,10 @@ class UserTest < ActiveSupport::TestCase
       should "return all owned links" do
         owned_links = @user.owned_links
         @items.each { |item| assert_includes owned_links, item }
+
+        # second time is cached
+        owned_links = @user.owned_links
+        @items.each { |item| assert_includes owned_links, item }
       end
     end
 
