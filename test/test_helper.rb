@@ -56,6 +56,7 @@ module BCrypt
     end
 
     def is_password?(unencrypted)
+      return false if unencrypted.blank?
       @encrypted == unencrypted.reverse
     end
 

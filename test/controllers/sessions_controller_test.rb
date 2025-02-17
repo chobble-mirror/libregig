@@ -51,6 +51,39 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       assert_equal "Invalid username or password", flash[:alert]
       assert_nil session[:user_id]
     end
+
+    should "skip login in development mode" do
+      Rails.env = "development"
+      post login_url, params: {
+        user: {
+          username: @user.username,
+          debug_skip: true
+        }
+      }
+      Rails.env = "test"
+
+      assert_redirected_to events_path # should redirect upon successful login
+      assert_equal @user.id, session[:user_id]
+
+      follow_redirect!
+      assert_response :success # verify that the redirect was successful
+    end
+
+    should "not skip login when not in development mode" do
+      assert_not Rails.env.development?
+
+      post login_url, params: {
+        user: {
+          username: @user.username,
+          debug_skip: true
+        }
+      }
+
+      assert_response :unprocessable_entity
+      assert_template :new
+      assert_equal "Invalid username or password", flash[:alert]
+      assert_nil session[:user_id]
+    end
   end
 
   context "#destroy" do

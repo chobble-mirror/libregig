@@ -1,5 +1,5 @@
 {
-  "language_overrides": {
+  "languages": {
     "ERB": {
       "formatter": {
         "external": {
@@ -10,6 +10,15 @@
     },
     "Haml": {
       "soft_wrap": "none"
+    },
+    "Ruby": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "standardrb",
+          "arguments": ["--fix-unsafely", "--stdin", "ignored", "--stderr"]
+        }
+      }
     }
   },
   "tabs": {
