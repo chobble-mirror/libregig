@@ -6,8 +6,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     @band_one = create(
       :band_with_members,
-      owner:
-      @user_organiser
+      owner: @user_organiser
     )
 
     assert_equal @user_organiser, @band_one.owner
@@ -34,14 +33,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     )
 
     assert_equal @user_organiser, @event_two.owner
-  end
 
-  context "#new" do
-    should "create a new event" do
-      log_in_as @user_organiser
-      get new_event_url
-      assert assigns(:event)
-    end
+    @other_band = create(:band_with_members)
   end
 
   context "#index" do
@@ -324,25 +317,46 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  context "#create" do
-    setup do
+  context "#new" do
+    should "create a new event" do
       log_in_as @user_organiser
+      get new_event_url
+      assert assigns(:event)
     end
 
+    should "pre-check bands when their IDs are passed as band_id" do
+      log_in_as @user_organiser
+      get new_event_url(band_id: @band_one.id)
+      event = assigns(:event)
+      assert_equal [@band_one], event.bands
+    end
+
+    should "not pre-check bands if I don't have access to their IDs" do
+      log_in_as @user_organiser
+      get new_event_url(band_id: @other_band.id)
+      event = assigns(:event)
+      assert_equal [], event.bands
+    end
+  end
+
+  context "#create" do
     should "create event with associated bands" do
+      log_in_as @user_organiser
       @band = create(:band_with_members, owner: @user_organiser)
       assert_difference "Event.count" do
-        post events_url, params: event_params(
+        url = events_url(band_id: @band_one.id)
+        post url, params: event_params(
           band_ids: [@band.id]
         )
       end
 
       assert_response :redirect
       event = assigns(:event)
-      assert_includes event.bands, @band
+      assert_equal event.bands, [@band]
     end
 
     should "create event with multiple bands" do
+      log_in_as @user_organiser
       band_one = create(:band_with_members, owner: @user_organiser)
       band_two = create(:band_with_members, owner: @user_organiser)
 
@@ -362,6 +376,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "assign event to organiser as owner" do
+      log_in_as @user_organiser
       organiser_user = create(:user_organiser)
       band_one = create(:band_with_members, owner: organiser_user)
       log_in_as(organiser_user)
@@ -396,6 +411,20 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
           band_ids: [band_one.id, band_two.id]
         )
       end
+    end
+
+    should "render an error if save fails" do
+      log_in_as @user_organiser
+      Event.any_instance.expects(:save).returns(false)
+
+      post events_url, params: event_params(
+        name: "New Event",
+        description: "New Description",
+        band_ids: [@band_one.id]
+      )
+
+      assert_response :unprocessable_entity
+      assert_template :new
     end
   end
 

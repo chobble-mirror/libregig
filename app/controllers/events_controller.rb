@@ -13,7 +13,10 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    @event.band_ids = [params[:band_id]] if params[:band_id].present?
+
+    param_band_id = Integer(params[:band_id], exception: false)
+    param_band_id = nil unless @bands.collect(&:id).include?(param_band_id)
+    @event.band_ids = [param_band_id] if param_band_id
   end
 
   def show
