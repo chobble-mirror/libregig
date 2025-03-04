@@ -1,5 +1,5 @@
 %section
-  - if Current.user.organiser? || Current.user.admin?
+  - if Current.user.organiser?
     %p.text-right
       = link_to "Share '#{@band.name}' with other users", |
         url_for(                                          |

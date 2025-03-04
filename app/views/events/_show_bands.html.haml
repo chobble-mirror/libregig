@@ -1,0 +1,23 @@
+%section
+  %h1.mb-4= event.name
+  %h2 Bands
+  - if event.bands.any?
+    %table.mb-8
+      %thead
+        %tr
+          %th Name
+          %th Description
+      %tbody
+        - event.bands.each do |band|
+          %tr
+            %td
+              = link_to band.name, band_path(band)
+            %td= band.description
+  - else
+    %p No bands for this event yet.
+  
+  .mt-4
+    - if event.editable?
+      = link_to 'Edit', edit_event_path(event), |
+        class: 'primary_button'                 |
+    = link_to 'Back', events_path, class: 'secondary_button'

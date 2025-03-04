@@ -42,6 +42,10 @@ class Event < ApplicationRecord
     Rails.application.routes.url_helpers.edit_event_url(self, host: Rails.application.config.server_url)
   end
 
+  def editable?
+    permission_type == "edit"
+  end
+
   def duration
     if start_date.present? && end_date.present?
       convert_seconds_to_duration(end_date - start_date)

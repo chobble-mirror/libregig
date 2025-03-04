@@ -3,6 +3,7 @@ class EventsController < ApplicationController
   include EventsHelper
 
   before_action :set_bands, only: %i[new edit create update]
+  before_action :set_view, only: %i[show edit update]
 
   def index
     @events = @events
@@ -55,6 +56,15 @@ class EventsController < ApplicationController
 
   def set_bands
     @bands = Current.user.bands
+  end
+  
+  def set_view
+    @views = %w[overview bands shares]
+    @views_subtitles = [nil, "(#{@event.bands.count})", nil]
+    @view =
+      @views.include?(params["view"]) ?
+        params["view"] :
+        "overview"
   end
 
   def event_params

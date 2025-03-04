@@ -1,0 +1,12 @@
+%nav.sub-nav
+  %ul.sub-nav-tabs
+    - @views.each_with_index do |view, index|
+      %li
+        - text = view.titlecase
+        - subtitle = @views_subtitles[index]
+        - css = "#{'active' if @view == view}"
+        = link_to url_for(view:), class: css do
+          = text
+          - if subtitle
+            %small
+              = subtitle

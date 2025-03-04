@@ -1,0 +1,45 @@
+%section
+  %h1.mb-4= event.name
+  %h2 Shares
+  - if Current.user.organiser?
+    %p.text-right
+      = link_to "Share '#{event.name}' with other users", |
+        url_for(                                         |
+          controller: "permissions",                     |
+          action: "new",                                 |
+          item_type: "event",                            |
+          item_id: event.id                              |
+        ),                                               |
+        class: "primary_button"                          |
+  - if event.permissions.any?
+    %table.mb-8
+      %thead
+        %th User
+        %th Status
+        %th Type
+        %th Created
+      %tbody
+        - event.permissions.each do |permission|
+          %tr
+            %td
+              - if Current.user.admin?
+                = link_to permission.user.name,    |
+                  admin_user_path(permission.user) |
+              - else
+                = permission.user.name
+              - if Current.user == permission.user
+                %em - that's you!
+            %td
+              = permission.status
+            %td
+              = permission.permission_type
+            %td
+              = permission.created_at
+  - else
+    %p No shares for this event yet.
+  
+  .mt-4
+    - if event.editable?
+      = link_to 'Edit', edit_event_path(event), |
+        class: 'primary_button'                 |
+    = link_to 'Back', events_path, class: 'secondary_button'
