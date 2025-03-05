@@ -9,6 +9,7 @@ class Permission < ApplicationRecord
   scope :accepted, -> { where(status: :accepted) }
   scope :accepted_or_owned, -> { where(status: %i[accepted owned]) }
   scope :item_type, ->(type) { where(item_type: type) }
+  scope :for_user, ->(user) { where("bestowing_user_id = :user_id OR user_id = :user_id", user_id: user.id) }
 
   def self.join_models(model)
     table_name = model.to_s.pluralize

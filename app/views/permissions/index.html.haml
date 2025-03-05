@@ -5,4 +5,7 @@
     %span
       - if Current.user.organiser?
         = link_to 'New Invite', new_permission_path, class: 'secondary_button ml-2'
-  = render 'list'
+        
+  = render 'direct_permissions', permissions: @permissions
+  %hr
+  = render 'effective_permissions', items: @other_items

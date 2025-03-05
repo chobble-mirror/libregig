@@ -1,31 +1,31 @@
 - if @permissions.any?
+  %h2
+    = "Direct permissions"
+    %small (#{@permissions.count})
   .relative.overflow-x-auto
     %table
       %thead
         %tr
+          %th{:style => "width: 1%"}
+            = table_header_sort('permissions', 'type', 'type', 'type', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
           %th.w-auto.lg:w-80
-            = table_header_sort('permissions', 'name', 'name', 'date')
+            = table_header_sort('permissions', 'name', 'name', 'name', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
           %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'type', 'type')
+            = table_header_sort('permissions', 'status', 'status', 'status', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
           %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'status', 'status')
-          %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'recipient', 'recipient')
+            = table_header_sort('permissions', 'recipient', 'recipient', 'recipient', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
           %th.hidden.md:table-cell{:style => "width: 1%;"}
-            = table_header_sort('permissions', 'created', 'created')
+            = table_header_sort('permissions', 'created', 'created', 'created', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
           %th.hidden.md:table-cell{:style => "width: 1%;"}
-            = table_header_sort('permissions', 'last_modified', 'modified')
+            = table_header_sort('permissions', 'last_modified', 'modified', 'last_modified', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
       %tbody
         - @permissions.each do |permission|
           %tr
+            %td #{permission.item_type}
             %td
               = link_to permission.item.name, permission.item, class: 'break-all'
-            %td
-              = permission.item_type
-            %td
-              = permission.status
-            %td
-              = permission.user.username
+            %td #{permission.status}
+            %td #{permission.user.username}
             %td.hidden.md:table-cell.whitespace-nowrap{:title => "#{permission.created_at}"}
               = time_ago_in_words(permission.created_at)
             %td.hidden.md:table-cell.whitespace-nowrap{:title => "#{permission.updated_at}"}
@@ -40,22 +40,37 @@
 
 - if @other_items.any?
   %hr
-  %h2 Effective permissions
+  %h2
+    = "Effective permissions"
+    %small (#{@other_items.count})
   .relative.overflow-x-auto
     %table
       %thead
         %tr
-          %th.w-auto.lg:w-80
-            = table_header_sort('permissions', 'name', 'name', 'date')
           %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'type', 'type')
+            = table_header_sort('permissions', 'type', 'type', 'type', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
+          %th.w-auto.lg:w-40
+            = table_header_sort('permissions', 'name', 'name', 'name', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
+          %th.w-auto.lg:w-40
+            = table_header_sort('permissions', 'source', 'source', 'source', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
           %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'status', 'status')
+            = table_header_sort('permissions', 'type', 'type', 'type', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
+          %th{:style => "width: 1%"}
+            = table_header_sort('permissions', 'status', 'status', 'status', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
       %tbody
         - @other_items.each do |item|
           %tr
+            %td #{item.class.to_s}
             %td
               = link_to item.name, item, class: 'break-all'
+            %td
+              - permission = find_effective_permission_source(Current.user, item)
+              - if permission.nil?
+                Direct
+              - else
+                = "#{permission.item_type}: "
+                %strong
+                  = link_to permission.item.name, permission.item
             %td
               = item.class
             %td

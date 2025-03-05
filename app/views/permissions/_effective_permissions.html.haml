@@ -1,0 +1,32 @@
+- if items.any?
+  %h2 Effective Permissions
+  .relative.overflow-x-auto
+    %table
+      %thead
+        %tr
+          %th.w-auto.lg:w-40
+            = table_header_sort('permissions', 'name', 'Item', 'name', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
+          %th.w-auto.lg:w-40
+            = table_header_sort('permissions', 'source', 'Source', 'source', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
+          %th{style: "width: 1%"}
+            = table_header_sort('permissions', 'type', 'Type', 'type', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
+          %th{style: "width: 1%"}
+            = table_header_sort('permissions', 'status', 'Access', 'status', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
+      %tbody
+        - items.each do |item|
+          - permission = find_effective_permission_source(Current.user, item)
+          %tr
+            %td
+              = link_to item.name, item, class: 'break-all'
+            %td
+              - if permission.nil?
+                Direct access
+              - else
+                = "via #{permission.item_type}: "
+                = link_to permission.item.name, permission.item
+            %td
+              = item.class
+            %td
+              = item.permission_type
+- else
+  %p No items found with effective permissions.
