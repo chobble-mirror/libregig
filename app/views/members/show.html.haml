@@ -1,4 +1,4 @@
 - content_for :title, @member.name
 - content_for :nav do
-  = render 'member_nav', member: @member
+  = render 'shared/tab_nav'
 = render "show_#{@view}", member: @member

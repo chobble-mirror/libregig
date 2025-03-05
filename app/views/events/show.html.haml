@@ -1,4 +1,4 @@
 - content_for :title, @event.name
 - content_for :nav do
-  = render 'event_nav', event: @event
+  = render 'shared/tab_nav'
 = render "show_#{@view}", event: @event
