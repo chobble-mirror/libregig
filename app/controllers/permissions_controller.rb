@@ -95,8 +95,8 @@ class PermissionsController < ApplicationController
       permissions.order(permission_type: direction_sym)
     when "status"
       permissions.order(status: direction_sym)
-    when "recipient"
-      permissions.joins(:user).order(Arel.sql(
+    when "bestower"
+      permissions.joins(:bestowing_user).order(Arel.sql(
         "users.username #{direction_sym}"
       ))
     when "created"

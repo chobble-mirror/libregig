@@ -9,6 +9,28 @@ module ApplicationHelper
     end
   end
 
+  def table_headers(sort_param_name, columns, resource = nil)
+    query_params = request.query_parameters.merge({}).except(sort_param_name)
+
+    capture do
+      columns.each do |column|
+        concat(
+          content_tag(:th,
+            table_header_sort(
+              resource || controller_name,
+              column[:name],
+              column[:display],
+              column[:default],
+              query_params,
+              sort_param_name
+            ),
+            class: column[:class],
+            style: column[:wide] ? nil : "width: 1%")
+        )
+      end
+    end
+  end
+
   def table_header_sort(
     resource,
     column,

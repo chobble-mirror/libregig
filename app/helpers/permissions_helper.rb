@@ -1,5 +1,6 @@
 module PermissionsHelper
   include ActionView::Helpers::UrlHelper
+  
   def potential_users
     # Get all non-admin users (both members and organisers) sorted by username,
     # excluding current user
