@@ -1,10 +1,10 @@
+- content_for :title, "All Members"
 %section
   .flex.justify-between.mb-8
-    %h1 Members
-    = link_to 'Add Member', new_member_path if (              |
-        Current.user.organiser? ||                            |
-          Current.user.member? && Current.user.members.empty? |
-      )                                                       |
+    = page_heading("Members")
+    %span
+      - if Current.user.organiser? || (Current.user.member? && Current.user.members.empty?)
+        = link_to 'Add Member', new_member_path, class: 'secondary_button ml-2'
   - if @members.present?
     .relative.overflow-x-auto
       %table

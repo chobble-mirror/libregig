@@ -1,7 +1,9 @@
 - content_for :title, "All Bands"
 %section
-  .block.items-right.text-right{:class => "w-4/5"}
-    = link_to 'Add Band', new_band_path, class: "primary_button"
+  .flex.justify-between.mb-8
+    = page_heading("Bands")
+    %span
+      = link_to 'Add Band', new_band_path, class: 'secondary_button ml-2'
   #bands.text-center
     - if Current.user.admin?
       %p

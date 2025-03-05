@@ -143,7 +143,8 @@ class ApplicationController < ActionController::Base
   def build_nav_tabs
     tabs = [
       {display_name: "Events", url: events_path},
-      {display_name: "Bands", url: bands_path}
+      {display_name: "Bands", url: bands_path},
+      {display_name: "Members", url: members_path}
     ]
 
     if Current.user.admin? || Current.user.organiser?

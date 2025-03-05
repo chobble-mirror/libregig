@@ -2,8 +2,8 @@
   local: true,                                     |
   builder: FormBuilders::NiceFormBuilder do |form| |
   = form.text_field :name, required: true
-  = form.text_area :description
-  = form.text_area :skills_list
+  = form.textarea :description
+  = form.textarea :skills_list
   .mb-8
     = form.label :bands, "Bands"
     = form.collection_check_boxes :band_ids, Band.all, :id, :name do |b|
