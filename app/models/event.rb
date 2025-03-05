@@ -56,9 +56,9 @@ class Event < ApplicationRecord
 
   def set_defaults
     if start_date.present?
-      end_date ||= start_date
+      self.end_date ||= start_date
       if end_date && end_date < start_date
-        start_date
+        self.end_date = start_date
       end
     end
   end
