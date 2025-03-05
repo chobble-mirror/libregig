@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[
     edit
     update
+    show
   ]
 
   before_action :check_not_logged_in, only: %i[
@@ -34,6 +35,9 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+  end
+  
   def edit
   end
 

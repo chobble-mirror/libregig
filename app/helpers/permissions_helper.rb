@@ -1,6 +1,22 @@
 module PermissionsHelper
   def potential_users
-    User.member.pluck(:username, :id)
+    # Get all non-admin users (both members and organisers) sorted by username,
+    # excluding current user
+    users =
+      User
+        .where
+        .not(user_type: :admin)
+        .where
+        .not(id: Current.user.id)
+        .order(:username)
+        .pluck(:username, :id)
+
+    if users.any?
+      # Add a "Please select" option with empty value as the first option
+      [["Please select", ""]] + users
+    else
+      []
+    end
   end
 
   def potential_items(owner)

@@ -165,6 +165,26 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
 
         assert_response :forbidden
       end
+
+      should "not allow organiser to create an permission with no user" do
+        log_in_as @organiser
+
+        assert_difference("Permission.count", 0) do
+          params = @valid_permission_params
+          params[:permission][:user_id] = nil
+          post permissions_path, params:
+        end
+
+        assert_response :not_found
+
+        assert_difference("Permission.count", 0) do
+          params = @valid_permission_params
+          params[:permission][:user_id] = 0
+          post permissions_path, params:
+        end
+
+        assert_response :not_found
+      end
     end
 
     context "#update" do

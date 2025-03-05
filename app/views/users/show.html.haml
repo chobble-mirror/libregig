@@ -1,14 +1,25 @@
 .w-full.max-w-xs.bg-white.shadow-md.p-8.mt-8
-  %h1
+  %h1 Profile
+  %p
+    %strong Name:
     = @user.name
   %p
-    = @user.updated_at
+    %strong Username:
+    = @user.username
   %p
-    time zone: #{@user.time_zone}
-  %ul
+    %strong Email:
+    = @user.email
+  %p
+    %strong Time zone:
+    = @user.time_zone
+  %p
+    %strong Account type:
+    = @user.user_type.capitalize
+  %p
+    %strong Last updated:
+    = @user.updated_at.strftime('%Y-%m-%d')
+  
+  .mt-4
     - if Current.user == @user
-      %li
-        = link_to "edit", edit_user_path(@user)
-    - if Current.user.admin?
-      %li
-        = link_to "admin edit", admin_user_path(@user), class: "admin"
+      = link_to "Edit Profile", edit_user_path(@user), class: 'primary_button'
+    = link_to "Back", events_path, class: 'secondary_button'

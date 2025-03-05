@@ -1,10 +1,20 @@
 .w-full.max-w-xs.bg-white.shadow-md.p-8.mt-8
   %h1
     Create Invitation
-  = form_with model: @permission,                    |
-    local: true,                                     |
-    builder: FormBuilders::NiceFormBuilder do |form| |
-    = form.select :user_id, @users
-    = form.select :item, @items
-    = form.select :permission_type, @permission_types
-    = form.submit "Create Invite"
+  
+  - if @no_users_available
+    .alert.alert-warning
+      %p No users available to invite. 
+      %p You can only invite non-admin users who aren't yourself.
+  - else
+    = form_with model: @permission,                    |
+      local: true,                                     |
+      builder: FormBuilders::NiceFormBuilder do |form| |
+      = form.select :user_id, @users
+      - if @preselected_item.present?
+        = form.select :item, @items, { selected: @preselected_item }, { disabled: true }
+        = form.hidden_field :item, value: @preselected_item
+      - else
+        = form.select :item, @items
+      = form.select :permission_type, @permission_types
+      = form.submit "Create Invite"

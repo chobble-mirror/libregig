@@ -7,8 +7,10 @@
         - if Current.user.admin?
           %li= link_to 'users admin', admin_users_path
         - if Current.impersonating?
-          %li stop impersonating
-        %li profile
+          %li
+            = form_with url: admin_impersonate_url, method: :delete, local: true do
+              = submit_tag 'stop impersonating', class: 'linkify'
+        %li= link_to 'profile', user_path(Current.user)
         %li notifications
         %li linked devices
         %li

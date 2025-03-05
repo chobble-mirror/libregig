@@ -24,6 +24,12 @@ class PermissionsController < ApplicationController
 
   def new
     @permission = Permission.new
+
+    if params[:item_type].present? && params[:item_id].present?
+      @preselected_item = "#{params[:item_type].capitalize}_#{params[:item_id]}"
+    end
+
+    @no_users_available = potential_users.empty?
   end
 
   def create
@@ -36,11 +42,9 @@ class PermissionsController < ApplicationController
     @permission.item_type, @permission.item_id = item_param.split("_")
     @permission.item_type&.capitalize!
 
-    if @permission.save!
-      redirect_to permissions_path, notice: "Invitation created"
-    else
-      render :new, status: :unprocessable_entity
-    end
+    return render :new, status: :unprocessable_entity unless @permission.save
+
+    redirect_to permissions_path, notice: "Invitation created"
   end
 
   def update
