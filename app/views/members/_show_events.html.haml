@@ -1,0 +1,11 @@
+%section
+  .sm:flex.flex-row.justify-between.items-center.gap-4
+    %h1.mb-4
+      = "#{@member.name}'s Events"
+  - if @events.any?
+    = render 'events/list', |
+      path_helper: ->(options) { |
+        member_path(@member, options.merge(view: 'events')) |
+      } |
+  - else
+    %p= "No events found for #{@member.name}"

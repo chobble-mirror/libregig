@@ -1,26 +1,4 @@
 - content_for :title, @member.name
-%section
-  %h1 Member Details
-  - if @read_only
-    %p.danger READ ONLY!
-  %p
-    %strong Name:
-    = @member.name
-  %p
-    %strong Description:
-    = @member.description
-  - if @member.skills.any?
-    %section.skills
-      %h2 Skills:
-      %ul
-        - @member.skills.each do |skill|
-          %li= skill.name
-  - if @member.bands.any?
-    %h2 Bands:
-    %ul
-      - @member.bands.each do |band|
-        %li= band.name
-  - unless @read_only
-    = link_to 'Edit', edit_member_path(@member)
-    |
-  = link_to 'Back', members_path
+- content_for :nav do
+  = render 'member_nav', member: @member
+= render "show_#{@view}", member: @member

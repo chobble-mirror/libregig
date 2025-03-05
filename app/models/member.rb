@@ -60,4 +60,10 @@ class Member < ApplicationRecord
   def editable
     false
   end
+
+  def events
+    Event.joins(:bands)
+      .where(bands: { id: bands.pluck(:id) })
+      .distinct
+  end
 end

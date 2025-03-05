@@ -1,5 +1,9 @@
 class MembersController < ApplicationController
   include AccessPermissions
+  include EventsHelper
+
+  before_action :set_member_events, only: :show
+  before_action :set_view, only: :show
 
   def index
     # Get skills for the current set of members
@@ -71,5 +75,20 @@ class MembersController < ApplicationController
     params.require(:member).permit(
       :name, :description, :skills_list, band_ids: []
     )
+  end
+  
+  def set_view
+    @views = %w[overview events]
+    @views_subtitles = [nil, "(#{@events.count})"]
+    @view =
+      @views.include?(params["view"]) ?
+        params["view"] :
+        "overview"
+  end
+  
+  def set_member_events
+    @events = @member.events
+      .then { |rel| filter_by_period(rel, params[:period]) }
+      .then { |rel| sort_results(rel, params[:sort]) }
   end
 end
