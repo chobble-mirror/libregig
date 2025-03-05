@@ -2,9 +2,8 @@
 %section
   .flex.justify-between.mb-8
     = page_heading("Members")
-    %span
-      - if Current.user.organiser? || (Current.user.member? && Current.user.members.empty?)
-        = link_to 'Add Member', new_member_path, class: 'secondary_button ml-2'
+    - if Current.user.organiser? || (Current.user.member? && Current.user.members.empty?)
+      = link_to 'Add Member', new_member_path, class: 'secondary_button ml-2'
 
   - if @skills.present?
     .mb-4

@@ -17,17 +17,14 @@
         - items.each do |item|
           - permission = find_effective_permission_source(Current.user, item)
           %tr
-            %td
-              = link_to item.name, item, class: 'break-all'
+            %td= link_to item.name, item, class: 'break-all'
             %td
               - if permission.nil?
                 Direct access
               - else
                 %strong #{permission.item_type}:
                 = link_to permission.item.name, permission.item
-            %td
-              = item.class
-            %td
-              = item.permission_type
+            %td= item.class
+            %td= item.permission_type
 - else
   %p No items found with effective permissions.
