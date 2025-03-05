@@ -6,16 +6,19 @@
     %table
       %thead
         %tr
+          - query = request.query_parameters.merge({}).except(:direct_sort)
           %th.w-auto.lg:w-80
-            = table_header_sort('permissions', 'name', 'Item', 'name', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
+            = table_header_sort('permissions', 'name', 'Item', nil, query, :direct_sort)
           %th{style: "width: 1%"}
-            = table_header_sort('permissions', 'type', 'Type', 'type', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
+            = table_header_sort('permissions', 'type', 'Type', nil, query, :direct_sort)
           %th{style: "width: 1%"}
-            = table_header_sort('permissions', 'status', 'Status', 'status', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
+            = table_header_sort('permissions', 'access', 'Access', nil, query, :direct_sort)
           %th{style: "width: 1%"}
-            = table_header_sort('permissions', 'recipient', 'User', 'recipient', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
+            = table_header_sort('permissions', 'status', 'Status', nil, query, :direct_sort)
+          %th{style: "width: 1%"}
+            = table_header_sort('permissions', 'bestower', 'Bestower', nil, query, :direct_sort)
           %th.hidden.md:table-cell{style: "width: 1%;"}
-            = table_header_sort('permissions', 'created', 'Created', 'created', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
+            = table_header_sort('permissions', 'created', 'Created', nil, query, :direct_sort)
       %tbody
         - permissions.each do |permission|
           %tr
@@ -24,12 +27,14 @@
             %td
               = permission.item_type
             %td
+              = permission.permission_type
+            %td
               = permission.status
             %td
-              - if permission.user.username == Current.user.username
+              - if permission.bestowing_user.username == Current.user.username
                 %em You!
               - else
-                = permission.user.username
+                = link_to permission.bestowing_user.username, permission.bestowing_user
             %td.hidden.md:table-cell.whitespace-nowrap{title: "#{permission.created_at}"}
               = time_ago_in_words(permission.created_at)
 - elsif Current.user.organiser?

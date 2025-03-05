@@ -18,8 +18,7 @@
   %p
     %strong Last updated:
     = @user.updated_at.strftime('%Y-%m-%d')
-  
+
   .mt-4
     - if Current.user == @user
       = link_to "Edit Profile", edit_user_path(@user), class: 'primary_button'
-    = link_to "Back", events_path, class: 'secondary_button'

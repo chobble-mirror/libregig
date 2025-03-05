@@ -91,6 +91,8 @@ class PermissionsController < ApplicationController
         ))
     when "type"
       permissions.order(item_type: direction_sym)
+    when "access"
+      permissions.order(permission_type: direction_sym)
     when "status"
       permissions.order(status: direction_sym)
     when "recipient"

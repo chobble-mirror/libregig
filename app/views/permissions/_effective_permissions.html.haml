@@ -24,7 +24,7 @@
               - if permission.nil?
                 Direct access
               - else
-                = "via #{permission.item_type}: "
+                %strong #{permission.item_type}:
                 = link_to permission.item.name, permission.item
             %td
               = item.class

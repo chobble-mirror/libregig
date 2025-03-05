@@ -141,16 +141,13 @@ class ApplicationController < ActionController::Base
   end
 
   def build_nav_tabs
-    tabs = [
+    shares_name =
+      (Current.user.admin? || Current.user.organiser?) ? "Sharing" : "Shares"
+    [
       {display_name: "Events", url: events_path},
       {display_name: "Bands", url: bands_path},
-      {display_name: "Members", url: members_path}
+      {display_name: "Members", url: members_path},
+      {display_name: shares_name, url: permissions_path}
     ]
-
-    if Current.user.admin? || Current.user.organiser?
-      tabs << {display_name: "Sharing", url: permissions_path}
-    end
-
-    tabs
   end
 end

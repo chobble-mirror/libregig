@@ -30,17 +30,16 @@ module ApplicationHelper
       new_sort_direction = default_sort_direction
       sort_icon = ""
     end
-    
-    # Use provided request_params or the current request.query_parameters
+
     query_params = request_params || request.query_parameters
-    
+
     new_params = query_params
       .except(:page, sort_param)
       .merge(sort_param => "#{column} #{new_sort_direction}")
 
     # Preserve period parameter if it exists
     new_params[:period] = request.params[:period] if request.params[:period]
-    
+
     sort_url = url_for(new_params)
 
     link_to "#{display_text}#{sort_icon}".html_safe, sort_url
