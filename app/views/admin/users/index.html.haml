@@ -41,7 +41,7 @@
                 %td
                   = user.name
                 %td
-                  = user.confirmed
+                  = user.confirmed? ? "Yes" : "No"
                 %td
                   = user.user_type
                 %td{:title => "#{user.created_at}"}

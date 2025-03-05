@@ -3,21 +3,20 @@ class PermissionsController < ApplicationController
 
   before_action :set_permission, only: [:update, :destroy]
   before_action :organiser_only, only: [:new, :create]
+  before_action :invitee_and_pending_only, only: [:update]
+  before_action :bestower_and_admin_only, only: [:destroy]
   before_action :set_form_options, only: [:new, :create]
 
   def index
-    # Use scopes instead of inline queries
     @permissions = Current.user.admin? ? Permission.all : Permission.for_user(Current.user)
     @permissions = sort_permissions(@permissions, params[:direct_sort])
 
-    # Fetch effective permissions with preloading for better performance
     @other_items = fetch_effective_permissions
     @other_items = sort_effective_items(@other_items, params[:effective_sort])
 
-    # Support standard Rails formats
     respond_to do |format|
       format.html
-      format.json { render json: { permissions: @permissions, effective: @other_items } }
+      format.json { render json: {permissions: @permissions, effective: @other_items} }
     end
   end
 
@@ -47,30 +46,22 @@ class PermissionsController < ApplicationController
   end
 
   def update
-    params = permission_update_params
-    if !@permission.user || @permission.user != Current.user
-      render plain: "Not your invite", status: :forbidden
-    elsif !@permission.pending?
-      render plain: "Invite not pending", status: :bad_request
-    else
-      @permission.update(params)
-      if @permission.accepted?
+    status = permission_update_params[:status]
+
+    if @permission.update(status: status)
+      if status == "accepted"
         redirect_to @permission.item, notice: "Invitation accepted"
       else
         redirect_to permissions_path, alert: "Invitation rejected"
       end
+    else
+      render plain: "Not updated", status: :bad_request
     end
-  rescue ArgumentError
-    render plain: "Not updated", status: :bad_request
   end
 
   def destroy
-    if Current.user.admin?
-      @permission.destroy!
-      redirect_to root_path, notice: "Invitation deleted"
-    else
-      render plain: "Only organisers can create permissions.", status: :forbidden
-    end
+    @permission.destroy!
+    redirect_to root_path, notice: "Invitation deleted"
   end
 
   private
@@ -144,18 +135,39 @@ class PermissionsController < ApplicationController
     desc ? sorted_items.reverse : sorted_items
   end
 
-  # Fetch effective permissions with preloading for better performance
   def fetch_effective_permissions
-    events = Event.permitted_for(Current.user.id).includes(:bands, :permissions)
-    bands = Band.permitted_for(Current.user.id).includes(:members, :events, :permission)
-    members = Member.permitted_for(Current.user.id).includes(:bands, :skills)
-    
+    events =
+      Event.permitted_for(Current.user.id)
+        .includes(:bands, :permissions)
+
+    bands =
+      Band.permitted_for(Current.user.id)
+        .includes(:members, :events, :permission)
+
+    members =
+      Member.permitted_for(Current.user.id)
+        .includes(:bands, :skills)
+
     events + bands + members
   end
-  
+
   def organiser_only
     unless Current.user.organiser?
       render plain: "Organisers only", status: :forbidden
+    end
+  end
+
+  def bestower_and_admin_only
+    unless Current.user.admin? || @permission.bestowing_user == Current.user
+      render plain: "Bestower only", status: :forbidden
+    end
+  end
+
+  def invitee_and_pending_only
+    if @permission.user != Current.user
+      render plain: "Invitee only", status: :forbidden
+    elsif !@permission.pending?
+      render plain: "Invite not pending", status: :bad_request
     end
   end
 

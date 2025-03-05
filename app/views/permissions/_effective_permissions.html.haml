@@ -1,5 +1,7 @@
 - if items.any?
-  %h2 Effective Permissions
+  %h2
+    = "Effective Permissions"
+    %small (#{items.count})
   .relative.overflow-x-auto
     %table
       %thead

@@ -9,4 +9,5 @@
     = form.text_field :name
     = form.text_field :email
     = form.select :user_type, User.user_types.keys
+    = form.check_box :confirmed, {label: {text: "Email Confirmed"}}, true, false
     = form.submit("Save")

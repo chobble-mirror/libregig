@@ -33,7 +33,7 @@
             %th Modified
         %tbody
           - @members.each do |member|
-            %tr{:style => "#{'font-weight: bold' if member.editable}"}
+            %tr{:style => "#{'font-weight: bold' if member.editable?}"}
               %td
                 = link_to member.name, member, class: 'break-all'
               %td.whitespace-nowrap{:title => "#{member.created_at.strftime("%m/%d/%Y, %H:%M")}"}

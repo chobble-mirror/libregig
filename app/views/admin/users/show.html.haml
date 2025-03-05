@@ -8,6 +8,9 @@
     %li
       %strong Time Zone:
       = @user.time_zone
+    %li
+      %strong Email Confirmed:
+      = @user.confirmed? ? "Yes" : "No"
     - if Rails.env.development?
       %li
         = form_with url: admin_impersonate_path, method: :post, local: true do

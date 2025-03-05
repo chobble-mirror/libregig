@@ -55,7 +55,8 @@ module Admin
         :username,
         :name,
         :email,
-        :user_type
+        :user_type,
+        :confirmed
       )
     end
   end

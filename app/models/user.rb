@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include RandomId
+  include PermissionsHelper
 
   enum :user_type, {admin: 0, member: 1, organiser: 2}
 

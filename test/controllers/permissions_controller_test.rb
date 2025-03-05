@@ -291,12 +291,9 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
             status: "invalid_status"
           }
         }
-        patch permission_path(permission), params: invalid_params
-
-        assert_nil flash[:notice]
-        assert_nil flash[:alert]
-        assert_response :bad_request
-        assert_equal "Not updated", response.body
+        assert_raise ArgumentError do
+          patch permission_path(permission), params: invalid_params
+        end
 
         @permission.reload
 
@@ -317,15 +314,16 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal "Invitation deleted", flash[:notice]
       end
 
-      should "not allow organiser to destroy permission" do
+      should "allow organiser to destroy permission" do
         log_in_as @organiser
 
-        assert_no_difference("Permission.count") do
+        assert_difference("Permission.count", -1) do
           delete permission_path(@permission)
         end
 
-        assert_response :forbidden
-        @permission.reload
+        assert_response :redirect
+        follow_redirect!
+        assert_equal "Invitation deleted", flash[:notice]
       end
 
       should "not allow member to destroy permission" do

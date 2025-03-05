@@ -1,6 +1,6 @@
 - content_for :title, @band.name
 - content_for :nav do
-  = render 'band_nav', band: @band
+  = render 'shared/tab_nav'
 %section
   %h1.mb-4 Delete "#{@band.name}"
   - if @band.events.any?

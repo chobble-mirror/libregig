@@ -57,13 +57,13 @@ class Member < ApplicationRecord
     end
   end
 
-  def editable
-    false
+  def editable?
+    permission_type == "edit"
   end
 
   def events
     Event.joins(:bands)
-      .where(bands: { id: bands.pluck(:id) })
+      .where(bands: {id: bands.pluck(:id)})
       .distinct
   end
 end

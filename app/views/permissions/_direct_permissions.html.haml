@@ -1,5 +1,7 @@
 - if permissions.any?
-  %h2 Direct Permissions
+  %h2
+    = "Direct Permissions"
+    %small (#{permissions.count})
   .relative.overflow-x-auto
     %table
       %thead
@@ -24,7 +26,10 @@
             %td
               = permission.status
             %td
-              = permission.user.username
+              - if permission.user.username == Current.user.username
+                %em You!
+              - else
+                = permission.user.username
             %td.hidden.md:table-cell.whitespace-nowrap{title: "#{permission.created_at}"}
               = time_ago_in_words(permission.created_at)
 - elsif Current.user.organiser?

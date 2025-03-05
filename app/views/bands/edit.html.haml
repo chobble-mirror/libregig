@@ -1,6 +1,6 @@
 - content_for :title, @band.name
 - content_for :nav do
-  = render 'band_nav', band: @band
+  = render 'shared/tab_nav'
 %section
   %h1.my-4
     = @band.name

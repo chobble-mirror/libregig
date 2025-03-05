@@ -8,6 +8,3 @@
     url: resend_confirmation_path,                   |
     builder: FormBuilders::NiceFormBuilder do |form| |
     = form.submit 'Re-send', class: 'primary_button'
-  - if Rails.env.development?
-    %hr/
-    = button_to 'Skip (debug)', debug_confirm_users_path, method: :post, class: 'danger_button'

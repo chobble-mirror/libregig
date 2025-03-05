@@ -51,6 +51,16 @@ module FormBuilders
 
       @template.content_tag("div", labels + field, {class: "field"})
     end
+    
+    def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
+      custom_opts, opts = partition_custom_opts(options)
+      classes = apply_style_classes(CHECKBOX_FIELD_STYLE, custom_opts, method)
+      
+      labels = labels(method, custom_opts[:label], options)
+      field = super(method, opts.merge({class: classes}), checked_value, unchecked_value)
+      
+      @template.content_tag("div", labels + field, {class: "field"})
+    end
 
     def collection_checkboxes(
       method,
