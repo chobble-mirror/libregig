@@ -32,7 +32,6 @@ class Band < ApplicationRecord
   end
 
   def editable?
-    Current.user.admin? ||
-      Current.user.bands.any? { |b| b.id == id }
+    permission_type == "edit"
   end
 end

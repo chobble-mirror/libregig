@@ -40,7 +40,9 @@ class UsersController < ApplicationController
 
   def edit
     @user = Current.user
-    redirect_to user_path(@user) unless params[:id] == @user.id
+    unless params[:id] == @user.username
+      redirect_to user_path(@user), alert: "Can't edit other users"
+    end
   end
 
   def update
