@@ -5,6 +5,20 @@
     %span
       - if Current.user.organiser? || (Current.user.member? && Current.user.members.empty?)
         = link_to 'Add Member', new_member_path, class: 'secondary_button ml-2'
+
+  - if @skills.present?
+    .mb-4
+      - if params[:skill_id].present?
+        Skill:
+        %strong= @skill.name
+        - filter_params = request.params.except(:skill_id)
+        = link_to '(clear)', members_path(filter_params), class: 'ml-1'
+      - else
+        = form_tag members_path, method: :get do
+          = select_tag :skill_id,
+            options_from_collection_for_select(@skills, :id, :name),
+            include_blank: "Filter by skill"
+          %button.primary_button{type: "submit"} Search
   - if @members.present?
     .relative.overflow-x-auto
       %table

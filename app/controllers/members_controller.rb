@@ -2,6 +2,21 @@ class MembersController < ApplicationController
   include AccessPermissions
 
   def index
+    # Get skills for the current set of members
+    @skills =
+      Skill.joins(:members)
+        .where(members: {id: @members.pluck(:id)})
+        .distinct
+        .order(:name)
+
+    # Filter members by skill if skill_id parameter is present
+    if params[:skill_id].present?
+      @skill = Skill.find(params[:skill_id])
+      @members =
+        @members
+          .joins(:skills)
+          .where(skills: {id: params[:skill_id]})
+    end
   end
 
   def edit
