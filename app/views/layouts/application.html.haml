@@ -35,15 +35,11 @@
           %strong= "'#{invite.item.name}'"
           \.
           %br
-          = form_with model: invite, method: :patch, class: "inline-block font-bold", local: true do |f|
-            %div
-              = f.radio_button :status, "accepted", id: "status_accepted_#{invite.id}"
-              = f.label :status, "Accept", for: "status_accepted_#{invite.id}"
-              = f.radio_button :status, "rejected", id: "status_rejected_#{invite.id}"
-              = f.label :status, "Decline", for: "status_rejected_#{invite.id}"
-            = f.submit 'Save', class: 'linkify'
-          or
-          = form_with model: invite, method: :patch, class: "inline-block font-bold", local: true do |f|
+          = form_with model: invite, url: permission_path(invite), method: :patch, class: "inline-block mr-2", local: true do |f|
+            = f.hidden_field :status, value: "accepted"
+            = f.submit 'Accept', class: 'linkify'
+          = " / "
+          = form_with model: invite, url: permission_path(invite), method: :patch, class: "inline-block", local: true do |f|
             = f.hidden_field :status, value: "rejected"
             = f.submit 'Decline', class: 'linkify'
       - if nav_tabs

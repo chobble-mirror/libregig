@@ -199,7 +199,7 @@
 
   .banner {
     @apply min-w-16 inline-block p-4 pr-8 my-4 text-sm border animate-fade-in relative;
-    &:has(input:checked) {
+    &:has(input.hidden:checked) {
       display: none;
     }
     .close {

@@ -41,6 +41,19 @@ class Permission < ApplicationRecord
     accepted: "accepted",
     rejected: "rejected"
   }
+  
+  def item_path
+    case item_type
+    when "Band"
+      Rails.application.routes.url_helpers.band_path(item)
+    when "Event"
+      Rails.application.routes.url_helpers.event_path(item)
+    when "Member"
+      Rails.application.routes.url_helpers.member_path(item)
+    else
+      Rails.application.routes.url_helpers.permissions_path
+    end
+  end
 
   private
 

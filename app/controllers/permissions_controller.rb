@@ -50,7 +50,7 @@ class PermissionsController < ApplicationController
 
     if @permission.update(status: status)
       if status == "accepted"
-        redirect_to @permission.item, notice: "Invitation accepted"
+        redirect_to @permission.item_path, notice: "Invitation accepted"
       else
         redirect_to permissions_path, alert: "Invitation rejected"
       end
