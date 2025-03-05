@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user, class: User do
-    sequence(:email) { |n| "factoryuser#{format("%05d", n)}@bash.coop" }
+    sequence(:email) { |n| "factoryuser#{format("%05d", n)}@example.com" }
     sequence(:name) { |n| "user#{format("%05d", n)}" }
     sequence(:username) { |n| "user#{format("%05d", n)}" }
     password_digest { BCrypt::Password.create("password") }

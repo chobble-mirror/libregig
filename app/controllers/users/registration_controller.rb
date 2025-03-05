@@ -19,7 +19,7 @@ class Users::RegistrationController < ApplicationController
       data = verifier.verify(@token)
       @user = User.find(data["user_id"])
       if @user.confirmed?
-        redirect_to account_path,
+        redirect_to user_path(@user),
           notice: "Your account is already confirmed"
       end
 
@@ -59,6 +59,6 @@ class Users::RegistrationController < ApplicationController
 
   def set_user
     @user = User.find(session[:user_id])
-    redirect_to account_path if @user.confirmed?
+    redirect_to user_path(@user) if @user.confirmed?
   end
 end

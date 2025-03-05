@@ -4,12 +4,6 @@ class UsersController < ApplicationController
     new
   ]
 
-  before_action :set_user, only: %i[
-    edit
-    update
-    show
-  ]
-
   before_action :check_not_logged_in, only: %i[
     create
     new
@@ -35,10 +29,18 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
+  def index
+    redirect_to user_path(Current.user)
   end
-  
+
+  def show
+    @user = User.find_by(username: params[:id])
+    redirect_to user_path(Current.user) unless @user
+  end
+
   def edit
+    @user = Current.user
+    redirect_to user_path(@user) unless params[:id] == @user.id
   end
 
   def update
@@ -47,9 +49,9 @@ class UsersController < ApplicationController
       params[:user].delete(:password_confirmation)
     end
 
+    @user = Current.user
     if @user.update(update_user_params)
-      flash[:notice] = "Updated successfully"
-      redirect_to account_url
+      redirect_to user_url(@user), notice: "Updated successfully"
     else
       errors = @user.errors.full_messages.join(", ").downcase
       render plain: "Could not update user: #{errors}",
@@ -79,11 +81,6 @@ class UsersController < ApplicationController
       :password_confirmation,
       :time_zone
     )
-  end
-
-  def set_user
-    @user = Current.user
-    redirect_to login_path unless @user
   end
 
   def check_admin_user

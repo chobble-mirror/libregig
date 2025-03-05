@@ -57,7 +57,7 @@ class EventsController < ApplicationController
   def set_bands
     @bands = Current.user.bands
   end
-  
+
   def set_view
     @views = %w[overview bands shares]
     @views_subtitles = [nil, "(#{@event.bands.count})", nil]

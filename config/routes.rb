@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   post "register", to: "users#create"
   get "account", to: "users#edit"
   patch "account", to: "users#update"
+  get "users", to: "users#index"
   resources :users, only: [:show, :edit, :update]
 
   namespace :admin do

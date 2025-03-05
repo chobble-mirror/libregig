@@ -34,10 +34,10 @@ class MembersController < ApplicationController
     Member.transaction do
       @member.assign_attributes(member_params)
       if @member.save
-        redirect_to @member, notice: "Member was successfully updated." and return
+        redirect_to @member, notice: "Member was successfully updated."
       else
         logger.warn "members/update error: #{@member.errors.full_messages}"
-        render :edit, status: :unprocessable_entity and return
+        render :edit, status: :unprocessable_entity
       end
     end
   rescue ActiveRecord::RecordInvalid => e

@@ -15,7 +15,7 @@ class Users::RegistrationControllerTest < ActionDispatch::IntegrationTest
           get confirm_registration_url({"token" => 16762826})
 
           assert_response :redirect
-          assert_redirected_to account_path
+          assert_redirected_to user_path @user
         end
       end
 
@@ -185,7 +185,7 @@ class Users::RegistrationControllerTest < ActionDispatch::IntegrationTest
         post resend_confirmation_url
 
         assert_response :redirect
-        assert_redirected_to account_path
+        assert_redirected_to user_path @user
       end
     end
   end
