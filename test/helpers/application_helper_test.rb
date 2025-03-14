@@ -47,7 +47,7 @@ class ApplicationHelperTest < ActionView::TestCase
       # Check wrapper
       assert_equal "p", doc.css("*")[0].name
       assert_equal "filter-group", doc.css("p")[0]["class"]
-      
+
       # Both should be links since neither matches nil
       assert_equal 2, doc.css("a").length
 

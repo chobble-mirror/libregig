@@ -6,11 +6,11 @@ class CreateLinkedDeviceLinkables < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    
+
     # Add unique constraint to prevent duplicates
-    add_index :linked_device_linkables, 
-              [:linked_device_id, :linkable_type, :linkable_id], 
-              unique: true,
-              name: 'index_device_linkables_on_device_and_linkable'
+    add_index :linked_device_linkables,
+      [:linked_device_id, :linkable_type, :linkable_id],
+      unique: true,
+      name: "index_device_linkables_on_device_and_linkable"
   end
 end

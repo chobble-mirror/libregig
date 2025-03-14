@@ -231,7 +231,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         name: "",
         description: ""
       )
-      
+
       # Debug failing tests by showing error messages
       if response.status == 422
         puts "Event validation errors: #{@controller.instance_variable_get(:@event).errors.full_messages}"

@@ -76,7 +76,7 @@ class MembersController < ApplicationController
       :name, :description, :skills_list, band_ids: []
     )
   end
-  
+
   def set_view
     @views = %w[overview events]
     @views_subtitles = [nil, "(#{@events.count})"]
@@ -85,7 +85,7 @@ class MembersController < ApplicationController
         params["view"] :
         "overview"
   end
-  
+
   def set_member_events
     @events = @member.events
       .then { |rel| filter_by_period(rel, params[:period]) }

@@ -17,26 +17,26 @@ module ApplicationHelper
   )
     path_generator ||= ->(options) { url_for(options) }
     param_name_str = param_name.to_s
-    
+
     # Build preserved params hash in one step
     preserved_options = preserve_params.each_with_object({}) do |param, hash|
       hash[param] = params[param] if params[param].present?
     end
-    
+
     content_tag(:p, class: "filter-group") do
       filters.map do |filter|
         # Build options hash
         options = preserved_options.merge(
           # Only add param if it has a value
-          filter[:value].present? ? { param_name => filter[:value] } : {},
+          filter[:value].present? ? {param_name => filter[:value]} : {},
           # Add any extra parameters
           filter[:extra] || {}
         )
-        
+
         # Determine if this filter is selected
-        selected = params[param_name_str] == filter[:value] || 
-                  (filter[:value].nil? && params[param_name_str].nil?)
-        
+        selected = params[param_name_str] == filter[:value] ||
+          (filter[:value].nil? && params[param_name_str].nil?)
+
         # Generate the link
         filter_link(filter[:label], path_generator.call(options), selected)
       end.join.html_safe

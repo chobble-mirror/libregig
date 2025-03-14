@@ -4,7 +4,7 @@ FactoryBot.define do
     device_type { :api }
     association :user
     user_account { "1" }
-    
+
     trait :with_event do
       user_account { nil }
       after(:create) do |device, evaluator|
@@ -13,7 +13,7 @@ FactoryBot.define do
         device.save!
       end
     end
-    
+
     trait :with_band do
       user_account { nil }
       after(:create) do |device, evaluator|
@@ -22,7 +22,7 @@ FactoryBot.define do
         device.save!
       end
     end
-    
+
     trait :with_member do
       user_account { nil }
       after(:create) do |device, evaluator|
@@ -31,11 +31,11 @@ FactoryBot.define do
         device.save!
       end
     end
-    
+
     trait :revoked do
       revoked_at { Time.current }
     end
-    
+
     trait :web do
       device_type { :web }
     end

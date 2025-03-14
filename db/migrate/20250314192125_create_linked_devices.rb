@@ -11,7 +11,7 @@ class CreateLinkedDevices < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    
+
     add_index :linked_devices, :secret, unique: true
   end
 end
