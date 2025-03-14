@@ -50,6 +50,29 @@ class ApplicationHelperTest < ActionView::TestCase
         end
       end
     end
+    
+    should "use correct custom sort parameter name" do
+      @request.params[:custom_sort] = "name asc"
+      render inline: table_header_sort(:events, "name", "Name", nil, nil, :custom_sort)
+      
+      assert_select "a[href*=?]", "custom_sort=name+desc"
+      assert_select "span", "▼"
+    end
+    
+    should "not show sort icon when column doesn't match sort param" do
+      @request.params[:effective_sort] = "source asc"
+      render inline: table_header_sort(:events, "name", "Name", nil, nil, :effective_sort)
+      
+      assert_select "a[href*=?]", "effective_sort=name+asc"
+      assert_select "span", {count: 0, text: /[▼▲]/}
+    end
+    
+    should "respect default_sort_column when no sort is active" do
+      @request.params[:sort] = nil
+      render inline: table_header_sort(:events, "name", "Name", "name")
+      
+      assert_select "span", "▼"
+    end
   end
 
   context "#flash_banner" do

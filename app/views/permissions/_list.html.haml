@@ -6,18 +6,15 @@
     %table
       %thead
         %tr
-          %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'type', 'type', 'type', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
-          %th.w-auto.lg:w-80
-            = table_header_sort('permissions', 'name', 'name', 'name', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
-          %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'status', 'status', 'status', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
-          %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'recipient', 'recipient', 'recipient', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
-          %th.hidden.md:table-cell{:style => "width: 1%;"}
-            = table_header_sort('permissions', 'created', 'created', 'created', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
-          %th.hidden.md:table-cell{:style => "width: 1%;"}
-            = table_header_sort('permissions', 'last_modified', 'modified', 'last_modified', request.query_parameters.merge({}).except(:direct_sort), :direct_sort)
+          - direct_columns = [
+          -   { name: 'type', display: 'Type', default: "name" },
+          -   { name: 'name', display: 'Name', default: "name", class: 'w-auto lg:w-80', wide: true },
+          -   { name: 'status', display: 'Status', default: "name" },
+          -   { name: 'recipient', display: 'Recipient', default: "name" },
+          -   { name: 'created', display: 'Created', default: "name", class: 'hidden md:table-cell' },
+          -   { name: 'last_modified', display: 'Modified', default: "name", class: 'hidden md:table-cell' }
+          - ]
+          = table_headers(:direct_sort, direct_columns, 'permissions')
       %tbody
         - @permissions.each do |permission|
           %tr
@@ -36,42 +33,3 @@
   %p No shares found - an organiser can invite you to edit or view.
 - elsif Current.user.admin?
   %p No shares found - an organiser needs to create one.
-
-
-- if @other_items.any?
-  %hr
-  %h2
-    = "Effective permissions"
-    %small (#{@other_items.count})
-  .relative.overflow-x-auto
-    %table
-      %thead
-        %tr
-          %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'type', 'type', 'type', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
-          %th.w-auto.lg:w-40
-            = table_header_sort('permissions', 'name', 'name', 'name', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
-          %th.w-auto.lg:w-40
-            = table_header_sort('permissions', 'source', 'source', 'source', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
-          %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'type', 'type', 'type', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
-          %th{:style => "width: 1%"}
-            = table_header_sort('permissions', 'status', 'status', 'status', request.query_parameters.merge({}).except(:effective_sort), :effective_sort)
-      %tbody
-        - @other_items.each do |item|
-          %tr
-            %td #{item.class.to_s}
-            %td
-              = link_to item.name, item, class: 'break-all'
-            %td
-              - permission = find_effective_permission_source(Current.user, item)
-              - if permission.nil?
-                Direct
-              - else
-                = "#{permission.item_type}: "
-                %strong
-                  = link_to permission.item.name, permission.item
-            %td
-              = item.class
-            %td
-              = item.permission_type

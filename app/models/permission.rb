@@ -41,17 +41,14 @@ class Permission < ApplicationRecord
     accepted: "accepted",
     rejected: "rejected"
   }
-  
+
   def item_path
+    helper = Rails.application.routes.url_helpers
     case item_type
-    when "Band"
-      Rails.application.routes.url_helpers.band_path(item)
-    when "Event"
-      Rails.application.routes.url_helpers.event_path(item)
-    when "Member"
-      Rails.application.routes.url_helpers.member_path(item)
-    else
-      Rails.application.routes.url_helpers.permissions_path
+    when "Band" then helper.band_path(item)
+    when "Event" then helper.event_path(item)
+    when "Member" then helper.member_path(item)
+    else raise "Invalid item type: #{item_type}"
     end
   end
 

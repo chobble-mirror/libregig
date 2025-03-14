@@ -144,16 +144,43 @@ class PermissionsControllerTest < ActionDispatch::IntegrationTest
         assert_response :unprocessable_entity
       end
 
-      should "allow organiser to create an permission for an event" do
-        log_in_as @organiser
+      %i[band event member].each do |type|
+        should "allow organiser to create an #{type} permission" do
+          log_in_as @organiser
 
-        assert_difference("Permission.count", 1) do
-          post permissions_path, params: @valid_permission_params
+          item = create(type)
+          create(
+            :owned_permission,
+            item: item,
+            user: @organiser
+          )
+
+          assert_difference("Permission.count", 1) do
+            post permissions_path, params: {
+              permission: {
+                user_id: @member.id,
+                item: "#{item.class}_#{item.id}",
+                permission_type: "edit"
+              }
+            }
+          end
+
+          assert_redirected_to permissions_path
+          follow_redirect!
+          assert_equal "Invitation created", flash[:notice]
+
+          log_in_as @member
+          pending_invites = assigns(:my_pending_invites)
+          items = pending_invites.collect(&:item)
+          assert_includes items, item
+
+          invite = pending_invites.first
+          patch permission_path(invite),
+            params: {permission: {status: "accepted"}}
+
+          assert_redirected_to invite.item_path
+          assert_equal "Invitation accepted", flash[:notice]
         end
-
-        assert_response :redirect
-        follow_redirect!
-        assert_equal "Invitation created", flash[:notice]
       end
 
       should "not allow member to create an permission" do

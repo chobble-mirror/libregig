@@ -11,16 +11,26 @@ module ApplicationHelper
 
   def table_headers(sort_param_name, columns, resource = nil)
     query_params = request.query_parameters.merge({}).except(sort_param_name)
-
+    
+    # Extract current sort information from params
+    current_sort_param = params[sort_param_name]
+    current_sort_column = nil
+    if current_sort_param.present?
+      current_sort_column, _ = current_sort_param.split
+    end
+    
     capture do
       columns.each do |column|
+        # Only set default if this column is actually the sorted one
+        default_sort = (column[:name] == current_sort_column) ? column[:default] : nil
+        
         concat(
           content_tag(:th,
             table_header_sort(
               resource || controller_name,
               column[:name],
               column[:display],
-              column[:default],
+              default_sort,
               query_params,
               sort_param_name
             ),

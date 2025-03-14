@@ -12,7 +12,9 @@ class PermissionsController < ApplicationController
     @permissions = sort_permissions(@permissions, params[:direct_sort])
 
     @other_items = fetch_effective_permissions
-    @other_items = sort_effective_items(@other_items, params[:effective_sort])
+    # Default to name sorting if not specified
+    effective_sort = params[:effective_sort].presence || "name asc"
+    @other_items = sort_effective_items(@other_items, effective_sort)
 
     respond_to do |format|
       format.html
@@ -138,18 +140,9 @@ class PermissionsController < ApplicationController
   end
 
   def fetch_effective_permissions
-    events =
-      Event.permitted_for(Current.user.id)
-        .includes(:bands, :permissions)
-
-    bands =
-      Band.permitted_for(Current.user.id)
-        .includes(:members, :events, :permission)
-
-    members =
-      Member.permitted_for(Current.user.id)
-        .includes(:bands, :skills)
-
+    events = Event.permitted_for(Current.user.id)
+    bands = Band.permitted_for(Current.user.id)
+    members = Member.permitted_for(Current.user.id)
     events + bands + members
   end
 
