@@ -5,6 +5,7 @@ class Event < ApplicationRecord
   has_many :event_bands, dependent: :destroy
   has_many :bands, through: :event_bands
   has_many :permissions, as: :item, dependent: :destroy
+  has_many :linked_devices, as: :linkable, dependent: :nullify
   validate :end_date_nil_or_after_start
   before_validation :set_defaults
 

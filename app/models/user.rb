@@ -22,6 +22,7 @@ class User < ApplicationRecord
   end
 
   has_many :confirmation_tokens, dependent: :destroy
+  has_many :linked_devices, dependent: :destroy
 
   before_save { email&.downcase! }
   before_validation :set_default_time_zone

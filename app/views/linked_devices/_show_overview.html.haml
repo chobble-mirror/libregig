@@ -1,0 +1,73 @@
+%section.md:mr-4.w-full
+  %h1.mb-4= linked_device.name
+  
+  .grid.grid-cols-1.md:grid-cols-2.gap-4.mb-4
+    .bg-gray-100.p-4.rounded-lg
+      %h3.text-lg.font-bold.mb-2 Device Details
+      
+      %dl.grid.grid-cols-2.gap-1
+        %dt.font-medium Type:
+        %dd= device_type_badge(linked_device.device_type)
+        
+        %dt.font-medium Status:
+        %dd= status_badge(linked_device)
+        
+        %dt.font-medium Created:
+        %dd= linked_device.created_at.strftime('%Y-%m-%d %H:%M')
+        
+        %dt.font-medium Last Accessed:
+        %dd
+          - if linked_device.accessed?
+            = linked_device.last_accessed_at.strftime('%Y-%m-%d %H:%M')
+          - else
+            Never
+        
+        - if linked_device.revoked?
+          %dt.font-medium Revoked:
+          %dd= linked_device.revoked_at.strftime('%Y-%m-%d %H:%M')
+    
+    .bg-gray-100.p-4.rounded-lg
+      %h3.text-lg.font-bold.mb-2 Access Details
+      
+      %dl.mb-2
+        %dt.font-medium Access Permissions:
+        %dd
+          - if linked_device.linked_device_linkables.none?
+            %p.font-bold Your User Account (full access)
+            %p.text-sm This device has access to all your resources.
+          - else
+            %p.font-bold Limited Access
+            %p.text-sm This device has access to only the following resources:
+            %ul.pl-4.list-disc
+              - %w[Event Band Member].each do |resource_type|
+                - linked_device.send("#{resource_type.downcase}_linkables").each do |link|
+                  %li
+                    #{resource_type}:
+                    = resource_link(resource_type, link.linkable_id)
+      
+      %p.font-medium API Secret:
+      .bg-gray-200.p-2.rounded.font-mono.text-xs.break-all
+        = linked_device.secret
+  
+  .mt-6.flex.gap-2
+    - unless linked_device.revoked?
+      = link_to 'Edit', edit_linked_device_path(linked_device), 
+        class: 'primary_button'
+      
+      = form_with url: revoke_linked_device_path(linked_device), 
+        method: :post, class: 'inline' do
+        = submit_tag 'Revoke', class: 'destructive_button',
+          onclick: "return confirm('Revoke this device? Cannot be undone.')"
+    - else
+      %p.text-red-600.font-bold Device revoked - no longer usable.
+      
+    = link_to 'Back', linked_devices_path, class: 'secondary_button'
+    
+    - if linked_device.accessed?
+      %span.ml-auto.text-gray-600.text-sm.italic
+        Cannot delete accessed devices.
+    - else
+      = form_with url: linked_device_path(linked_device), 
+        method: :delete, class: 'inline ml-auto' do
+        = submit_tag 'Delete', class: 'destructive_button',
+          onclick: "return confirm('Delete this device permanently?')"

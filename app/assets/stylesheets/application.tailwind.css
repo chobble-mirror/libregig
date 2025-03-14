@@ -294,6 +294,10 @@
   .email_content {
     @apply break-all max-w-screen-md border-dashed border border-gray-500 p-4 my-4;
   }
+
+  .filter-group {
+    @apply flex gap-4;
+  }
 }
 
 .animate-fade-in {

@@ -10,6 +10,7 @@ class Member < ApplicationRecord
   validates :skills, presence: true, if: -> { skills_list.present? }
 
   has_many :permission, as: :item, dependent: :destroy
+  has_many :linked_devices, as: :linkable, dependent: :nullify
 
   include Auditable
   audit_log_columns :name, :description

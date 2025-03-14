@@ -32,6 +32,10 @@ Rails.application.routes.draw do
   resources :user_mails, only: [:index, :create, :show]
   resources :sessions, only: [:new, :create, :destroy]
   resources :permissions, path: "/permissions"
+  
+  resources :linked_devices do
+    post :revoke, on: :member
+  end
 
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"

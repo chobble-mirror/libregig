@@ -1,0 +1,63 @@
+.md:flex.justify-between
+  - path_generator = local_assigns.fetch(:path_helper) { ->(options) { linked_devices_path(options) }}
+
+  %p
+    -# Status filters
+    - all = { label: 'All', value: nil }
+    - active = { label: 'Active', value: 'active' }
+    - revoked = { label: 'Revoked', value: 'revoked' }
+    - filters = [all, active, revoked]
+    = render_filter_group(filters, :status, [:device_type], &path_generator)
+
+  %p
+    -# Device type filters
+    - all = { label: 'All Types', value: nil }
+    - api = { label: 'API', value: 'api' }
+    - web = { label: 'Web', value: 'web' }
+    - filters = [all, api, web]
+    = render_filter_group(filters, :device_type, [:status], &path_generator)
+
+- if @linked_devices.any?
+  .relative.overflow-x-auto
+    %table
+      %colgroup
+        %col.w-auto.lg:w-64
+        %col{style: "width: 1%;"}
+        %col{style: "width: 1%;"}
+        %col.hidden.md:table-cell{style: "width: 20%;"}
+        %col.hidden.md:table-cell{style: "width: 1%;"}
+        %col{style: "width: 1%;"}
+      %thead
+        %tr
+          %th
+            = table_header_sort('linked_devices', 'name', 'name')
+          %th Type
+          %th Status
+          %th.hidden.md:table-cell Linked To
+          %th.hidden.md:table-cell
+            = table_header_sort('linked_devices', 'last_accessed', 'last accessed')
+          %th
+            = table_header_sort('linked_devices', 'created', 'created')
+      %tbody
+        - @linked_devices.each do |device|
+          %tr
+            %td
+              - name = device.name != "" ? device.name : "NOT SET"
+              - path = linked_device_path(device)
+              = link_to (name), path, class: 'break-all'
+            %td.whitespace-nowrap
+              = device_type_badge(device.device_type)
+            %td.whitespace-nowrap
+              = status_badge(device)
+            %td.hidden.md:table-cell
+              - count = device.linked_device_linkables.count
+              - if count == 0
+                Your User Account
+              - else
+                = pluralize(count, 'resource')
+            %td.hidden.md:table-cell.whitespace-nowrap
+              = last_accessed_display(device)
+            %td.whitespace-nowrap{title: "#{device.created_at}"}
+              = time_ago_in_words(device.created_at)
+- else
+  %p No linked devices found - link a new device with the button above.

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_30_184500) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_14_195114) do
   create_table "band_members", force: :cascade do |t|
     t.integer "member_id", null: false
     t.integer "band_id", null: false
@@ -75,6 +75,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_30_184500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_events_audit_on_event_id"
+  end
+
+  create_table "linked_device_linkables", force: :cascade do |t|
+    t.integer "linked_device_id", null: false
+    t.string "linkable_type", null: false
+    t.integer "linkable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linkable_type", "linkable_id"], name: "index_linked_device_linkables_on_linkable"
+    t.index ["linked_device_id", "linkable_type", "linkable_id"], name: "index_device_linkables_on_device_and_linkable", unique: true
+    t.index ["linked_device_id"], name: "index_linked_device_linkables_on_linked_device_id"
+  end
+
+  create_table "linked_devices", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "user_id", null: false
+    t.integer "device_type", null: false
+    t.string "secret", null: false
+    t.datetime "last_accessed_at"
+    t.datetime "revoked_at"
+    t.string "linkable_type"
+    t.integer "linkable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linkable_type", "linkable_id"], name: "index_linked_devices_on_linkable"
+    t.index ["secret"], name: "index_linked_devices_on_secret", unique: true
+    t.index ["user_id"], name: "index_linked_devices_on_user_id"
   end
 
   create_table "member_skills", force: :cascade do |t|
@@ -155,6 +182,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_30_184500) do
   add_foreign_key "confirmation_tokens", "users"
   add_foreign_key "event_bands", "bands"
   add_foreign_key "event_bands", "events"
+  add_foreign_key "linked_device_linkables", "linked_devices"
+  add_foreign_key "linked_devices", "users"
   add_foreign_key "member_skills", "members"
   add_foreign_key "member_skills", "skills"
   add_foreign_key "user_mails", "users"

@@ -1,0 +1,47 @@
+= form_with(model: @linked_device, local: true, builder: FormBuilders::NiceFormBuilder) do |form|
+  = form.text_field :name, placeholder: "Name"
+  = form.select :device_type,
+    LinkedDevice.device_types.keys.map { |k| [k.humanize, k] },
+    { label: { text: "Type" } }
+
+  .mb-4
+    = form.label :linkable, "Link to", class: "block font-medium mb-1"
+    
+    .text-sm.mb-4.bg-blue-50.p-2.rounded.border.border-blue-200
+      - if @linked_device.errors[:base].any?
+        .text-red-600.font-bold= @linked_device.errors[:base].first
+      %p
+        %strong Resource Access:
+        %ul.list-disc.ml-5.mt-1
+          %li
+            If you select specific resources below, this device will have limited access to only those resources.
+          %li
+            If you don't select any resources, this device will have full access to your user account (all your resources).
+    
+    - # No need to disable resource checkboxes now
+    - disabled = false
+      
+    - %w[event band member].each do |resource_type|
+      - collection = instance_variable_get("@#{resource_type.pluralize}")
+      - if collection.any?
+        %fieldset.mt-4
+          %legend.font-bold= resource_type.pluralize.capitalize
+          .grid.grid-cols-1.md:grid-cols-2.gap-2.ml-4
+            - collection.each do |resource|
+              .flex.items-center
+                - should_check = @linked_device.send("#{resource_type}_ids").include?(resource.id.to_s)
+                - field_name = "linked_device[#{resource_type}_ids][]"
+                - field_id = "#{resource_type}_#{resource.id}"
+                = check_box_tag field_name, resource.id, should_check, id: field_id
+                = label_tag field_id, resource.name, class: "ml-2"
+    
+    - # Add hidden fields to ensure empty arrays are submitted when no checkboxes are checked
+    - %w[event band member].each do |resource_type|
+      = hidden_field_tag "linked_device[#{resource_type}_ids][]", ""
+
+  - if flash[:saved]
+    .success_message Saved Successfully!
+
+  %p.text-right
+    = form.submit 'Save', class: 'primary_button'
+    = link_to 'Back', linked_devices_path, class: 'secondary_button ml-2'

@@ -1,0 +1,5 @@
+- content_for :title, "Edit Linked Device"
+%section
+  %h1.my-4
+    = @linked_device.name
+  = render 'form', linked_device: @linked_device

@@ -7,6 +7,7 @@ class Band < ApplicationRecord
   has_many :band_members, dependent: :restrict_with_error
   has_many :members, through: :band_members
   has_many :permission, as: :item, dependent: :destroy
+  has_many :linked_devices, as: :linkable, dependent: :nullify
 
   validates :description, presence: true
   validates :name, presence: true
