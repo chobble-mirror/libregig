@@ -1,6 +1,6 @@
 - headers = []
-- headers << {name: 'name', display: 'Item', wide: true}
 - headers << {name: 'type', display: 'Type'}
+- headers << {name: 'name', display: 'Item', wide: true}
 - headers << {name: 'access', display: 'Access'}
 - headers << {name: 'status', display: 'Status'}
 - headers << {name: 'bestower', display: 'Bestower'}
@@ -18,13 +18,15 @@
       %tbody
         - permissions.each do |permission|
           %tr
+            %td= permission.item_type
             %td
               = link_to permission.item.name, permission.item, class: 'break-all'
-            %td= permission.item_type
             %td= permission.permission_type
             %td= permission.status
             %td
-              - if permission.bestowing_user == Current.user
+              - i_bestowed = permission.bestowing_user == Current.user
+              - system_bestowed = permission.bestowing_user == nil
+              - if system_bestowed || i_bestowed
                 %em You!
               - else
                 = link_to permission.bestowing_user.username, permission.bestowing_user
