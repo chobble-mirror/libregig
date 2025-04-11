@@ -82,12 +82,9 @@ class LinkedDevicesController < ApplicationController
   end
 
   def set_linkables
-    @events = Current.user.events.to_a
-    @bands = Current.user.bands.to_a
-    @members = Current.user.members.to_a
-    puts("Events: #{@events}")
-    puts("Bands: #{@bands}")
-    puts("Members: #{@members}")
+    @events = Current.user.events
+    @bands = Current.user.bands
+    @members = Current.user.members
   end
 
   def set_view
