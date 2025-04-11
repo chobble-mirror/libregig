@@ -1,6 +1,7 @@
 class LinkedDevicesController < ApplicationController
   before_action :set_linked_device, only: [:show, :edit, :update, :destroy, :revoke]
   before_action :set_linkables, only: [:new, :edit, :create, :update]
+  before_action :set_device_types
   before_action :set_view, only: [:show]
 
   def index
@@ -82,9 +83,28 @@ class LinkedDevicesController < ApplicationController
   end
 
   def set_linkables
-    @events = Current.user.events
-    @bands = Current.user.bands
-    @members = Current.user.members
+    if Current.user.admin?
+      @events = Event.all
+      @bands = Band.all
+      @members = Member.all
+    else
+      @events = Current.user.events
+      @bands = Current.user.bands
+      @members = Current.user.members
+    end
+  end
+
+  DEVICE_TYPE_NAMES = {
+    api: "API (For developers)",
+    web: "Web page with private URL",
+    ical: "iCal (Apple Calendar, Thunderbird)"
+  }
+
+  def set_device_types
+    @device_types =
+      LinkedDevice.device_types.keys.map do |key|
+        [DEVICE_TYPE_NAMES[key.to_sym], key]
+      end
   end
 
   def set_view

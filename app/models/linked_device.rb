@@ -10,13 +10,15 @@ class LinkedDevice < ApplicationRecord
   has_many :member_linkables, -> { where(linkable_type: "Member") },
     class_name: "LinkedDeviceLinkable"
 
-  enum :device_type, {api: 0, web: 1}
+  enum :device_type, {
+    api: 0,
+    web: 1,
+    ical: 2
+  }
 
   validates :name, presence: true
   validates :device_type, presence: true
   validates :secret, presence: true, uniqueness: true
-  # We're removing this validation as part of the UI simplification
-  # validate :validate_access_selection, unless: :skip_access_validation?
 
   before_validation :generate_secret, on: :create
   before_destroy :ensure_never_accessed
@@ -24,7 +26,7 @@ class LinkedDevice < ApplicationRecord
   scope :active, -> { where(revoked_at: nil) }
   scope :revoked, -> { where.not(revoked_at: nil) }
 
-  # Virtual attributes for checkboxes
+  # For checkboxes
   attr_accessor :event_ids, :band_ids, :member_ids, :user_account
 
   # Skip validation flag - used in tests
@@ -99,12 +101,15 @@ class LinkedDevice < ApplicationRecord
     current = send(:"#{type.downcase}_linkables")
     current_ids = current.pluck(:linkable_id).map(&:to_s)
 
-    # Add new linkables
-    (ids - current_ids).each do |id|
-      linked_device_linkables.create!(linkable_type: type, linkable_id: id)
+    new_linkables = ids - current_ids
+    new_linkables.each do |id|
+      linked_device_linkables.create!(
+        linkable_type: type,
+        linkable_id: id
+      )
     end
 
-    # Remove old linkables
-    current.where(linkable_id: current_ids - ids).destroy_all if (current_ids - ids).any?
+    old_linkables = current_ids - ids
+    current.where(linkable_id: old_linkables).destroy_all
   end
 end
