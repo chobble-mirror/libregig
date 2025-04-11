@@ -45,8 +45,9 @@
       - if nav_tabs
         %nav.top-nav
           = render partial: 'shared/tabs', locals: { tabs: nav_tabs }
-      = render partial: 'shared/banners'
+      = render partial: "shared/banners"
       = yield :nav
       .tab-body
         = yield
       %footer
+        = render partial: "shared/footer"

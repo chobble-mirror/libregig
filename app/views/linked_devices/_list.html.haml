@@ -1,21 +1,19 @@
 .md:flex.justify-between
   - path_generator = local_assigns.fetch(:path_helper) { ->(options) { linked_devices_path(options) }}
 
-  %p
-    -# Status filters
-    - all = { label: 'All', value: nil }
-    - active = { label: 'Active', value: 'active' }
-    - revoked = { label: 'Revoked', value: 'revoked' }
-    - filters = [all, active, revoked]
-    = render_filter_group(filters, :status, [:device_type], &path_generator)
+  -# Status filters
+  - all = { label: 'All', value: nil }
+  - active = { label: 'Active', value: 'active' }
+  - revoked = { label: 'Revoked', value: 'revoked' }
+  - filters = [all, active, revoked]
+  = render_filter_group(filters, :status, [:device_type], &path_generator)
 
-  %p
-    -# Device type filters
-    - all = { label: 'All Types', value: nil }
-    - api = { label: 'API', value: 'api' }
-    - web = { label: 'Web', value: 'web' }
-    - filters = [all, api, web]
-    = render_filter_group(filters, :device_type, [:status], &path_generator)
+  -# Device type filters
+  - all = { label: 'All Types', value: nil }
+  - api = { label: 'API', value: 'api' }
+  - web = { label: 'Web', value: 'web' }
+  - filters = [all, api, web]
+  = render_filter_group(filters, :device_type, [:status], &path_generator)
 
 - if @linked_devices.any?
   .relative.overflow-x-auto

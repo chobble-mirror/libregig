@@ -6,6 +6,7 @@ module.exports = {
     "./app/helpers/**/*.rb",
     "./app/javascript/**/*.js",
     "./app/views/**/*.html.haml",
+    "./app/views/**/*.haml",
     "./app/lib/form_builders/tailwind_form_builder.rb",
   ],
   safelist: [
