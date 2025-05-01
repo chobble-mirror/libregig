@@ -37,6 +37,9 @@ Rails.application.routes.draw do
     post :revoke, on: :member
   end
 
+  # Public calendar view for web-type linked devices
+  get "calendar/:secret", to: "calendars#show", as: :public_calendar
+
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"

@@ -76,6 +76,14 @@ class LinkedDevice < ApplicationRecord
     has_specific_access? ? "specific" : "full"
   end
 
+  def calendar_url
+    return nil unless web?
+    Rails.application.routes.url_helpers.public_calendar_url(
+      secret,
+      host: Rails.application.config.server_url
+    )
+  end
+
   private
 
   def generate_secret

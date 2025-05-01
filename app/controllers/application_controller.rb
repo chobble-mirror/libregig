@@ -3,7 +3,11 @@
 class ApplicationController < ActionController::Base
   prepend_before_action :set_current_user
   before_action :require_login
-  helper_method :show_tabs, :nav_tabs, :my_pending_invites, :body_class, :set_current_user_by_session
+  helper_method :show_tabs,
+    :nav_tabs,
+    :my_pending_invites,
+    :body_class,
+    :set_current_user_by_session
 
   def nav_tabs
     return unless show_tabs
@@ -12,7 +16,10 @@ class ApplicationController < ActionController::Base
 
   def my_pending_invites
     return unless Current.user&.member?
-    @my_pending_invites ||= Permission.where(user_id: Current.user.id, status: "pending")
+    @my_pending_invites ||= Permission.where(
+      user_id: Current.user.id,
+      status: "pending"
+    )
   end
 
   def body_class
@@ -125,11 +132,15 @@ class ApplicationController < ActionController::Base
       resend_confirmation_path,
       confirm_registration_path,
       confirm_registration_submit_path
-    ].include?(request.path)
+    ].include?(request.path) ||
+      request.path.start_with?("/calendar/")
   end
 
   def handle_unconfirmed_user
-    unless [not_confirmed_path, resend_confirmation_path].include?(request.path)
+    unless [
+      not_confirmed_path,
+      resend_confirmation_path
+    ].include?(request.path)
       flash[:alert] = "Your account is not confirmed"
       redirect_to not_confirmed_path
     end
@@ -142,12 +153,17 @@ class ApplicationController < ActionController::Base
 
   def build_nav_tabs
     shares_name =
-      (Current.user.admin? || Current.user.organiser?) ? "Sharing" : "Shares"
+      (Current.user.admin? || Current.user.organiser?) ?
+        "Sharing" :
+        "Shares"
     [
       {display_name: "Events", url: events_path},
       {display_name: "Bands", url: bands_path},
       {display_name: "Members", url: members_path},
-      {display_name: shares_name, url: permissions_path}
+      {
+        display_name: shares_name,
+        url: permissions_path
+      }
     ]
   end
 end

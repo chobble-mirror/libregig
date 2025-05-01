@@ -1,0 +1,26 @@
+
+%section.mt-8
+  %h1 Calendar
+  %p This calendar shows events for #{@linked_device.name}
+  %hr
+  - if @events.empty?
+    %p No events found.
+  - else
+    %ul.event-list
+      - @events.each do |event|
+        %li.event-item
+          %h2= event.name
+          - if event.description.present?
+            %p= event.description
+          - if event.start_date.present?
+            %p
+              %strong Start:
+              = event.start_date.strftime("%B %d, %Y at %I:%M %p")
+          - if event.end_date.present? && event.end_date != event.start_date
+            %p
+              %strong End:
+              = event.end_date.strftime("%B %d, %Y at %I:%M %p")
+          - if event.bands.any?
+            %p
+              %strong Bands:
+              = event.bands.map(&:name).join(", ")

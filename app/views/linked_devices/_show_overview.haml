@@ -45,19 +45,28 @@
                     #{resource_type}:
                     = resource_link(resource_type, link.linkable_id)
 
-      - unless linked_device.accessed?
+      - if linked_device.web?
+        %p.font-medium Public Calendar URL:
+        .bg-gray-200.p-2.rounded.font-mono.text-xs.break-all
+          = link_to linked_device.calendar_url, 
+            linked_device.calendar_url, 
+            target: "_blank"
+      - elsif !linked_device.accessed?
         %p.font-medium API Secret:
         .bg-gray-200.p-2.rounded.font-mono.text-xs.break-all
           = linked_device.secret
 
   .mt-6.flex.gap-2
     - unless linked_device.revoked?
-      = link_to 'Edit', edit_linked_device_path(linked_device),
+      = link_to 'Edit', 
+        edit_linked_device_path(linked_device),
         class: 'primary_button'
 
       = form_with url: revoke_linked_device_path(linked_device),
-        method: :post, class: 'inline' do
-        = submit_tag 'Revoke', class: 'danger_button',
+        method: :post, 
+        class: 'inline' do
+        = submit_tag 'Revoke', 
+          class: 'danger_button',
           onclick: "return confirm('Revoke this device? Cannot be undone.')"
     - else
       %p.text-red-600.font-bold Device revoked - no longer usable.
@@ -69,6 +78,8 @@
         Cannot delete accessed devices.
     - else
       = form_with url: linked_device_path(linked_device),
-        method: :delete, class: 'inline ml-auto' do
-        = submit_tag 'Delete', class: 'danger_button',
+        method: :delete, 
+        class: 'inline ml-auto' do
+        = submit_tag 'Delete', 
+          class: 'danger_button',
           onclick: "return confirm('Delete this device permanently?')"
