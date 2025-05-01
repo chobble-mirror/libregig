@@ -10,9 +10,10 @@
 
   -# Device type filters
   - all = { label: 'All Types', value: nil }
+  - ical = { label: 'iCal', value: 'ical' }
   - api = { label: 'API', value: 'api' }
   - web = { label: 'Web', value: 'web' }
-  - filters = [all, api, web]
+  - filters = [all, ical, api, web]
   = render_filter_group(filters, :device_type, [:status], &path_generator)
 
 - if @linked_devices.any?
