@@ -1,4 +1,4 @@
-%section.w-fit
+%section
   %h1
     Editing User
   = form_with model: @user,                          |
@@ -16,6 +16,3 @@
     = form.password_field :password
     = form.password_field :password_confirmation
     = form.submit "Save"
-%section
-  = form_with(url: logout_path, method: :delete) do
-    = submit_tag "log out", data: { confirm: "Are you sure?" }

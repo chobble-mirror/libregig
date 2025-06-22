@@ -30,9 +30,8 @@
             %strong= invite.bestowing_user.username
             has
           - else
-            We have
-          invited you to #{invite.permission_type}
-          %strong= "'#{invite.item.name}'"
+            We have invited you to #{invite.permission_type}
+            %strong= "'#{invite.item.name}'"
           \.
           %br
           = form_with model: invite, url: permission_path(invite), method: :patch, class: "inline-block mr-2", local: true do |f|
