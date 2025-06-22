@@ -204,7 +204,7 @@ class LinkedDeviceTest < ActiveSupport::TestCase
       should "return nil for non-web devices" do
         ical_device = create(:linked_device, device_type: :ical)
         api_device = create(:linked_device, device_type: :api)
-        
+
         assert_nil ical_device.calendar_url
         assert_nil api_device.calendar_url
       end

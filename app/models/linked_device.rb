@@ -83,7 +83,7 @@ class LinkedDevice < ApplicationRecord
       host: Rails.application.config.server_url
     )
   end
-  
+
   def ical_url
     return nil unless ical? || web?
     base_url = Rails.application.routes.url_helpers.ical_feed_url(

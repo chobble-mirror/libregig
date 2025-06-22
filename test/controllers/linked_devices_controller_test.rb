@@ -19,7 +19,7 @@ class LinkedDevicesControllerTest < ActionDispatch::IntegrationTest
         get linked_device_url(@linked_device)
         assert_response :success
       end
-      
+
       should "show iCal URL for ical devices" do
         ical_device = create(:linked_device, user: @user, device_type: :ical)
         get linked_device_url(ical_device)
@@ -27,7 +27,7 @@ class LinkedDevicesControllerTest < ActionDispatch::IntegrationTest
         assert_match ical_device.ical_url, @response.body
         assert_match "iCal Feed URL:", @response.body
       end
-      
+
       should "show calendar URL for web devices" do
         web_device = create(:linked_device, user: @user, device_type: :web)
         get linked_device_url(web_device)

@@ -1,12 +1,12 @@
 namespace :tailwindcss do
   desc "Build Tailwind CSS"
-  task :build => :environment do
+  task build: :environment do
     # Use which to find the system tailwindcss, bypassing bundler
     tailwind_path = `which tailwindcss`.strip
     if tailwind_path.empty?
       abort("tailwindcss not found in PATH. Make sure you're in the nix shell.")
     end
-    
+
     system(
       tailwind_path,
       "--config", Rails.root.join("config/tailwind.config.js").to_s,
@@ -17,13 +17,13 @@ namespace :tailwindcss do
   end
 
   desc "Watch Tailwind CSS for changes"
-  task :watch => :environment do
+  task watch: :environment do
     # Use which to find the system tailwindcss, bypassing bundler
     tailwind_path = `which tailwindcss`.strip
     if tailwind_path.empty?
       abort("tailwindcss not found in PATH. Make sure you're in the nix shell.")
     end
-    
+
     system(
       tailwind_path,
       "--config", Rails.root.join("config/tailwind.config.js").to_s,

@@ -67,26 +67,26 @@ class IcalFeedsControllerTest < ActionDispatch::IntegrationTest
       @linked_device = create(:linked_device, user: @user, device_type: :ical)
 
       # Create events owned by the user
-      @event1 = create(:event, owner: @user, name: "Full Access Event 1", 
-                       description: "Description 1", 
-                       start_date: 1.day.from_now,
-                       end_date: 1.day.from_now + 2.hours)
+      @event1 = create(:event, owner: @user, name: "Full Access Event 1",
+        description: "Description 1",
+        start_date: 1.day.from_now,
+        end_date: 1.day.from_now + 2.hours)
       @event2 = create(:event, owner: @user, name: "Full Access Event 2",
-                       start_date: 2.days.from_now)
+        start_date: 2.days.from_now)
     end
 
     should "include all user events in iCal format" do
       get ical_feed_url(@linked_device.secret, format: :ics)
 
       assert_response :success
-      
+
       # Parse the iCal content
       body = response.body
       assert body.include?("BEGIN:VCALENDAR")
       assert body.include?("VERSION:2.0")
       assert body.include?("PRODID:-//LibreGig//Calendar//EN")
       assert body.include?("X-WR-CALNAME:LibreGig Calendar - #{@linked_device.name}")
-      
+
       # Check events are included
       assert body.include?("BEGIN:VEVENT")
       assert body.include?("SUMMARY:Full Access Event 1")
@@ -124,15 +124,15 @@ class IcalFeedsControllerTest < ActionDispatch::IntegrationTest
       get ical_feed_url(@linked_device.secret, format: :ics)
 
       assert_response :success
-      
+
       body = response.body
       # Should include accessible events
       assert body.include?("SUMMARY:Specific Access Event 1")
       assert body.include?("SUMMARY:Band Related Event")
-      
+
       # Should include band info in description
       assert body.include?("Bands: Test Band")
-      
+
       # Should NOT include non-accessible event
       assert_not body.include?("SUMMARY:Specific Access Event 2")
     end

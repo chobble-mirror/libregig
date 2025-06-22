@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
   # Device access endpoints
   get "calendar/:secret", to: "calendars#show", as: :calendar
-  get "ical/:secret", to: "ical_feeds#show", as: :ical_feed, defaults: { format: :ics }
+  get "ical/:secret", to: "ical_feeds#show", as: :ical_feed, defaults: {format: :ics}
 
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
