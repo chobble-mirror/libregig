@@ -1,0 +1,8 @@
+en:
+  audit:
+    system_user: "System"
+    changed_field: "changed %{field}"
+    from_value: "from %{value}"
+    empty_value: "(empty)"
+    no_changes: "No changes recorded"
+    versions_label: "Versions:"

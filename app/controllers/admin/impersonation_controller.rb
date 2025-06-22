@@ -12,7 +12,10 @@ module Admin
     end
 
     def destroy
-      return redirect_to(admin_users_path, alert: "No active impersonation session") unless session[:impersonation]
+      unless session[:impersonation]
+        return redirect_to(admin_users_path,
+                          alert: "No active impersonation session")
+      end
 
       target_user = User.find(session[:impersonation]["target_user_id"])
       original_user = User.find(session[:impersonation]["original_user_id"])

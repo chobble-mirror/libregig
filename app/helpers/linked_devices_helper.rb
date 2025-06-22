@@ -6,7 +6,8 @@ module LinkedDevicesHelper
     when "web"
       content_tag(:span, "Web", class: "bg-blue-600 text-white px-2 py-1 rounded-full text-xs")
     else
-      content_tag(:span, device_type.to_s.upcase, class: "bg-gray-600 text-white px-2 py-1 rounded-full text-xs")
+      badge_class = "bg-gray-600 text-white px-2 py-1 rounded-full text-xs"
+      content_tag(:span, device_type.to_s.upcase, class: badge_class)
     end
   end
 

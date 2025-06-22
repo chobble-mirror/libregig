@@ -13,3 +13,6 @@
   - if @band.editable?
     %p
       = link_to "Edit", edit_band_path(@band), class: "primary_button"
+%section
+  %h2= t('audit.versions_label')
+  = render 'shared/audit_history', audits: @band.bands_audits

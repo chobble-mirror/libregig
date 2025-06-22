@@ -49,4 +49,5 @@
           = distance_of_time_in_words(Time.now, event.start_date)
           from now
     %li
-      %strong Versions:
+      %strong= t('audit.versions_label')
+      = render 'shared/audit_history', audits: event.events_audits

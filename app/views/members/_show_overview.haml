@@ -23,3 +23,6 @@
     = link_to 'Edit', edit_member_path(@member)
     |
   = link_to 'Back', members_path
+%section
+  %h2= t('audit.versions_label')
+  = render 'shared/audit_history', audits: @member.members_audits

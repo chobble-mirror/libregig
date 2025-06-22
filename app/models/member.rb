@@ -11,6 +11,7 @@ class Member < ApplicationRecord
 
   has_many :permission, as: :item, dependent: :destroy
   has_many :linked_devices, as: :linkable, dependent: :nullify
+  has_many :members_audits, dependent: :destroy
 
   include Auditable
   audit_log_columns :name, :description

@@ -1,0 +1,11 @@
+- if audits.any?
+  %ul
+    - audits.includes(:user).order(created_at: :desc).each do |audit|
+      %li
+        = audit.created_at.strftime('%Y-%m-%d %H:%M')
+        \-
+        = audit.user&.username || t('audit.system_user')
+        = t('audit.changed_field', field: audit.column_changed)
+        = t('audit.from_value', value: audit.old_value || t('audit.empty_value'))
+- else
+  %em= t('audit.no_changes')
