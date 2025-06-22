@@ -188,4 +188,45 @@ class LinkedDeviceTest < ActiveSupport::TestCase
       end
     end
   end
+
+  context "URL generation" do
+    setup do
+      Rails.application.config.server_url = "https://example.com"
+    end
+
+    context "calendar_url" do
+      should "return calendar URL for web devices" do
+        device = create(:linked_device, device_type: :web, secret: "test-secret")
+        expected_url = "https://example.com/calendar/test-secret"
+        assert_equal expected_url, device.calendar_url
+      end
+
+      should "return nil for non-web devices" do
+        ical_device = create(:linked_device, device_type: :ical)
+        api_device = create(:linked_device, device_type: :api)
+        
+        assert_nil ical_device.calendar_url
+        assert_nil api_device.calendar_url
+      end
+    end
+
+    context "ical_url" do
+      should "return iCal URL for ical devices" do
+        device = create(:linked_device, device_type: :ical, secret: "test-secret")
+        expected_url = "https://example.com/ical/test-secret.ics"
+        assert_equal expected_url, device.ical_url
+      end
+
+      should "return iCal URL for web devices" do
+        device = create(:linked_device, device_type: :web, secret: "test-secret")
+        expected_url = "https://example.com/ical/test-secret.ics"
+        assert_equal expected_url, device.ical_url
+      end
+
+      should "return nil for api devices" do
+        api_device = create(:linked_device, device_type: :api)
+        assert_nil api_device.ical_url
+      end
+    end
+  end
 end

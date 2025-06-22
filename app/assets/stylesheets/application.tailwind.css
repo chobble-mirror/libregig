@@ -298,6 +298,55 @@
   .filter-group {
     @apply flex gap-4;
   }
+
+  /* Linked Devices Specific Styles */
+  .info-box {
+    @apply bg-gray-100 p-4 rounded-lg;
+  }
+
+  .info-box-heading {
+    @apply text-lg font-bold mb-2;
+  }
+
+  .info-grid {
+    @apply space-y-1;
+  }
+
+  .info-grid div {
+    @apply flex items-center gap-2;
+  }
+
+  .monospace-box {
+    @apply bg-gray-200 p-2 rounded font-mono text-xs break-all;
+  }
+
+  .resource-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-2 ml-4;
+  }
+
+  .checkbox-item {
+    @apply flex items-center;
+  }
+
+  .checkbox-label {
+    @apply ml-2;
+  }
+
+  .page-header {
+    @apply flex justify-between mb-8;
+  }
+
+  .status-note {
+    @apply ml-auto text-gray-600 text-sm italic;
+  }
+
+  .success_message {
+    @apply text-green-600 font-bold my-2;
+  }
+
+  .notice-box {
+    @apply text-sm mb-4 bg-blue-50 p-2 rounded border border-blue-200;
+  }
 }
 
 .animate-fade-in {

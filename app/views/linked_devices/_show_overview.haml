@@ -2,32 +2,36 @@
   %h1.mb-4= linked_device.name
 
   .grid.grid-cols-1.md:grid-cols-2.gap-4.mb-4
-    .bg-gray-100.p-4.rounded-lg
-      %h3.text-lg.font-bold.mb-2 Device Details
+    .info-box
+      %h3.info-box-heading Device Details
 
-      %dl.grid.grid-cols-2.gap-1
-        %dt.font-medium Type:
-        %dd= device_type_badge(linked_device.device_type)
+      .info-grid
+        %div
+          %span.font-medium Type:
+          = device_type_badge(linked_device.device_type)
 
-        %dt.font-medium Status:
-        %dd= status_badge(linked_device)
+        %div
+          %span.font-medium Status:
+          = status_badge(linked_device)
 
-        %dt.font-medium Created:
-        %dd= linked_device.created_at.strftime('%Y-%m-%d %H:%M')
+        %div
+          %span.font-medium Created:
+          %span= linked_device.created_at.strftime('%Y-%m-%d %H:%M')
 
-        %dt.font-medium Last Accessed:
-        %dd
+        %div
+          %span.font-medium Last Accessed:
           - if linked_device.accessed?
-            = linked_device.last_accessed_at.strftime('%Y-%m-%d %H:%M')
+            %span= linked_device.last_accessed_at.strftime('%Y-%m-%d %H:%M')
           - else
-            Never
+            %span Never
 
         - if linked_device.revoked?
-          %dt.font-medium Revoked:
-          %dd= linked_device.revoked_at.strftime('%Y-%m-%d %H:%M')
+          %div
+            %span.font-medium Revoked:
+            %span= linked_device.revoked_at.strftime('%Y-%m-%d %H:%M')
 
-    .bg-gray-100.p-4.rounded-lg
-      %h3.text-lg.font-bold.mb-2 Access Details
+    .info-box
+      %h3.info-box-heading Access Details
 
       %dl.mb-2
         %dt.font-medium Access Permissions:
@@ -47,16 +51,22 @@
 
       - if linked_device.web?
         %p.font-medium Public Calendar URL:
-        .bg-gray-200.p-2.rounded.font-mono.text-xs.break-all
+        .monospace-box
           = link_to linked_device.calendar_url, 
             linked_device.calendar_url, 
             target: "_blank"
+      - elsif linked_device.ical?
+        %p.font-medium iCal Feed URL:
+        .monospace-box
+          = link_to linked_device.ical_url, 
+            linked_device.ical_url, 
+            target: "_blank"
       - elsif !linked_device.accessed?
         %p.font-medium API Secret:
-        .bg-gray-200.p-2.rounded.font-mono.text-xs.break-all
+        .monospace-box
           = linked_device.secret
 
-  .mt-6.flex.gap-2
+  .action-buttons
     - unless linked_device.revoked?
       = link_to 'Edit', 
         edit_linked_device_path(linked_device),
@@ -74,7 +84,7 @@
     = link_to 'Back', linked_devices_path, class: 'secondary_button'
 
     - if linked_device.accessed?
-      %span.ml-auto.text-gray-600.text-sm.italic
+      %span.status-note
         Cannot delete accessed devices.
     - else
       = form_with url: linked_device_path(linked_device),

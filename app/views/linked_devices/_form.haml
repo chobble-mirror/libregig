@@ -5,9 +5,9 @@
   .mb-4
     = form.label :linkable, "Link to", class: "block font-medium mb-1"
 
-    .text-sm.mb-4.bg-blue-50.p-2.rounded.border.border-blue-200
+    .notice-box
       - if @linked_device.errors[:base].any?
-        .text-red-600.font-bold= @linked_device.errors[:base].first
+        .error_message= @linked_device.errors[:base].first
       %p
         %strong Resource Access:
         %ul.list-disc.ml-5.mt-1
@@ -24,14 +24,14 @@
       - if collection.any?
         %fieldset.mt-4
           %legend.font-bold= resource_type.pluralize.capitalize
-          .grid.grid-cols-1.md:grid-cols-2.gap-2.ml-4
+          .resource-grid
             - collection.each do |resource|
-              .flex.items-center
+              .checkbox-item
                 - should_check = @linked_device.send("#{resource_type}_ids").include?(resource.id.to_s)
                 - field_name = "linked_device[#{resource_type}_ids][]"
                 - field_id = "#{resource_type}_#{resource.id}"
                 = check_box_tag field_name, resource.id, should_check, id: field_id
-                = label_tag field_id, resource.name, class: "ml-2"
+                = label_tag field_id, resource.name, class: "checkbox-label"
 
     - # Add hidden fields to ensure empty arrays are submitted when no checkboxes are checked
     - %w[event band member].each do |resource_type|

@@ -9,27 +9,27 @@ class CalendarsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "show calendar when a valid secret is provided" do
-      get public_calendar_url(@linked_device.secret)
+      get calendar_url(@linked_device.secret)
       assert_response :success
       assert_select "h1", "Calendar"
       assert_select "p", /This calendar shows events for Test Web Device/
     end
 
     should "return 404 when an invalid secret is provided" do
-      get public_calendar_url("invalid-secret")
+      get calendar_url("invalid-secret")
       assert_response :not_found
     end
 
     should "return 404 when the device has been revoked" do
       @linked_device.update!(revoked_at: Time.current)
-      get public_calendar_url(@linked_device.secret)
+      get calendar_url(@linked_device.secret)
       assert_response :not_found
     end
 
     should "update last_accessed_at when viewing the calendar" do
       assert_nil @linked_device.last_accessed_at
 
-      get public_calendar_url(@linked_device.secret)
+      get calendar_url(@linked_device.secret)
 
       @linked_device.reload
       assert_not_nil @linked_device.last_accessed_at
@@ -47,7 +47,7 @@ class CalendarsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "display all events for the user" do
-      get public_calendar_url(@linked_device.secret)
+      get calendar_url(@linked_device.secret)
 
       assert_response :success
       assert_select ".event-item", count: 2
@@ -78,7 +78,7 @@ class CalendarsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "only display events that the device has access to" do
-      get public_calendar_url(@linked_device.secret)
+      get calendar_url(@linked_device.secret)
 
       assert_response :success
       assert_select ".event-item", count: 2
@@ -96,10 +96,10 @@ class CalendarsControllerTest < ActionDispatch::IntegrationTest
     end
 
     should "not display calendar for non-web devices" do
-      get public_calendar_url(@api_device.secret)
+      get calendar_url(@api_device.secret)
       assert_response :not_found
 
-      get public_calendar_url(@ical_device.secret)
+      get calendar_url(@ical_device.secret)
       assert_response :not_found
     end
   end

@@ -78,10 +78,19 @@ class LinkedDevice < ApplicationRecord
 
   def calendar_url
     return nil unless web?
-    Rails.application.routes.url_helpers.public_calendar_url(
+    Rails.application.routes.url_helpers.calendar_url(
       secret,
       host: Rails.application.config.server_url
     )
+  end
+  
+  def ical_url
+    return nil unless ical? || web?
+    base_url = Rails.application.routes.url_helpers.ical_feed_url(
+      secret,
+      host: Rails.application.config.server_url
+    )
+    "#{base_url}.ics"
   end
 
   private
